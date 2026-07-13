@@ -1,0 +1,190 @@
+---
+interface Props {
+  command: string;
+  label?: string;
+  copyLabel?: string;
+  copiedLabel?: string;
+  failedLabel?: string;
+}
+
+const {
+  command,
+  label = "Shell",
+  copyLabel = "Copy",
+  copiedLabel = "Copied",
+  failedLabel = "Copy failed",
+} = Astro.props;
+---
+
+<div
+  class="command-box"
+  data-command-box
+  data-command={command}
+  data-copy-default={copyLabel}
+  data-copy-success={copiedLabel}
+  data-copy-failed={failedLabel}
+>
+  <div class="command-meta">
+    <span>{label}</span>
+    <button type="button" data-copy-button aria-label="Copy installation command">
+      <span class="copy-state" aria-hidden="true" data-copy-state></span>
+      <span data-copy-label>{copyLabel}</span>
+    </button>
+  </div>
+  <pre><code><span class="prompt" aria-hidden="true">$</span> <span class="command-main">curl -fsSL</span> <span class="command-url">https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh</span> <span class="command-pipe">|</span> <span class="command-main">bash</span></code></pre>
+  <p class="copy-feedback" role="status" aria-live="polite" data-copy-feedback></p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-command-box]:not([data-copy-ready])").forEach((box) => {
+    box.dataset.copyReady = "true";
+    const button = box.querySelector<HTMLButtonElement>("[data-copy-button]");
+    const label = box.querySelector<HTMLElement>("[data-copy-label]");
+    const feedback = box.querySelector<HTMLElement>("[data-copy-feedback]");
+    const state = box.querySelector<HTMLElement>("[data-copy-state]");
+    let timer: number | undefined;
+
+    const setState = (text: string, mode: "idle" | "success" | "error") => {
+      if (label) label.textContent = text;
+      if (feedback) feedback.textContent = mode === "idle" ? "" : text;
+      if (state) state.dataset.state = mode;
+      box.dataset.copyStatus = mode;
+    };
+
+    button?.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(box.dataset.command ?? "");
+        setState(box.dataset.copySuccess || "Copied", "success");
+        clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          setState(box.dataset.copyDefault || "Copy", "idle");
+        }, 1800);
+      } catch {
+        setState(box.dataset.copyFailed || "Copy failed", "error");
+      }
+    });
+  });
+</script>
+
+<style>
+  .command-box {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid oklch(0.32 0.016 255);
+    border-radius: 0.48rem;
+    background: oklch(0.145 0.012 255);
+    color: oklch(0.92 0.014 165);
+    box-shadow: 0 16px 40px rgb(15 23 42 / 0.12);
+  }
+
+  .command-box::before {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    background:
+      linear-gradient(90deg, rgb(16 185 129 / 0.08), transparent 38%),
+      repeating-linear-gradient(90deg, transparent 0 5.75rem, rgb(255 255 255 / 0.035) 5.75rem 5.8rem);
+  }
+
+  .command-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.65rem;
+    padding-inline: 0.85rem;
+    border-bottom: 1px solid oklch(0.3 0.016 255);
+    color: oklch(0.7 0.014 255);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+
+  button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid oklch(0.36 0.018 255);
+    border-radius: 0.3rem;
+    background: oklch(0.21 0.014 255);
+    color: oklch(0.82 0.13 165);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    cursor: pointer;
+  }
+
+  button:hover {
+    border-color: oklch(0.58 0.15 165);
+  }
+
+  .copy-state {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: oklch(0.58 0.014 255);
+  }
+
+  .copy-state[data-state="success"] {
+    background: oklch(0.72 0.15 165);
+    box-shadow: 0 0 0 4px rgb(16 185 129 / 0.13);
+  }
+
+  .copy-state[data-state="error"] {
+    background: oklch(0.65 0.2 25);
+  }
+
+  button:focus-visible {
+    outline: 2px solid oklch(0.72 0.15 165);
+    outline-offset: 2px;
+  }
+
+  pre {
+    position: relative;
+    margin: 0;
+    overflow-x: auto;
+    padding: 0.95rem 1rem 1.05rem;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    white-space: pre;
+  }
+
+  .prompt {
+    color: oklch(0.72 0.15 165);
+  }
+
+  .command-main {
+    color: oklch(0.92 0.02 155);
+    font-weight: 500;
+  }
+
+  .command-url {
+    color: oklch(0.78 0.055 230);
+  }
+
+  .command-pipe {
+    color: oklch(0.76 0.13 85);
+  }
+
+  .copy-feedback {
+    position: absolute;
+    right: 0.85rem;
+    bottom: 0.45rem;
+    margin: 0;
+    color: oklch(0.72 0.15 165);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+  }
+
+  @media (max-width: 560px) {
+    pre {
+      font-size: 0.7rem;
+    }
+
+    .copy-feedback {
+      position: static;
+      padding: 0 0.85rem 0.65rem;
+    }
+  }
+</style>

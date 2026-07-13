@@ -1,0 +1,98 @@
+@import "@fontsource-variable/instrument-sans";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+:root {
+  color-scheme: light;
+  --app-bg: oklch(0.982 0.005 245);
+  --app-surface: oklch(1 0 0);
+  --app-surface-muted: oklch(0.965 0.006 245);
+  --app-surface-raised: oklch(0.995 0.002 245);
+  --app-border: oklch(0.9 0.009 250);
+  --app-border-strong: oklch(0.82 0.014 250);
+  --app-ink: oklch(0.18 0.014 255);
+  --app-muted: oklch(0.44 0.019 255);
+  --app-subtle: oklch(0.6 0.016 255);
+  --app-accent: oklch(0.58 0.15 165);
+  --app-accent-strong: oklch(0.45 0.13 165);
+  --app-accent-soft: oklch(0.94 0.04 165);
+  --app-accent-ink: oklch(0.25 0.09 165);
+  --font-sans: "Instrument Sans Variable", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", Consolas, monospace;
+}
+
+:root.dark {
+  color-scheme: dark;
+  --app-bg: oklch(0.145 0.012 255);
+  --app-surface: oklch(0.205 0.014 255);
+  --app-surface-muted: oklch(0.25 0.015 255);
+  --app-surface-raised: oklch(0.235 0.014 255);
+  --app-border: oklch(0.32 0.016 255);
+  --app-border-strong: oklch(0.42 0.018 255);
+  --app-ink: oklch(0.96 0.004 255);
+  --app-muted: oklch(0.72 0.014 255);
+  --app-subtle: oklch(0.64 0.014 255);
+  --app-accent: oklch(0.72 0.15 165);
+  --app-accent-strong: oklch(0.78 0.14 165);
+  --app-accent-soft: oklch(0.29 0.055 165);
+  --app-accent-ink: oklch(0.86 0.12 165);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--app-bg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--app-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-mono);
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--app-accent-strong);
+  color: white;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

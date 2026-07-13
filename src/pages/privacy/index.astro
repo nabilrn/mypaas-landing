@@ -1,0 +1,257 @@
+---
+import LandingHeader from "../../components/LandingHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const repositoryUrl = "https://github.com/nabilrn/MyPaas";
+---
+
+<BaseLayout
+  title="Privacy policy — MyPaas"
+  description="How the MyPaas public website and self-hosted instances handle data."
+>
+  <LandingHeader />
+  <main class="policy-page">
+    <article class="policy-shell">
+      <header>
+        <p>Policy</p>
+        <h1>Privacy policy</h1>
+        <div>
+          This policy separates the public MyPaas website from the MyPaas software
+          that an operator installs on their own infrastructure.
+        </div>
+        <span>Effective 13 July 2026</span>
+      </header>
+
+      <section>
+        <h2>1. Public website</h2>
+        <p>
+          The public website is a static informational site. As shipped, it does
+          not provide accounts, advertising, behavioral analytics, or tracking cookies.
+        </p>
+        <ul>
+          <li>The theme preference is stored locally in your browser under <code>mypaas-theme</code>.</li>
+          <li>The installation copy button writes the displayed command to your clipboard only after you click it.</li>
+          <li>The hosting or network provider may process standard request metadata such as IP address, user agent, requested path, and timestamp for delivery and security.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>2. Self-hosted MyPaas instances</h2>
+        <p>
+          A MyPaas instance is operated by the person or organization that installs
+          it. That operator controls the server, database, domain, access list,
+          backups, retention, and connected third-party services.
+        </p>
+        <p>
+          If you use someone else's instance, contact that instance operator about
+          access, correction, export, retention, or deletion of your data.
+        </p>
+      </section>
+
+      <section>
+        <h2>3. Data an instance may process</h2>
+        <table>
+          <thead><tr><th>Category</th><th>Examples and purpose</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Identity</strong></td><td>GitHub account details and email used for OAuth authentication and whitelist authorization.</td></tr>
+            <tr><td><strong>Repository configuration</strong></td><td>Repository URL, selected branch, deployment model, ports, and webhook settings used to deploy a project.</td></tr>
+            <tr><td><strong>Project environment</strong></td><td>Environment keys and values used at runtime. Stored values are encrypted at rest and masked in normal dashboard views.</td></tr>
+            <tr><td><strong>Operational records</strong></td><td>Deployment history, commit identifiers, build output, runtime logs, status, metrics, and failure context.</td></tr>
+            <tr><td><strong>Audit records</strong></td><td>Authenticated administration and project actions used for troubleshooting and accountability.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>4. Connected services</h2>
+        <p>Depending on the operator's configuration, MyPaas interacts with:</p>
+        <ul>
+          <li><strong>GitHub</strong> for OAuth, repository access, and signed webhook events.</li>
+          <li><strong>Cloudflare</strong> for DNS, Tunnel ingress, TLS termination, and related network processing.</li>
+          <li><strong>Git hosts and container registries</strong> selected by the operator or project configuration.</li>
+          <li><strong>Backup storage</strong> configured by the operator for database or application recovery.</li>
+        </ul>
+        <p>Those providers process data under their own terms and privacy policies.</p>
+      </section>
+
+      <section>
+        <h2>5. Storage, retention, and deletion</h2>
+        <p>
+          Instance data is stored on infrastructure controlled by the operator.
+          Retention depends on instance configuration, deployment history cleanup,
+          project deletion, database backups, and any off-host backup policy.
+        </p>
+        <p>
+          Deleting a project removes tracked project resources through MyPaas, but
+          copies may remain in operator-managed backups until those backups expire.
+        </p>
+      </section>
+
+      <section>
+        <h2>6. Security</h2>
+        <p>
+          MyPaas includes controls such as GitHub OAuth with a database whitelist,
+          encrypted environment values, signed webhook verification, local runtime
+          port binding, and audit records. These controls reduce risk but do not
+          guarantee that an instance is secure.
+        </p>
+        <p>
+          The operator remains responsible for server updates, SSH access, credential
+          rotation, backup verification, repository review, and incident response.
+        </p>
+      </section>
+
+      <section>
+        <h2>7. Questions and changes</h2>
+        <p>
+          For an installed instance, contact its operator first. For questions about
+          the open-source project or this public policy, use the contact method
+          published in the <a href={repositoryUrl} target="_blank" rel="noreferrer">MyPaas repository</a>.
+          Do not post credentials, environment values, or private logs in a public issue.
+        </p>
+        <p>
+          This policy may change when the public website or the MyPaas data model changes.
+          The effective date above identifies the current version.
+        </p>
+      </section>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .policy-page {
+    min-height: calc(100vh - 4.5rem);
+    padding: clamp(3.5rem, 7vw, 6.5rem) 0;
+    border-top: 1px solid var(--app-border);
+    background: var(--app-bg);
+  }
+
+  .policy-shell {
+    width: min(calc(100% - 2.5rem), 54rem);
+    margin-inline: auto;
+  }
+
+  header {
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--app-border-strong);
+  }
+
+  header > p {
+    margin: 0 0 0.8rem;
+    color: var(--app-accent-strong);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(3rem, 6vw, 5.4rem);
+    font-weight: 590;
+    letter-spacing: -0.058em;
+    line-height: 0.98;
+  }
+
+  header > div {
+    max-width: 42rem;
+    margin-top: 1.2rem;
+    color: var(--app-muted);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  header > span {
+    display: block;
+    margin-top: 1.1rem;
+    color: var(--app-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+
+  section {
+    padding-top: 3rem;
+  }
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: -0.036em;
+  }
+
+  p,
+  li,
+  td {
+    color: var(--app-muted);
+    font-size: 0.87rem;
+    line-height: 1.75;
+  }
+
+  p {
+    margin: 0 0 1rem;
+  }
+
+  ul {
+    margin: 0.8rem 0 1rem;
+    padding-left: 1.25rem;
+  }
+
+  li + li {
+    margin-top: 0.45rem;
+  }
+
+  strong {
+    color: var(--app-ink);
+    font-weight: 620;
+  }
+
+  code {
+    padding: 0.12rem 0.3rem;
+    border: 1px solid var(--app-border);
+    border-radius: 0.25rem;
+    background: var(--app-surface-muted);
+    color: var(--app-ink);
+    font-size: 0.78em;
+  }
+
+  a {
+    color: var(--app-accent-strong);
+    text-underline-offset: 0.2em;
+  }
+
+  table {
+    width: 100%;
+    margin: 1.25rem 0;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.8rem;
+    border-bottom: 1px solid var(--app-border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    border-bottom-color: var(--app-border-strong);
+    color: var(--app-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    .policy-shell {
+      width: min(calc(100% - 1.25rem), 54rem);
+    }
+
+    table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+</style>

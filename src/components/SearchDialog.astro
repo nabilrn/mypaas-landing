@@ -1,0 +1,156 @@
+---
+import { searchEntries, uiCopy, type Locale } from "../lib/site";
+
+interface Props { locale?: Locale }
+
+const { locale = "en" } = Astro.props;
+const copy = uiCopy[locale];
+const entries = searchEntries(locale);
+---
+
+<dialog
+  class="search-dialog"
+  aria-label={copy.search}
+  data-search-dialog
+  data-result-singular={copy.resultSingular}
+  data-result-plural={copy.resultPlural}
+>
+  <div class="search-frame">
+    <header class="search-header">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"></path></svg>
+      <input type="search" autocomplete="off" spellcheck="false" placeholder={copy.searchPlaceholder} aria-label={copy.search} data-search-input />
+      <button type="button" aria-label={copy.searchClose} data-search-close><kbd>Esc</kbd></button>
+    </header>
+    <div class="search-body">
+      <p class="search-status" aria-live="polite" data-search-status>{copy.searchHint}</p>
+      <div class="search-results" role="listbox" aria-label={copy.searchResults} data-search-results></div>
+      <p class="search-empty" hidden data-search-empty>{copy.searchEmpty}</p>
+    </div>
+    <footer><span><kbd>↑</kbd><kbd>↓</kbd> {copy.navigate}</span><span><kbd>↵</kbd> {copy.open}</span></footer>
+  </div>
+  <script type="application/json" data-search-index set:html={JSON.stringify(entries)}></script>
+</dialog>
+
+<script>
+  document.querySelectorAll<HTMLDialogElement>("[data-search-dialog]:not([data-search-ready])").forEach((dialog) => {
+    dialog.dataset.searchReady = "true";
+    const input = dialog.querySelector<HTMLInputElement>("[data-search-input]");
+    const results = dialog.querySelector<HTMLElement>("[data-search-results]");
+    const empty = dialog.querySelector<HTMLElement>("[data-search-empty]");
+    const status = dialog.querySelector<HTMLElement>("[data-search-status]");
+    const data = dialog.querySelector<HTMLScriptElement>("[data-search-index]");
+    const entries = JSON.parse(data?.textContent || "[]") as Array<{ title: string; section: string; description: string; href: string; keywords: string }>;
+    let activeIndex = 0;
+    let visibleEntries = entries;
+    let lastActive: HTMLElement | null = null;
+
+    const resultLinks = () => Array.from(results?.querySelectorAll<HTMLAnchorElement>("a") ?? []);
+
+    const setActive = (index: number) => {
+      const links = resultLinks();
+      if (!links.length) return;
+      activeIndex = (index + links.length) % links.length;
+      links.forEach((link, linkIndex) => {
+        const active = linkIndex === activeIndex;
+        link.dataset.active = String(active);
+        link.setAttribute("aria-selected", String(active));
+      });
+      links[activeIndex]?.scrollIntoView({ block: "nearest" });
+    };
+
+    const render = (query = "") => {
+      if (!results || !empty || !status) return;
+      const normalized = query.trim().toLocaleLowerCase();
+      visibleEntries = normalized
+        ? entries.filter((entry) => `${entry.title} ${entry.section} ${entry.description} ${entry.keywords}`.toLocaleLowerCase().includes(normalized))
+        : entries;
+      results.replaceChildren();
+      visibleEntries.forEach((entry, index) => {
+        const link = document.createElement("a");
+        link.href = entry.href;
+        link.setAttribute("role", "option");
+        link.dataset.active = String(index === 0);
+        link.setAttribute("aria-selected", String(index === 0));
+        const meta = document.createElement("span");
+        meta.className = "result-meta";
+        meta.textContent = entry.section;
+        const title = document.createElement("strong");
+        title.textContent = entry.title;
+        const description = document.createElement("small");
+        description.textContent = entry.description;
+        const arrow = document.createElement("i");
+        arrow.textContent = "↗";
+        arrow.setAttribute("aria-hidden", "true");
+        const copy = document.createElement("span");
+        copy.className = "result-copy";
+        copy.append(meta, title, description);
+        link.append(copy, arrow);
+        results.append(link);
+      });
+      activeIndex = 0;
+      empty.hidden = visibleEntries.length > 0;
+      const resultLabel = visibleEntries.length === 1 ? dialog.dataset.resultSingular : dialog.dataset.resultPlural;
+      status.textContent = normalized ? `${visibleEntries.length} ${resultLabel || "results"}` : status.dataset.default || status.textContent;
+      if (!status.dataset.default) status.dataset.default = status.textContent || "";
+    };
+
+    const open = (trigger?: HTMLElement) => {
+      lastActive = trigger ?? document.activeElement as HTMLElement;
+      if (!dialog.open) dialog.showModal();
+      render("");
+      if (input) input.value = "";
+      requestAnimationFrame(() => input?.focus());
+    };
+
+    const close = () => {
+      dialog.close();
+      lastActive?.focus();
+    };
+
+    document.querySelectorAll<HTMLElement>("[data-search-trigger]").forEach((trigger) => {
+      if (trigger.dataset.searchBound) return;
+      trigger.dataset.searchBound = "true";
+      trigger.addEventListener("click", () => open(trigger));
+    });
+    dialog.querySelector<HTMLElement>("[data-search-close]")?.addEventListener("click", close);
+    dialog.addEventListener("click", (event) => { if (event.target === dialog) close(); });
+    input?.addEventListener("input", () => render(input.value));
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown") { event.preventDefault(); setActive(activeIndex + 1); }
+      if (event.key === "ArrowUp") { event.preventDefault(); setActive(activeIndex - 1); }
+      if (event.key === "Enter") { const link = resultLinks()[activeIndex]; if (link) { event.preventDefault(); link.click(); } }
+    });
+    document.addEventListener("keydown", (event) => {
+      const target = event.target as HTMLElement;
+      const typing = target.matches("input, textarea, select, [contenteditable='true']");
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); dialog.open ? close() : open(); }
+      if (!typing && event.key === "/") { event.preventDefault(); open(); }
+    });
+  });
+</script>
+
+<style>
+  .search-dialog { width: min(calc(100% - 1.5rem), 42rem); max-height: min(82vh, 42rem); padding: 0; border: 1px solid var(--app-border-strong); border-radius: 0.75rem; background: var(--app-surface); color: var(--app-ink); box-shadow: 0 28px 90px rgb(2 6 23 / 0.28); }
+  .search-dialog::backdrop { background: rgb(2 6 23 / 0.54); backdrop-filter: blur(7px); }
+  .search-frame { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; max-height: min(82vh, 42rem); }
+  .search-header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; min-height: 3.65rem; padding: 0 0.85rem; border-bottom: 1px solid var(--app-border); }
+  .search-header svg { width: 1.1rem; height: 1.1rem; fill: none; stroke: var(--app-subtle); stroke-width: 1.8; stroke-linecap: round; }
+  .search-header input { min-width: 0; height: 3.55rem; padding: 0; border: 0; outline: 0; background: transparent; color: var(--app-ink); font-size: 0.9rem; }
+  .search-header input::placeholder { color: var(--app-subtle); }
+  .search-header button { padding: 0; border: 0; background: transparent; cursor: pointer; }
+  kbd { display: inline-flex; min-width: 1.7rem; min-height: 1.55rem; align-items: center; justify-content: center; padding: 0 0.35rem; border: 1px solid var(--app-border); border-bottom-color: var(--app-border-strong); border-radius: 0.3rem; background: var(--app-surface-muted); color: var(--app-subtle); font-size: 0.62rem; box-shadow: 0 1px 0 var(--app-border-strong); }
+  .search-body { min-height: 14rem; overflow: auto; padding: 0.65rem; }
+  .search-status { margin: 0; padding: 0.35rem 0.45rem 0.55rem; color: var(--app-subtle); font-family: var(--font-mono); font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0; }
+  .search-results { display: grid; gap: 0.2rem; }
+  .search-results :global(a) { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem; padding: 0.75rem; border: 1px solid transparent; border-radius: 0.5rem; color: inherit; text-decoration: none; }
+  .search-results :global(a[data-active="true"]), .search-results :global(a:hover) { border-color: color-mix(in oklch, var(--app-accent) 34%, var(--app-border)); background: var(--app-accent-soft); }
+  .search-results :global(.result-copy) { display: grid; gap: 0.18rem; min-width: 0; }
+  .search-results :global(.result-meta) { color: var(--app-accent-strong); font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0; }
+  .search-results :global(strong) { overflow: hidden; font-size: 0.84rem; font-weight: 640; text-overflow: ellipsis; white-space: nowrap; }
+  .search-results :global(small) { overflow: hidden; color: var(--app-muted); font-size: 0.72rem; line-height: 1.45; text-overflow: ellipsis; white-space: nowrap; }
+  .search-results :global(i) { color: var(--app-accent-strong); font-style: normal; }
+  .search-empty { margin: 3rem auto; color: var(--app-muted); font-size: 0.82rem; text-align: center; }
+  footer { display: flex; align-items: center; gap: 1rem; min-height: 2.6rem; padding: 0 0.85rem; border-top: 1px solid var(--app-border); color: var(--app-subtle); font-size: 0.65rem; }
+  footer span { display: inline-flex; align-items: center; gap: 0.3rem; }
+  @media (max-width: 560px) { .search-dialog { width: calc(100% - 0.75rem); margin-top: 0.4rem; } .search-results :global(small) { white-space: normal; } footer { display: none; } }
+</style>

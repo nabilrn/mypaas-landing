@@ -1,0 +1,85 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+---
+
+<DocsLayout
+  title="Operations"
+  description="Read deployment state, follow logs and metrics, control project lifecycle, and recover previous releases."
+>
+  <section>
+    <p class="overline">Project state</p>
+    <h2>Status and deployment progress</h2>
+    <p>
+      Deployment work is asynchronous. The API creates a deployment record and
+      the dashboard follows queued, building, running, stopped, and failed states without blocking the request.
+    </p>
+    <p>
+      A project stream carries typed status, deployment, log, and metric events.
+      The dashboard keeps the project shell stable while individual views load or reconnect.
+    </p>
+  </section>
+
+  <section>
+    <h2>Logs</h2>
+    <ul>
+      <li>Build output appears while the deployment is running and remains attached to deployment history.</li>
+      <li>Runtime output can be loaded from recent history and followed live.</li>
+      <li>Compose output includes service context and can be filtered by service or text.</li>
+      <li>Secret-like values are sanitized before application logs are exposed where supported.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Metrics</h2>
+    <p>
+      Docker Stats provides CPU, memory, and uptime snapshots for running containers.
+      Compose projects expose service-level selection instead of one ambiguous aggregate.
+    </p>
+    <p>
+      Configured limits and live usage are different values. The configured number
+      reserves quota; it does not mean the process continuously consumes that amount of RAM or CPU.
+    </p>
+  </section>
+
+  <section>
+    <h2>Lifecycle actions</h2>
+    <table>
+      <thead><tr><th>Action</th><th>Behavior</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Deploy</strong></td><td>Queue a new release from the configured repository and branch.</td></tr>
+        <tr><td><strong>Stop</strong></td><td>Stop the runtime and remove its active Caddy route while preserving project configuration.</td></tr>
+        <tr><td><strong>Start</strong></td><td>Restart the existing runtime and restore the project route.</td></tr>
+        <tr><td><strong>Restart</strong></td><td>Restart the active runtime and keep routing aligned with the resulting state.</td></tr>
+        <tr><td><strong>Redeploy</strong></td><td>Build and activate a new release from source.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Deployment history and rollback</h2>
+    <p>
+      History records the commit, trigger source, status, timestamps, build output,
+      and failure context for each deployment. A previous successful Dockerfile or
+      Compose deployment can be selected for rollback without rebuilding that release.
+    </p>
+    <aside class="warning"><p>Static projects do not use image rollback. Redeploy the desired commit to publish its static output.</p></aside>
+  </section>
+
+  <section>
+    <h2>Compose resources</h2>
+    <p>
+      Project settings can audit containers, networks, volumes, routes, and allocated
+      ports associated with a Compose project. Reset remains explicit because deleting
+      a database volume can permanently remove project data.
+    </p>
+  </section>
+
+  <section>
+    <h2>Database inspection</h2>
+    <p>
+      Owner-only DB Studio Lite can inspect PostgreSQL, MySQL, and MariaDB schemas and
+      paginated rows for configured project databases. Writes require a temporary write
+      session, and update or delete operations require a primary key. It is not a general raw SQL console.
+    </p>
+  </section>
+</DocsLayout>

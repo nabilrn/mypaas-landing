@@ -1,0 +1,71 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+---
+
+<DocsLayout
+  title="Security"
+  description="Understand the trust model, secret handling, webhook verification, network exposure, and owner responsibilities."
+>
+  <section>
+    <p class="overline">Trust model</p>
+    <h2>One owner, one host, narrow access</h2>
+    <p>
+      MyPaas is a single-node control plane with privileged access to the host Docker
+      daemon. Treat the owner account and the MyPaas service as infrastructure administration access.
+    </p>
+    <p>
+      GitHub OAuth authenticates users, but authorization still depends on the MyPaas
+      database whitelist. There is no public registration flow.
+    </p>
+  </section>
+
+  <section>
+    <h2>Control summary</h2>
+    <table>
+      <thead><tr><th>Boundary</th><th>Control</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Dashboard access</strong></td><td>GitHub OAuth plus an explicit database whitelist.</td></tr>
+        <tr><td><strong>Project environment</strong></td><td>AES-256-GCM encryption at rest, masked display, authenticated reveal endpoint.</td></tr>
+        <tr><td><strong>GitHub webhook</strong></td><td>Per-project secret and HMAC-SHA256 signature verification using constant-time comparison.</td></tr>
+        <tr><td><strong>Project network</strong></td><td>Runtime ports bind locally and project traffic passes through Caddy.</td></tr>
+        <tr><td><strong>Docker access</strong></td><td>The control plane owns the Docker socket; project containers do not receive it by default.</td></tr>
+        <tr><td><strong>Database writes</strong></td><td>DB Studio requires a temporary write session and primary-key guards for update or delete.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Secrets and environment values</h2>
+    <p>
+      Environment values are decrypted only when an authenticated operation needs them.
+      The encryption key belongs to the MyPaas instance configuration and must be backed up
+      separately from the database. Losing it makes stored values unrecoverable.
+    </p>
+    <p>
+      Do not paste secrets into issue trackers, deployment names, repository files, or logs.
+      Rotate GitHub OAuth, webhook, JWT, database, and Cloudflare credentials after suspected exposure.
+    </p>
+  </section>
+
+  <section>
+    <h2>Public exposure</h2>
+    <p>
+      The intended production path exposes Caddy through a configured Cloudflare Tunnel.
+      Individual runtime ports stay local. Cloudflare handles public TLS and network-edge
+      processing according to the operator's Cloudflare configuration.
+    </p>
+  </section>
+
+  <section>
+    <h2>Owner responsibilities</h2>
+    <ul>
+      <li>Restrict SSH and operating-system administration access.</li>
+      <li>Keep the VM, Docker Engine, Compose plugin, and MyPaas checkout updated.</li>
+      <li>Configure, test, and retain database backups outside the running database volume.</li>
+      <li>Review repository Dockerfiles and Compose files before deploying them.</li>
+      <li>Monitor host disk, memory, CPU, and Cloudflare configuration.</li>
+      <li>Remove collaborators and rotate credentials when access is no longer required.</li>
+    </ul>
+    <aside class="warning"><p>Self-hosting gives the operator control over the infrastructure; it does not eliminate security or operational risk.</p></aside>
+  </section>
+</DocsLayout>

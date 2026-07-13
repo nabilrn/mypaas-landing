@@ -1,0 +1,78 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+---
+
+<DocsLayout
+  title="Configuration & routing"
+  description="Configure identity, repository access, project environment values, resource limits, and the public route."
+>
+  <section>
+    <p class="overline">Instance setup</p>
+    <h2>Core configuration</h2>
+    <table>
+      <thead><tr><th>Area</th><th>Required configuration</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Owner access</strong></td><td>Owner email plus GitHub OAuth client ID and secret. Additional users must be explicitly whitelisted.</td></tr>
+        <tr><td><strong>Public domain</strong></td><td>The base domain used by the dashboard and project subdomains.</td></tr>
+        <tr><td><strong>Cloudflare Tunnel</strong></td><td>Tunnel token with root and wildcard hostname routes pointing to Caddy.</td></tr>
+        <tr><td><strong>Production secrets</strong></td><td>JWT, environment encryption, database, and internal service credentials generated or entered during setup.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Repository inspection</h2>
+    <p>
+      Project creation starts with a repository and branch. MyPaas inspects only
+      the selected branch, shows the relevant structure, then proposes a deployment model and port.
+    </p>
+    <p>
+      Compose projects receive additional preflight checks for the public service,
+      build context, port mapping, required environment values, and unsupported configuration flags.
+    </p>
+  </section>
+
+  <section>
+    <h2>Environment variables</h2>
+    <p>MyPaas can prepare environment keys from:</p>
+    <ul>
+      <li><code>.env.example</code>, <code>.env.sample</code>, <code>.env.template</code>, and <code>.env.local.example</code>.</li>
+      <li>Compose interpolation such as <code>${"${VAR}"}</code> and default or required forms.</li>
+      <li>Manual rows or a reviewed <code>.env</code> paste/upload.</li>
+    </ul>
+    <p>
+      Discovery creates a draft. You review keys and values before persistence.
+      Sensitive-looking keys remain blank or masked unless explicitly entered.
+      Stored values use AES-256-GCM encryption and are masked in normal dashboard views.
+    </p>
+    <aside class="note"><p>When shared PostgreSQL is selected, MyPaas creates a project database and role, then stores the generated <code>DATABASE_URL</code> as an encrypted managed value.</p></aside>
+  </section>
+
+  <section>
+    <h2>GitHub webhook</h2>
+    <p>
+      Project settings provide a webhook URL and per-project secret. Add both to
+      the GitHub repository and select push events. Only signed pushes to the configured branch trigger a deployment.
+    </p>
+    <aside class="warning"><p>MyPaas does not currently create the GitHub webhook automatically. Manual repository setup is required.</p></aside>
+  </section>
+
+  <section>
+    <h2>Routing model</h2>
+    <ol class="steps">
+      <li>Each project receives a hostname under the configured public domain.</li>
+      <li>MyPaas allocates a local port for Dockerfile or Compose public services, or a filesystem root for static output.</li>
+      <li>The API updates Caddy through its Admin API and periodically reconciles running project routes.</li>
+      <li>Cloudflare Tunnel forwards the public root and wildcard hostnames to the Caddy service.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Resource profiles</h2>
+    <p>
+      Projects use a named CPU and memory profile based on the detected deployment
+      model. You can override it within the configured owner quota. The dashboard
+      reports configured allocation separately from best-effort live Docker usage.
+    </p>
+  </section>
+</DocsLayout>

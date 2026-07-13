@@ -1,0 +1,64 @@
+---
+import "../styles/global.css";
+import { localeMeta, locales, type Locale } from "../lib/site";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  locale?: Locale;
+  path?: string;
+}
+
+const { title, description, image, locale = "en", path = Astro.url.pathname } = Astro.props;
+const canonical = Astro.site ? new URL(path, Astro.site) : Astro.url;
+const socialImage = image && Astro.site ? new URL(image, Astro.site) : undefined;
+const meta = localeMeta[locale];
+const alternateUrls = locales.map((item) => ({
+  lang: localeMeta[item].htmlLang,
+  href: Astro.site ? new URL(localeMeta[item].path, Astro.site) : localeMeta[item].path,
+}));
+const siteName = "MyPaas";
+---
+
+<!doctype html>
+<html lang={meta.htmlLang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#047857" />
+    <meta name="application-name" content={siteName} />
+    <meta name="apple-mobile-web-app-title" content={siteName} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={meta.ogLocale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {socialImage && <meta property="og:image" content={socialImage} />}
+    <meta name="twitter:card" content={socialImage ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {socialImage && <meta name="twitter:image" content={socialImage} />}
+    <link rel="canonical" href={canonical} />
+    {alternateUrls.map((item) => <link rel="alternate" hreflang={item.lang} href={item.href} />)}
+    {Astro.site && <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <title>{title}</title>
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem("mypaas-theme");
+        const dark = stored === "dark" || (!stored && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

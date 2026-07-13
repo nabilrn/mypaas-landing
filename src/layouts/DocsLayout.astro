@@ -1,0 +1,69 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import LandingHeader from "../components/LandingHeader.astro";
+import "../styles/docs.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const pathname = Astro.url.pathname;
+const repositoryUrl = "https://github.com/nabilrn/MyPaas";
+
+const navItems = [
+  ["Overview", "/docs/"],
+  ["Installation", "/docs/installation/"],
+  ["Deployment models", "/docs/deployment-models/"],
+  ["Configuration & routing", "/docs/configuration/"],
+  ["Operations", "/docs/operations/"],
+  ["Security", "/docs/security/"],
+  ["Limitations", "/docs/limitations/"],
+];
+
+const isActive = (href: string) => href === "/docs/"
+  ? pathname === href
+  : pathname.startsWith(href);
+---
+
+<BaseLayout title={`${title} — MyPaas Docs`} description={description}>
+  <LandingHeader />
+  <div class="docs-page">
+    <div class="docs-shell">
+      <aside class="docs-sidebar">
+        <p class="docs-nav-title">Documentation</p>
+        <nav aria-label="Documentation navigation">
+          {navItems.map(([label, href]) => (
+            <a class:list={{ active: isActive(href) }} href={href} aria-current={isActive(href) ? "page" : undefined}>
+              {label}
+            </a>
+          ))}
+        </nav>
+        <div class="docs-sidebar-meta">
+          <a href="/privacy/">Privacy policy</a>
+          <a href={repositoryUrl} target="_blank" rel="noreferrer">Source repository</a>
+        </div>
+      </aside>
+
+      <main class="docs-main">
+        <header class="docs-header">
+          <p>MyPaas documentation</p>
+          <h1>{title}</h1>
+          <div>{description}</div>
+        </header>
+        <article class="docs-content">
+          <slot />
+        </article>
+        <footer class="docs-footer">
+          <span>MyPaas documentation</span>
+          <nav aria-label="Documentation footer">
+            <a href="/">Landing page</a>
+            <a href="/privacy/">Privacy</a>
+            <a href={`${repositoryUrl}/issues`} target="_blank" rel="noreferrer">Report an issue</a>
+          </nav>
+        </footer>
+      </main>
+    </div>
+  </div>
+</BaseLayout>

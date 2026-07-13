@@ -1,0 +1,126 @@
+---
+import { Image } from "astro:assets";
+import SearchDialog from "./SearchDialog.astro";
+import { localeMeta, locales, repositoryUrl, uiCopy, type Locale } from "../lib/site";
+import "../styles/header.css";
+
+interface Props { locale?: Locale }
+
+const { locale = "en" } = Astro.props;
+const copy = uiCopy[locale];
+const homeHref = localeMeta[locale].path;
+---
+
+<header
+  class="landing-header"
+  data-landing-header
+  data-theme-dark-label={copy.themeDark}
+  data-theme-light-label={copy.themeLight}
+  data-menu-open-label={copy.menuOpen}
+  data-menu-close-label={copy.menuClose}
+>
+  <div class="header-shell">
+    <a class="brand-link" href={homeHref} aria-label={copy.home} data-close-menu>
+      <Image src="/brand/mypaas-horizontal-transparent-green.png" alt="MyPaas" class="brand-image brand-image-light" width="640" height="180" />
+      <Image src="/brand/mypaas-horizontal-transparent-white.png" alt="" class="brand-image brand-image-dark" width="640" height="180" aria-hidden="true" />
+      <span class="sr-only">{copy.home}</span>
+    </a>
+
+    <nav class="desktop-navigation" aria-label={copy.navLabel}>
+      <a href="/docs/">{copy.docs}</a>
+      <a href="/docs/installation/">{copy.install}</a>
+      <a href={`${homeHref}#integrations`}>{copy.integrations}</a>
+      <a href={`${homeHref}#operations`}>{copy.operations}</a>
+      <a href="/privacy/">{copy.privacy}</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="search-trigger" type="button" aria-label={copy.searchOpen} data-search-trigger>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"></path></svg>
+        <span>{copy.search}</span><kbd>⌘K</kbd>
+      </button>
+
+      <details class="locale-switcher">
+        <summary aria-label={copy.language}><span>{localeMeta[locale].short}</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"></path></svg></summary>
+        <div class="locale-menu">
+          {locales.map((item) => (
+            <a href={localeMeta[item].path} lang={localeMeta[item].htmlLang} aria-label={localeMeta[item].label} aria-current={item === locale ? "page" : undefined}>
+              <span>{localeMeta[item].label}</span>{item === locale && <i aria-hidden="true">✓</i>}
+            </a>
+          ))}
+        </div>
+      </details>
+
+      <button class="icon-button" type="button" aria-label={copy.themeDark} title={copy.themeDark} data-theme-toggle>
+        <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8 8 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"></path></svg>
+        <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>
+      </button>
+
+      <a class="star-link" href={repositoryUrl} target="_blank" rel="noreferrer" aria-label={`${copy.star} MyPaas on GitHub`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.7 6.3.9-4.55 4.43 1.08 6.27L12 17.14 6.37 20.1l1.08-6.27L2.9 9.4l6.3-.9L12 2.8Z"></path></svg>
+        <span>{copy.star}</span><small data-star-count hidden></small>
+      </a>
+
+      <button class="icon-button mobile-menu-button" type="button" aria-label={copy.menuOpen} aria-expanded="false" aria-controls="mobile-navigation" data-menu-toggle>
+        <svg class="menu-open-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        <svg class="menu-close-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-navigation" class="mobile-navigation" aria-label={copy.navLabel}>
+    <button class="mobile-search" type="button" data-search-trigger><span>{copy.search}</span><kbd>⌘K</kbd></button>
+    <a href="/docs/" data-close-menu>{copy.docs}</a>
+    <a href="/docs/installation/" data-close-menu>{copy.install}</a>
+    <a href={`${homeHref}#integrations`} data-close-menu>{copy.integrations}</a>
+    <a href={`${homeHref}#operations`} data-close-menu>{copy.operations}</a>
+    <a href="/privacy/" data-close-menu>{copy.privacy}</a>
+    <div class="mobile-languages" aria-label={copy.language}>
+      {locales.map((item) => <a class:list={{ active: item === locale }} href={localeMeta[item].path} lang={localeMeta[item].htmlLang} aria-label={localeMeta[item].label}>{localeMeta[item].short}</a>)}
+    </div>
+    <a class="mobile-star" href={repositoryUrl} target="_blank" rel="noreferrer">★ {copy.star}</a>
+  </nav>
+</header>
+
+<SearchDialog {locale} />
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-landing-header]:not([data-header-ready])").forEach((header) => {
+    header.dataset.headerReady = "true";
+    const menuButton = header.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+    const themeButton = header.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+    const localeSwitcher = header.querySelector<HTMLDetailsElement>(".locale-switcher");
+
+    const setMenu = (open: boolean) => {
+      header.dataset.open = String(open);
+      menuButton?.setAttribute("aria-expanded", String(open));
+      menuButton?.setAttribute("aria-label", open ? header.dataset.menuCloseLabel || "Close menu" : header.dataset.menuOpenLabel || "Open menu");
+    };
+    const syncThemeLabel = () => {
+      const dark = document.documentElement.classList.contains("dark");
+      const label = dark ? header.dataset.themeLightLabel : header.dataset.themeDarkLabel;
+      if (label) { themeButton?.setAttribute("aria-label", label); themeButton?.setAttribute("title", label); }
+    };
+
+    menuButton?.addEventListener("click", () => setMenu(header.dataset.open !== "true"));
+    header.querySelectorAll<HTMLElement>("[data-close-menu]").forEach((link) => link.addEventListener("click", () => setMenu(false)));
+    themeButton?.addEventListener("click", () => {
+      const dark = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("mypaas-theme", dark ? "dark" : "light");
+      syncThemeLabel();
+    });
+    localeSwitcher?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => localeSwitcher.removeAttribute("open")));
+    document.addEventListener("click", (event) => { if (localeSwitcher?.open && !localeSwitcher.contains(event.target as Node)) localeSwitcher.removeAttribute("open"); });
+    syncThemeLabel();
+
+    const starCount = header.querySelector<HTMLElement>("[data-star-count]");
+    fetch("https://api.github.com/repos/nabilrn/MyPaas", { headers: { Accept: "application/vnd.github+json" } })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((repo: { stargazers_count?: number }) => {
+        if (!starCount || typeof repo.stargazers_count !== "number") return;
+        starCount.textContent = Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 1 }).format(repo.stargazers_count);
+        starCount.hidden = false;
+      })
+      .catch(() => undefined);
+  });
+</script>

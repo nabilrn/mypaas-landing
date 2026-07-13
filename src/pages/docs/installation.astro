@@ -1,0 +1,71 @@
+---
+import CopyCommand from "../../components/CopyCommand.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const installCommand = "curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh | bash";
+---
+
+<DocsLayout
+  title="Installation"
+  description="Prepare a Linux VM, launch the bootstrap, and finish setup through the guided installer."
+>
+  <section>
+    <p class="overline">Quick start</p>
+    <h2>Start the installer</h2>
+    <CopyCommand command={installCommand} label="Ubuntu / Debian" />
+    <p>
+      The bootstrap installs Git when needed, checks out MyPaas into
+      <code>~/MyPaas</code>, and opens the browser setup wizard. It is a starting
+      command, not a zero-configuration install.
+    </p>
+  </section>
+
+  <section>
+    <h2>Prerequisites</h2>
+    <table>
+      <thead><tr><th>Requirement</th><th>What to prepare</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Linux VM or VPS</strong></td><td>Ubuntu or Debian is the supported path for automatic Docker installation.</td></tr>
+        <tr><td><strong>Cloudflare domain</strong></td><td>An active zone with root and wildcard hostnames routed to the MyPaas Caddy service.</td></tr>
+        <tr><td><strong>GitHub OAuth app</strong></td><td>Client ID, client secret, and the correct callback URL for your MyPaas domain.</td></tr>
+        <tr><td><strong>Cloudflare Tunnel</strong></td><td>A tunnel token and public hostname routes for the root and wildcard project domains.</td></tr>
+      </tbody>
+    </table>
+    <aside class="warning"><p>Hardware figures in the PRD describe the original host context. Treat them as planning context, not a universal minimum.</p></aside>
+  </section>
+
+  <section>
+    <h2>What the bootstrap does</h2>
+    <ol class="steps">
+      <li>Checks or installs Git, then creates or safely updates the MyPaas checkout.</li>
+      <li>Starts the setup wizard on the VM and attempts a temporary, token-protected Cloudflare Quick Tunnel.</li>
+      <li>Falls back to printed SSH port forwarding instructions if the temporary tunnel cannot start.</li>
+      <li>Collects the owner email, public domain, GitHub OAuth credentials, Cloudflare Tunnel token, and production secrets.</li>
+      <li>Checks Docker and Compose, creates host directories, runs migrations, and starts the production stack.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Cloudflare routing</h2>
+    <p>Configure both of these public hostname patterns to the MyPaas Caddy service over HTTP:</p>
+    <ul>
+      <li>The root MyPaas domain, for example <code>mypaas.example.com</code>.</li>
+      <li>The wildcard project domain, for example <code>*.mypaas.example.com</code>.</li>
+    </ul>
+    <p>
+      Caddy performs internal routing. Cloudflare Tunnel provides public ingress
+      and TLS. Project containers remain bound to local host ports rather than being exposed directly.
+    </p>
+  </section>
+
+  <section>
+    <h2>Verify the installation</h2>
+    <pre><code>cd ~/MyPaas
+bash scripts/verify-production.sh
+docker compose -f docker-compose.prod.yml ps</code></pre>
+    <p>
+      Confirm the dashboard resolves, the API health check responds, Caddy can be
+      reached by the stack, and the Cloudflare root and wildcard records are active.
+    </p>
+  </section>
+</DocsLayout>

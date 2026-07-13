@@ -1,0 +1,69 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+---
+
+<DocsLayout
+  title="MyPaas documentation"
+  description="Install, configure, deploy, and operate MyPaas on a single Linux VM."
+>
+  <section>
+    <p class="overline">Overview</p>
+    <h2>What MyPaas is</h2>
+    <p>
+      MyPaas is a self-hosted PaaS control plane for one Linux server. It accepts
+      repositories with an explicit deployment contract, runs the workload on
+      Docker or publishes ready static output through Caddy, and keeps operational
+      state in a dashboard.
+    </p>
+    <p>
+      It is built for an owner and a small whitelist of trusted collaborators.
+      It is not a hosted service, public registration system, or multi-tenant cloud.
+    </p>
+    <aside class="note">
+      <p>
+        These docs describe current behavior from the product requirements,
+        repository changelog, installer, and implementation. Roadmap items are
+        not presented as available features.
+      </p>
+    </aside>
+  </section>
+
+  <section>
+    <h2>Supported project contracts</h2>
+    <table>
+      <thead><tr><th>Mode</th><th>Repository requirement</th><th>Runtime</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Dockerfile</strong></td><td>Root <code>Dockerfile</code> and an application port.</td><td>One application container.</td></tr>
+        <tr><td><strong>Docker Compose</strong></td><td>Root Compose file and a selected public service.</td><td>Main service plus private supporting services.</td></tr>
+        <tr><td><strong>Static</strong></td><td>Ready <code>index.html</code> in <code>dist</code>, <code>build</code>, <code>public</code>, or root.</td><td>Caddy file server without an app container.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Detection priority is Compose, then Dockerfile, then static output. Detection
+      prepares a plan; the user still reviews branch, ports, resources, and environment values.
+    </p>
+  </section>
+
+  <section>
+    <h2>System model</h2>
+    <ol class="steps">
+      <li><strong>GitHub</strong> provides repository access, OAuth identity, and signed push events.</li>
+      <li><strong>MyPaas</strong> validates the project, queues deployment work, and stores operational state.</li>
+      <li><strong>Docker and Compose</strong> build and run project workloads on the host.</li>
+      <li><strong>Caddy</strong> maps project hostnames to local runtime ports or static files.</li>
+      <li><strong>Cloudflare Tunnel</strong> provides configured public ingress and TLS.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Start here</h2>
+    <ul class="link-list">
+      <li><a href="/docs/installation/">Installation</a><span>Prepare a VM and run the guided bootstrap.</span></li>
+      <li><a href="/docs/deployment-models/">Deployment models</a><span>Understand Dockerfile, Compose, and static contracts.</span></li>
+      <li><a href="/docs/configuration/">Configuration & routing</a><span>Set GitHub, Cloudflare, domains, and project environment values.</span></li>
+      <li><a href="/docs/operations/">Operations</a><span>Use logs, metrics, lifecycle actions, history, and rollback.</span></li>
+      <li><a href="/docs/security/">Security</a><span>Review trust boundaries and operator responsibilities.</span></li>
+      <li><a href="/docs/limitations/">Limitations</a><span>Know what the single-node product does not provide.</span></li>
+    </ul>
+  </section>
+</DocsLayout>

@@ -1,0 +1,183 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CopyCommand from "./CopyCommand.astro";
+import IntegrationMarquee from "./IntegrationMarquee.astro";
+import LandingHeader from "./LandingHeader.astro";
+import ThemeCompareSlider from "./ThemeCompareSlider.astro";
+import { installCommand, landingCopy, repositoryUrl, uiCopy, type Locale } from "../lib/site";
+import "../styles/landing.css";
+
+interface Props { locale?: Locale }
+
+const { locale = "en" } = Astro.props;
+const copy = landingCopy[locale];
+const ui = uiCopy[locale];
+---
+
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription} locale={locale} path={locale === "en" ? "/" : `/${locale}/`} image="/landing/dashboard-dark.png">
+  <LandingHeader {locale} />
+
+  <main class="landing-page">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="circuit-layer" aria-hidden="true"></div>
+      <div class="landing-shell">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">{copy.eyebrow}</p>
+            <h1 id="hero-title">{copy.heroTitle}</h1>
+            <p class="hero-summary">{copy.heroSummary}</p>
+            <div class="hero-actions">
+              <a class="primary-action" href="/docs/">{copy.readDocs}</a>
+              <a class="secondary-action star-action" href={repositoryUrl} target="_blank" rel="noreferrer">
+                <span aria-hidden="true">★</span>{copy.starRepository}
+              </a>
+            </div>
+          </div>
+
+          <dl class="product-scope" aria-label={copy.scopeLabel}>
+            {copy.scope.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}
+          </dl>
+        </div>
+
+        <div class="hero-command">
+          <p class="command-label">{copy.commandLabel}</p>
+          <CopyCommand command={installCommand} label={copy.commandPlatform} copyLabel={copy.copy} copiedLabel={copy.copied} failedLabel={copy.copyFailed} />
+          <p class="command-note">{copy.commandNote}</p>
+        </div>
+
+        <div class="dashboard-preview">
+          <ThemeCompareSlider />
+        </div>
+      </div>
+    </section>
+
+    <section id="integrations" class="integration-section" aria-labelledby="integrations-title">
+      <div class="landing-shell integration-heading">
+        <div>
+          <p class="section-label">{copy.integrationsLabel}</p>
+          <h2 id="integrations-title">{copy.integrationsTitle}</h2>
+        </div>
+        <p>{copy.integrationsBody}</p>
+      </div>
+      <IntegrationMarquee />
+    </section>
+
+    <section id="workflow" class="section" aria-labelledby="workflow-title">
+      <div class="landing-shell">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">{copy.workflowLabel}</p>
+            <h2 id="workflow-title">{copy.workflowTitle}</h2>
+          </div>
+          <p>{copy.workflowBody}</p>
+        </div>
+
+        <div class="workflow-grid">
+          {copy.workflow.map(([number, title, body]) => (
+            <article>
+              <span>{number}</span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </article>
+          ))}
+        </div>
+
+        <div class="contract-table" aria-label={copy.contractHeaders[0]}>
+          <div class="contract-row contract-header">
+            {copy.contractHeaders.map((item) => <span>{item}</span>)}
+          </div>
+          {copy.contracts.map(([title, body, runtime]) => (
+            <div class="contract-row">
+              <strong>{title}</strong>
+              <p>{body}</p>
+              <span>{runtime}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="operations" class="section section-muted" aria-labelledby="operations-title">
+      <div class="landing-shell operations-layout">
+        <div class="operations-intro">
+          <p class="section-label">{copy.operationsLabel}</p>
+          <h2 id="operations-title">{copy.operationsTitle}</h2>
+          <p>{copy.operationsBody}</p>
+          <div class="request-path" aria-label={copy.requestPathLabel}>
+            <span>GitHub</span><i>→</i><span>MyPaas</span><i>→</i><span>Docker</span><i>→</i><span>Caddy</span><i>→</i><span>Cloudflare Tunnel</span><i>→</i><span>{copy.domainExample}</span>
+          </div>
+        </div>
+
+        <div class="operation-list">
+          {copy.operations.map(([title, body], index) => (
+            <article>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div><h3>{title}</h3><p>{body}</p></div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="limits-title">
+      <div class="landing-shell boundary-layout">
+        <div>
+          <p class="section-label">{copy.boundariesLabel}</p>
+          <h2 id="limits-title">{copy.boundariesTitle}</h2>
+        </div>
+        <div class="boundary-copy">
+          <p>{copy.boundariesBody}</p>
+          <ul>{copy.boundaries.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="installation" class="section install-checklist" aria-labelledby="before-install-title">
+      <div class="landing-shell">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">{copy.beforeLabel}</p>
+            <h2 id="before-install-title">{copy.beforeTitle}</h2>
+          </div>
+          <p>{copy.beforeBody}</p>
+        </div>
+
+        <ol class="prerequisite-grid">
+          {copy.prerequisites.map(([number, title, body]) => <li><span>{number}</span><strong>{title}</strong><p>{body}</p></li>)}
+        </ol>
+
+        <a class="docs-link" href="/docs/installation/">{copy.installationGuide} <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section id="faq" class="section section-muted" aria-labelledby="faq-title">
+      <div class="landing-shell faq-layout">
+        <div>
+          <p class="section-label">{copy.faqLabel}</p>
+          <h2 id="faq-title">{copy.faqTitle}</h2>
+        </div>
+        <div class="faq-list">
+          {copy.faq.map(([question, answer], index) => (
+            <details open={index === 0}>
+              <summary><span>{question}</span><i aria-hidden="true">+</i></summary>
+              <p>{answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="landing-shell footer-layout">
+      <div><strong>MyPaas</strong><p>{copy.footer}</p></div>
+      <nav aria-label="Footer navigation">
+        <a href="/docs/">{copy.documentation}</a>
+        <a href="/privacy/">{ui.privacy}</a>
+        <a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a>
+        <a href={`${repositoryUrl}/blob/main/CHANGELOG.md`} target="_blank" rel="noreferrer">{copy.changelog}</a>
+        <a href={`${repositoryUrl}/blob/main/LICENSE`} target="_blank" rel="noreferrer">{copy.license}</a>
+      </nav>
+    </div>
+  </footer>
+</BaseLayout>
