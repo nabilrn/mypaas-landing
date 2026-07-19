@@ -4,9 +4,9 @@ import SearchDialog from "./SearchDialog.astro";
 import { localeMeta, locales, repositoryUrl, uiCopy, type Locale } from "../lib/site";
 import "../styles/header.css";
 
-interface Props { locale?: Locale }
+interface Props { locale?: Locale; hideThemeToggle?: boolean }
 
-const { locale = "en" } = Astro.props;
+const { locale = "en", hideThemeToggle = false } = Astro.props;
 const copy = uiCopy[locale];
 const homeHref = localeMeta[locale].path;
 ---
@@ -51,10 +51,12 @@ const homeHref = localeMeta[locale].path;
         </div>
       </details>
 
-      <button class="icon-button" type="button" aria-label={copy.themeDark} title={copy.themeDark} data-theme-toggle>
-        <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8 8 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"></path></svg>
-        <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>
-      </button>
+      {!hideThemeToggle && (
+        <button class="icon-button" type="button" aria-label={copy.themeDark} title={copy.themeDark} data-theme-toggle>
+          <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8 8 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"></path></svg>
+          <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg>
+        </button>
+      )}
 
       <a class="star-link" href={repositoryUrl} target="_blank" rel="noreferrer" aria-label={`${copy.star} MyPaas on GitHub`}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.7 6.3.9-4.55 4.43 1.08 6.27L12 17.14 6.37 20.1l1.08-6.27L2.9 9.4l6.3-.9L12 2.8Z"></path></svg>

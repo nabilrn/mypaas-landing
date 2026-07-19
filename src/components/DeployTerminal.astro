@@ -1,0 +1,227 @@
+---
+interface Props {
+  label: string;
+  lines: readonly (readonly [string, string])[];
+}
+
+const { label, lines } = Astro.props;
+---
+
+<div class="deploy-terminal" data-reveal data-deploy-terminal>
+  <div class="terminal-meta">
+    <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="terminal-title">{label}</span>
+    <span class="terminal-live"><i aria-hidden="true"></i>SSE</span>
+  </div>
+  <div class="terminal-body">
+    {lines.map(([tag, text]) => (
+      <p class="terminal-line" data-terminal-line>
+        {tag === "$" ? (
+          <><span class="term-prompt">$</span><span class="term-command">{text}</span></>
+        ) : (
+          <><span class={`term-tag term-tag-${tag}`}>[{tag}]</span><span class="term-text">{text}</span></>
+        )}
+      </p>
+    ))}
+    <p class="terminal-cursor-line" data-terminal-cursor aria-hidden="true">
+      <span class="term-prompt">$</span><span class="terminal-cursor"></span>
+    </p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-deploy-terminal]:not([data-terminal-ready])").forEach((terminal) => {
+    terminal.dataset.terminalReady = "true";
+    const lines = Array.from(terminal.querySelectorAll<HTMLElement>("[data-terminal-line]"));
+    const cursor = terminal.querySelector<HTMLElement>("[data-terminal-cursor]");
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || !("IntersectionObserver" in window)) return;
+
+    let started = false;
+    const play = () => {
+      terminal.classList.add("is-animated");
+      let at = 550;
+      lines.forEach((line, index) => {
+        window.setTimeout(() => line.classList.add("is-visible"), at);
+        at += index === 0 ? 1300 : 820;
+      });
+      window.setTimeout(() => cursor?.classList.add("is-visible"), at);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !started) {
+          started = true;
+          play();
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.35 });
+    observer.observe(terminal);
+  });
+</script>
+
+<style>
+  .deploy-terminal {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid oklch(0.32 0.016 255);
+    border-radius: 0.6rem;
+    background: oklch(0.155 0.014 255);
+    color: oklch(0.86 0.012 255);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .terminal-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 2.5rem;
+    padding-inline: 0.85rem;
+    border-bottom: 1px solid oklch(0.28 0.016 255);
+    background: oklch(0.19 0.014 255);
+  }
+
+  .terminal-dots {
+    display: flex;
+    gap: 0.32rem;
+  }
+
+  .terminal-dots i {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: oklch(0.38 0.02 255);
+  }
+
+  .terminal-dots i:first-child {
+    background: oklch(0.62 0.15 25);
+  }
+
+  .terminal-dots i:nth-child(2) {
+    background: oklch(0.72 0.14 85);
+  }
+
+  .terminal-dots i:last-child {
+    background: oklch(0.68 0.15 165);
+  }
+
+  .terminal-title {
+    overflow: hidden;
+    color: oklch(0.66 0.014 255);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .terminal-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: auto;
+    color: oklch(0.78 0.16 165);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+  }
+
+  .terminal-live i {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 999px;
+    background: oklch(0.78 0.16 165);
+    box-shadow: 0 0 8px oklch(0.78 0.16 165 / 0.8);
+    animation: terminal-pulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes terminal-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  .terminal-body {
+    min-height: 16.5rem;
+    padding: 0.95rem 1rem 1.05rem;
+    font-family: var(--font-mono);
+    font-size: 0.71rem;
+    line-height: 2.05;
+  }
+
+  .terminal-line,
+  .terminal-cursor-line {
+    display: flex;
+    gap: 0.6rem;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .term-prompt {
+    flex: 0 0 auto;
+    color: oklch(0.78 0.16 165);
+    font-weight: 500;
+  }
+
+  .term-command {
+    color: oklch(0.94 0.02 155);
+    font-weight: 500;
+  }
+
+  .term-tag {
+    flex: 0 0 4.9rem;
+    color: oklch(0.6 0.014 255);
+  }
+
+  .term-tag-queued { color: oklch(0.66 0.03 255); }
+  .term-tag-clone { color: oklch(0.76 0.1 250); }
+  .term-tag-build { color: oklch(0.8 0.13 85); }
+  .term-tag-start { color: oklch(0.76 0.11 300); }
+  .term-tag-route { color: oklch(0.8 0.1 210); }
+  .term-tag-live { color: oklch(0.8 0.16 165); font-weight: 500; }
+
+  .terminal-cursor {
+    display: inline-block;
+    width: 0.52rem;
+    height: 0.95rem;
+    background: oklch(0.78 0.16 165);
+    vertical-align: text-bottom;
+    animation: terminal-blink 1.1s steps(1) infinite;
+  }
+
+  @keyframes terminal-blink {
+    50% { opacity: 0; }
+  }
+
+  .is-animated .terminal-line,
+  .is-animated .terminal-cursor-line {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  .is-animated .terminal-line.is-visible,
+  .is-animated .terminal-cursor-line.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: opacity 320ms ease, transform 320ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .terminal-live i,
+    .terminal-cursor {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .terminal-body {
+      min-height: 15rem;
+      font-size: 0.64rem;
+    }
+
+    .term-tag {
+      flex-basis: 4.2rem;
+    }
+  }
+</style>

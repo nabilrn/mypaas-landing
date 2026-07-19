@@ -1,0 +1,192 @@
+---
+import { simScenarios } from "../lib/site";
+
+interface Props {
+  choose: string;
+  noneNote: string;
+  contracts: readonly (readonly [string, string, string])[];
+}
+
+const { choose, noneNote, contracts } = Astro.props;
+---
+
+<div class="simulator" data-reveal data-simulator>
+  <p class="sim-choose">{choose}</p>
+  <div class="sim-options">
+    {simScenarios.map((scenario, index) => (
+      <button type="button" class="sim-chip" data-sim-option aria-pressed={index === 0 ? "true" : "false"}>{scenario.file}</button>
+    ))}
+  </div>
+  <div class="sim-screen">
+    <div class="sim-scan" data-sim-scan aria-hidden="true"></div>
+    <p class="sim-line sim-cmd"><span class="sim-prompt">$</span> mypaas detect github.com/you/app --branch main</p>
+    {simScenarios.map((scenario, index) => (
+      <div class="sim-result" data-sim-result hidden={index !== 0}>
+        {scenario.lines.map((line) => <p class="sim-line sim-dim">··· {line}</p>)}
+        {scenario.contract >= 0 ? (
+          <>
+            <p class="sim-line sim-mode">→ mode: {scenario.mode}</p>
+            <p class="sim-line sim-note">{contracts[scenario.contract][1]}</p>
+            <p class="sim-line sim-runtime">▸ runtime: {contracts[scenario.contract][2]}</p>
+          </>
+        ) : (
+          <p class="sim-line sim-error">✗ {noneNote}</p>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-simulator]:not([data-sim-ready])").forEach((sim) => {
+    sim.dataset.simReady = "true";
+    const chips = Array.from(sim.querySelectorAll<HTMLButtonElement>("[data-sim-option]"));
+    const results = Array.from(sim.querySelectorAll<HTMLElement>("[data-sim-result]"));
+    const scan = sim.querySelector<HTMLElement>("[data-sim-scan]");
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let timer: number | undefined;
+
+    const activate = (index: number) => {
+      chips.forEach((chip, chipIndex) => chip.setAttribute("aria-pressed", String(chipIndex === index)));
+      const show = () => results.forEach((panel, panelIndex) => { panel.hidden = panelIndex !== index; });
+      if (reduced || !scan) { show(); return; }
+      results.forEach((panel) => { panel.hidden = true; });
+      scan.classList.remove("is-running");
+      void scan.offsetWidth;
+      scan.classList.add("is-running");
+      clearTimeout(timer);
+      timer = window.setTimeout(show, 470);
+    };
+
+    chips.forEach((chip, index) => chip.addEventListener("click", () => activate(index)));
+  });
+</script>
+
+<style>
+  .simulator {
+    margin-top: 2.4rem;
+  }
+
+  .sim-choose {
+    margin: 0 0 0.7rem;
+    color: var(--app-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .sim-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .sim-chip {
+    padding: 0.42rem 0.75rem;
+    border: 1px solid var(--app-border-strong);
+    border-radius: 999px;
+    background: var(--app-surface);
+    color: var(--app-muted);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    cursor: pointer;
+    transition: border-color 150ms ease, background 150ms ease, color 150ms ease, transform 150ms ease;
+  }
+
+  .sim-chip:hover {
+    border-color: var(--app-accent);
+    color: var(--app-accent-strong);
+    transform: translateY(-1px);
+  }
+
+  .sim-chip[aria-pressed="true"] {
+    border-color: color-mix(in oklch, var(--app-accent) 55%, var(--app-border));
+    background: var(--app-accent-soft);
+    color: var(--app-accent-strong);
+    font-weight: 500;
+  }
+
+  .sim-chip:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 5px var(--app-accent);
+  }
+
+  .sim-screen {
+    position: relative;
+    overflow: hidden;
+    min-height: 12.5rem;
+    padding: 1rem 1.15rem 1.1rem;
+    border: 1px solid oklch(0.32 0.016 255);
+    border-radius: 0.6rem;
+    background: oklch(0.155 0.014 255);
+    color: oklch(0.86 0.012 255);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sim-scan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, oklch(0.78 0.16 165));
+    opacity: 0;
+  }
+
+  .sim-scan.is-running {
+    animation: sim-scan 480ms ease-out forwards;
+  }
+
+  @keyframes sim-scan {
+    from { width: 0; opacity: 1; }
+    to { width: 100%; opacity: 1; }
+  }
+
+  .sim-line {
+    margin: 0;
+    line-height: 2.05;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .sim-cmd {
+    margin-bottom: 0.45rem;
+    color: oklch(0.94 0.02 155);
+    font-weight: 500;
+  }
+
+  .sim-prompt {
+    color: oklch(0.78 0.16 165);
+  }
+
+  .sim-dim {
+    color: oklch(0.62 0.014 255);
+  }
+
+  .sim-mode {
+    color: oklch(0.8 0.16 165);
+    font-weight: 500;
+  }
+
+  .sim-note {
+    color: oklch(0.78 0.014 255);
+  }
+
+  .sim-runtime {
+    color: oklch(0.62 0.014 255);
+  }
+
+  .sim-error {
+    color: oklch(0.75 0.15 25);
+  }
+
+  @media (max-width: 560px) {
+    .sim-screen {
+      font-size: 0.65rem;
+    }
+  }
+</style>

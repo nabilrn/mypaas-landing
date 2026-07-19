@@ -8,9 +8,10 @@ interface Props {
   image?: string;
   locale?: Locale;
   path?: string;
+  forceTheme?: "dark" | "light";
 }
 
-const { title, description, image, locale = "en", path = Astro.url.pathname } = Astro.props;
+const { title, description, image, locale = "en", path = Astro.url.pathname, forceTheme } = Astro.props;
 const canonical = Astro.site ? new URL(path, Astro.site) : Astro.url;
 const socialImage = image && Astro.site ? new URL(image, Astro.site) : undefined;
 const meta = localeMeta[locale];
@@ -22,7 +23,7 @@ const siteName = "MyPaas";
 ---
 
 <!doctype html>
-<html lang={meta.htmlLang}>
+<html lang={meta.htmlLang} class:list={{ dark: forceTheme === "dark" }}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -50,10 +51,14 @@ const siteName = "MyPaas";
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <title>{title}</title>
-    <script is:inline>
+    <script is:inline define:vars={{ forcedTheme: forceTheme ?? "" }}>
       (() => {
-        const stored = localStorage.getItem("mypaas-theme");
-        const dark = stored === "dark" || (!stored && matchMedia("(prefers-color-scheme: dark)").matches);
+        const dark = forcedTheme
+          ? forcedTheme === "dark"
+          : (() => {
+              const stored = localStorage.getItem("mypaas-theme");
+              return stored === "dark" || (!stored && matchMedia("(prefers-color-scheme: dark)").matches);
+            })();
         document.documentElement.classList.toggle("dark", dark);
       })();
     </script>

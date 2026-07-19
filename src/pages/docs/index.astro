@@ -34,13 +34,16 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
       <thead><tr><th>Mode</th><th>Repository requirement</th><th>Runtime</th></tr></thead>
       <tbody>
         <tr><td><strong>Dockerfile</strong></td><td>Root <code>Dockerfile</code> and an application port.</td><td>One application container.</td></tr>
-        <tr><td><strong>Docker Compose</strong></td><td>Root Compose file and a selected public service.</td><td>Main service plus private supporting services.</td></tr>
+        <tr><td><strong>Docker Compose</strong></td><td>A Compose file at the root or in a subdirectory — auto-discovered or set explicitly — plus a selected public service.</td><td>Main service plus private supporting services.</td></tr>
         <tr><td><strong>Static</strong></td><td>Ready <code>index.html</code> in <code>dist</code>, <code>build</code>, <code>public</code>, or root.</td><td>Caddy file server without an app container.</td></tr>
       </tbody>
     </table>
     <p>
-      Detection priority is Compose, then Dockerfile, then static output. Detection
-      prepares a plan; the user still reviews branch, ports, resources, and environment values.
+      Detection priority is Compose, then Dockerfile, then static output. Compose
+      discovery walks the repository tree (depth ≤ 4), ranks root files highest, and
+      skips dependency and build-output directories; the chosen path is persisted so
+      webhook redeploys use the same file. Detection prepares a plan; the user still
+      reviews branch, ports, resources, and environment values.
     </p>
   </section>
 

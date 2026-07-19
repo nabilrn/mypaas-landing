@@ -32,7 +32,8 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
   <section>
     <h2>Metrics</h2>
     <p>
-      Docker Stats provides CPU, memory, and uptime snapshots for running containers.
+      Docker Stats provides CPU, memory, and uptime snapshots for running containers,
+      streamed to the dashboard at roughly five-second intervals.
       Compose projects expose service-level selection instead of one ambiguous aggregate.
     </p>
     <p>
@@ -63,6 +64,30 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
       Compose deployment can be selected for rollback without rebuilding that release.
     </p>
     <aside class="warning"><p>Static projects do not use image rollback. Redeploy the desired commit to publish its static output.</p></aside>
+    <p>
+      History is bounded: the 20 most recent deployments per project are kept, runtime
+      log history is capped at the most recent 5,000 lines, and unused images are
+      cleaned up on a weekly schedule.
+    </p>
+  </section>
+
+  <section>
+    <h2>Platform backups</h2>
+    <p>
+      The platform database is dumped to local files on a daily schedule, with optional
+      weekly offsite copies to Cloudflare R2 when configured. Keep the environment
+      encryption key backed up separately — without it, stored secrets cannot be recovered.
+    </p>
+  </section>
+
+  <section>
+    <h2>CLI access</h2>
+    <p>
+      The <code>mypaas</code> CLI covers routine administration without opening the
+      dashboard: <code>user add</code>, <code>project list</code>, <code>project deploy</code>,
+      <code>project logs</code>, and a manual <code>backup</code>. It authenticates to the
+      same API with a token stored on the operator's machine.
+    </p>
   </section>
 
   <section>

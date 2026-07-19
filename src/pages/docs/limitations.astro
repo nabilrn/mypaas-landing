@@ -39,6 +39,9 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
         <tr><td><strong>Static projects</strong></td><td>MyPaas publishes ready output; it does not run arbitrary framework builds.</td></tr>
         <tr><td><strong>GitHub webhook</strong></td><td>The generated URL and secret must currently be added to GitHub manually.</td></tr>
         <tr><td><strong>Rollback</strong></td><td>Image rollback applies to successful Dockerfile and Compose releases, not static output.</td></tr>
+        <tr><td><strong>Build queue</strong></td><td>Builds are serialized per project with at most two concurrent builds; further work waits.</td></tr>
+        <tr><td><strong>History bounds</strong></td><td>The 20 most recent deployments per project are kept; runtime log history is capped at 5,000 lines.</td></tr>
+        <tr><td><strong>Metrics</strong></td><td>Dashboard metrics are live Docker Stats snapshots, not long-term historical series.</td></tr>
       </tbody>
     </table>
   </section>

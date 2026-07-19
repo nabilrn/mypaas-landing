@@ -1,8 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CopyCommand from "./CopyCommand.astro";
+import DeployTerminal from "./DeployTerminal.astro";
+import DetectionSimulator from "./DetectionSimulator.astro";
 import IntegrationMarquee from "./IntegrationMarquee.astro";
 import LandingHeader from "./LandingHeader.astro";
+import LiveOpsMock from "./LiveOpsMock.astro";
 import ThemeCompareSlider from "./ThemeCompareSlider.astro";
 import { installCommand, landingCopy, repositoryUrl, uiCopy, type Locale } from "../lib/site";
 import "../styles/landing.css";
@@ -12,52 +15,100 @@ interface Props { locale?: Locale }
 const { locale = "en" } = Astro.props;
 const copy = landingCopy[locale];
 const ui = uiCopy[locale];
+const dashboardHost = `dashboard.${copy.domainExample.slice(copy.domainExample.indexOf(".") + 1)}`;
+const pipelineWords = ["git push", "build", "deploy", "route", "live", "rollback"];
+
+const capabilityIcons = [
+  '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.2"/>',
+  '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7.5 9 3 3-3 3M13 15h4"/>',
+  '<rect x="3" y="4" width="18" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5M10 13h4"/>',
+  '<path d="M12 3 5 6v5c0 4.4 3 8.2 7 9 4-.8 7-4.6 7-9V6l-7-3Z"/><path d="m9.3 12 1.9 1.9 3.5-3.7"/>',
+  '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/>',
+];
 ---
 
-<BaseLayout title={copy.metaTitle} description={copy.metaDescription} locale={locale} path={locale === "en" ? "/" : `/${locale}/`} image="/landing/dashboard-dark.png">
-  <LandingHeader {locale} />
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription} locale={locale} path={locale === "en" ? "/" : `/${locale}/`} image="/landing/dashboard-dark.png" forceTheme="dark">
+  <LandingHeader {locale} hideThemeToggle />
 
   <main class="landing-page">
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero" aria-labelledby="hero-title" data-hero>
       <div class="circuit-layer" aria-hidden="true"></div>
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-spotlight" aria-hidden="true"></div>
+      <div class="hero-mega" aria-hidden="true">SHIP</div>
+      <div class="hero-scanline" aria-hidden="true"></div>
       <div class="landing-shell">
         <div class="hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">{copy.eyebrow}</p>
-            <h1 id="hero-title">{copy.heroTitle}</h1>
-            <p class="hero-summary">{copy.heroSummary}</p>
-            <div class="hero-actions">
-              <a class="primary-action" href="/docs/">{copy.readDocs}</a>
+            <p class="hero-status" data-reveal><span class="status-dot" aria-hidden="true"></span>{copy.heroStatus}</p>
+            <h1 id="hero-title" data-reveal style="--reveal-delay:70ms">
+              <span class="hero-title-lead">{copy.heroTitleLead}</span>
+              <span class="hero-title-accent">{copy.heroTitleAccent}</span>
+            </h1>
+            <p class="hero-summary" data-reveal style="--reveal-delay:140ms">{copy.heroSummary}</p>
+            <div class="hero-actions" data-reveal style="--reveal-delay:210ms">
+              <a class="primary-action" href="/docs/">{copy.readDocs}<span class="action-arrow" aria-hidden="true">→</span></a>
               <a class="secondary-action star-action" href={repositoryUrl} target="_blank" rel="noreferrer">
                 <span aria-hidden="true">★</span>{copy.starRepository}
               </a>
             </div>
           </div>
 
-          <dl class="product-scope" aria-label={copy.scopeLabel}>
+          <dl class="product-scope" aria-label={copy.scopeLabel} data-reveal style="--reveal-delay:280ms">
             {copy.scope.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}
           </dl>
         </div>
 
-        <div class="hero-command">
-          <p class="command-label">{copy.commandLabel}</p>
-          <CopyCommand command={installCommand} label={copy.commandPlatform} copyLabel={copy.copy} copiedLabel={copy.copied} failedLabel={copy.copyFailed} />
-          <p class="command-note">{copy.commandNote}</p>
+        <div class="hero-panels">
+          <div class="hero-command" data-reveal style="--reveal-delay:120ms">
+            <p class="command-label">{copy.commandLabel}</p>
+            <CopyCommand command={installCommand} label={copy.commandPlatform} copyLabel={copy.copy} copiedLabel={copy.copied} failedLabel={copy.copyFailed} />
+            <p class="command-note">{copy.commandNote}</p>
+          </div>
+          <DeployTerminal label={copy.terminalLabel} lines={copy.terminalLines} />
         </div>
 
-        <div class="dashboard-preview">
+        <div class="preview-frame" data-reveal>
+          <div class="preview-chrome" aria-hidden="true">
+            <span class="chrome-dots"><i></i><i></i><i></i></span>
+            <span class="chrome-url">{dashboardHost}</span>
+          </div>
           <ThemeCompareSlider />
         </div>
+      </div>
+
+      <div class="pipeline-ticker" aria-label={copy.pipelineLabel}>
+        <div class="pipeline-track">
+          {[0, 1].map((group) => (
+            <div class="pipeline-group" aria-hidden={group === 1 ? "true" : undefined}>
+              {pipelineWords.map((word, index) => (
+                <><span class:list={[{ outline: index % 2 === 1 }]}>{word}</span><i aria-hidden="true">→</i></>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-band" aria-label={copy.statsLabel}>
+      <div class="landing-shell stats-grid">
+        {copy.stats.map(([value, suffix, label], index) => (
+          <div class="stat" data-reveal style={`--reveal-delay:${index * 60}ms`}>
+            <p class="stat-value"><span data-count-to={value}>{value}</span>{suffix && <span class="stat-suffix">{suffix}</span>}</p>
+            <p class="stat-label">{label}</p>
+          </div>
+        ))}
       </div>
     </section>
 
     <section id="integrations" class="integration-section" aria-labelledby="integrations-title">
       <div class="landing-shell integration-heading">
-        <div>
+        <div data-reveal>
           <p class="section-label">{copy.integrationsLabel}</p>
           <h2 id="integrations-title">{copy.integrationsTitle}</h2>
         </div>
-        <p>{copy.integrationsBody}</p>
+        <p data-reveal style="--reveal-delay:90ms">{copy.integrationsBody}</p>
       </div>
       <IntegrationMarquee />
     </section>
@@ -65,16 +116,18 @@ const ui = uiCopy[locale];
     <section id="workflow" class="section" aria-labelledby="workflow-title">
       <div class="landing-shell">
         <div class="section-heading">
-          <div>
+          <div data-reveal>
             <p class="section-label">{copy.workflowLabel}</p>
             <h2 id="workflow-title">{copy.workflowTitle}</h2>
+            <span class="section-index" aria-hidden="true">01</span>
           </div>
-          <p>{copy.workflowBody}</p>
+          <p data-reveal style="--reveal-delay:90ms">{copy.workflowBody}</p>
         </div>
 
         <div class="workflow-grid">
-          {copy.workflow.map(([number, title, body]) => (
-            <article>
+          <span class="workflow-pulse" aria-hidden="true"></span>
+          {copy.workflow.map(([number, title, body], index) => (
+            <article data-reveal style={`--reveal-delay:${index * 80}ms`}>
               <span>{number}</span>
               <h3>{title}</h3>
               <p>{body}</p>
@@ -82,35 +135,26 @@ const ui = uiCopy[locale];
           ))}
         </div>
 
-        <div class="contract-table" aria-label={copy.contractHeaders[0]}>
-          <div class="contract-row contract-header">
-            {copy.contractHeaders.map((item) => <span>{item}</span>)}
-          </div>
-          {copy.contracts.map(([title, body, runtime]) => (
-            <div class="contract-row">
-              <strong>{title}</strong>
-              <p>{body}</p>
-              <span>{runtime}</span>
-            </div>
-          ))}
-        </div>
+        <DetectionSimulator choose={copy.simChoose} noneNote={copy.simNoneNote} contracts={copy.contracts} />
       </div>
     </section>
 
     <section id="operations" class="section section-muted" aria-labelledby="operations-title">
       <div class="landing-shell operations-layout">
-        <div class="operations-intro">
+        <div class="operations-intro" data-reveal>
           <p class="section-label">{copy.operationsLabel}</p>
           <h2 id="operations-title">{copy.operationsTitle}</h2>
+          <span class="section-index" aria-hidden="true">02</span>
           <p>{copy.operationsBody}</p>
           <div class="request-path" aria-label={copy.requestPathLabel}>
             <span>GitHub</span><i>→</i><span>MyPaas</span><i>→</i><span>Docker</span><i>→</i><span>Caddy</span><i>→</i><span>Cloudflare Tunnel</span><i>→</i><span>{copy.domainExample}</span>
           </div>
+          <LiveOpsMock label={copy.liveLabel} />
         </div>
 
         <div class="operation-list">
           {copy.operations.map(([title, body], index) => (
-            <article>
+            <article data-reveal style={`--reveal-delay:${index * 60}ms`}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div><h3>{title}</h3><p>{body}</p></div>
             </article>
@@ -119,8 +163,34 @@ const ui = uiCopy[locale];
       </div>
     </section>
 
+    <section id="capabilities" class="section" aria-labelledby="capabilities-title">
+      <div class="landing-shell">
+        <div class="section-heading">
+          <div data-reveal>
+            <p class="section-label">{copy.capabilitiesLabel}</p>
+            <h2 id="capabilities-title">{copy.capabilitiesTitle}</h2>
+            <span class="section-index" aria-hidden="true">03</span>
+          </div>
+          <p data-reveal style="--reveal-delay:90ms">{copy.capabilitiesBody}</p>
+        </div>
+
+        <div class="capability-grid">
+          {copy.capabilities.map(([title, body], index) => (
+            <article class="capability-card" data-reveal style={`--reveal-delay:${index * 70}ms`}>
+              <span class="capability-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" set:html={capabilityIcons[index]} />
+              </span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+              {index === 0 && <code class="capability-snippet">DATABASE_URL=postgres://app:•••@postgres:5432/app</code>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
     <section class="section" aria-labelledby="limits-title">
-      <div class="landing-shell boundary-layout">
+      <div class="landing-shell boundary-layout" data-reveal>
         <div>
           <p class="section-label">{copy.boundariesLabel}</p>
           <h2 id="limits-title">{copy.boundariesTitle}</h2>
@@ -135,30 +205,34 @@ const ui = uiCopy[locale];
     <section id="installation" class="section install-checklist" aria-labelledby="before-install-title">
       <div class="landing-shell">
         <div class="section-heading">
-          <div>
+          <div data-reveal>
             <p class="section-label">{copy.beforeLabel}</p>
             <h2 id="before-install-title">{copy.beforeTitle}</h2>
+            <span class="section-index" aria-hidden="true">04</span>
           </div>
-          <p>{copy.beforeBody}</p>
+          <p data-reveal style="--reveal-delay:90ms">{copy.beforeBody}</p>
         </div>
 
         <ol class="prerequisite-grid">
-          {copy.prerequisites.map(([number, title, body]) => <li><span>{number}</span><strong>{title}</strong><p>{body}</p></li>)}
+          {copy.prerequisites.map(([number, title, body], index) => (
+            <li data-reveal style={`--reveal-delay:${index * 80}ms`}><span>{number}</span><strong>{title}</strong><p>{body}</p></li>
+          ))}
         </ol>
 
-        <a class="docs-link" href="/docs/installation/">{copy.installationGuide} <span aria-hidden="true">→</span></a>
+        <a class="docs-link" href="/docs/installation/" data-reveal>{copy.installationGuide} <span aria-hidden="true">→</span></a>
       </div>
     </section>
 
     <section id="faq" class="section section-muted" aria-labelledby="faq-title">
       <div class="landing-shell faq-layout">
-        <div>
+        <div data-reveal>
           <p class="section-label">{copy.faqLabel}</p>
           <h2 id="faq-title">{copy.faqTitle}</h2>
+          <span class="section-index" aria-hidden="true">05</span>
         </div>
         <div class="faq-list">
           {copy.faq.map(([question, answer], index) => (
-            <details open={index === 0}>
+            <details open={index === 0} data-reveal style={`--reveal-delay:${index * 50}ms`}>
               <summary><span>{question}</span><i aria-hidden="true">+</i></summary>
               <p>{answer}</p>
             </details>
@@ -166,9 +240,23 @@ const ui = uiCopy[locale];
         </div>
       </div>
     </section>
+
+    <section class="section cta-section" aria-labelledby="cta-title">
+      <div class="landing-shell">
+        <div class="cta-inner" data-reveal>
+          <p class="section-label">{copy.ctaLabel}</p>
+          <h2 id="cta-title">{copy.ctaTitle}</h2>
+          <p class="cta-body">{copy.ctaBody}</p>
+          <div class="cta-command">
+            <CopyCommand command={installCommand} label={copy.commandPlatform} copyLabel={copy.copy} copiedLabel={copy.copied} failedLabel={copy.copyFailed} />
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
+    <div class="footer-wordmark" aria-hidden="true">MYPAAS</div>
     <div class="landing-shell footer-layout">
       <div><strong>MyPaas</strong><p>{copy.footer}</p></div>
       <nav aria-label="Footer navigation">
@@ -180,4 +268,67 @@ const ui = uiCopy[locale];
       </nav>
     </div>
   </footer>
+
+  <noscript><style>[data-reveal] { opacity: 1 !important; transform: none !important; }</style></noscript>
 </BaseLayout>
+
+<script>
+  const prefersReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const hero = document.querySelector<HTMLElement>("[data-hero]");
+  if (hero && !prefersReduced && matchMedia("(pointer: fine)").matches) {
+    let spotlightFrame: number | null = null;
+    hero.addEventListener("pointermove", (event) => {
+      if (spotlightFrame !== null) return;
+      spotlightFrame = requestAnimationFrame(() => {
+        const rect = hero.getBoundingClientRect();
+        hero.style.setProperty("--mx", `${Math.round(event.clientX - rect.left)}px`);
+        hero.style.setProperty("--my", `${Math.round(event.clientY - rect.top)}px`);
+        spotlightFrame = null;
+      });
+    });
+  }
+
+  const revealables = document.querySelectorAll<HTMLElement>("[data-reveal]");
+  if (prefersReduced || !("IntersectionObserver" in window)) {
+    revealables.forEach((el) => el.classList.add("is-revealed"));
+  } else {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-revealed");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.18, rootMargin: "0px 0px -6% 0px" });
+    revealables.forEach((el) => revealObserver.observe(el));
+  }
+
+  const counters = document.querySelectorAll<HTMLElement>("[data-count-to]");
+  const setFinalValue = (el: HTMLElement) => {
+    if (el.dataset.countTo) el.textContent = el.dataset.countTo;
+  };
+  if (prefersReduced || !("IntersectionObserver" in window)) {
+    counters.forEach(setFinalValue);
+  } else {
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target as HTMLElement;
+        counterObserver.unobserve(el);
+        const target = Number(el.dataset.countTo);
+        if (!Number.isFinite(target)) return;
+        const duration = 1300;
+        const startedAt = performance.now();
+        const tick = (now: number) => {
+          const progress = Math.min((now - startedAt) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = String(Math.round(target * eased));
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach((el) => counterObserver.observe(el));
+  }
+</script>

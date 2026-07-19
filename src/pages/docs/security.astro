@@ -30,6 +30,8 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
         <tr><td><strong>Project network</strong></td><td>Runtime ports bind locally and project traffic passes through Caddy.</td></tr>
         <tr><td><strong>Docker access</strong></td><td>The control plane owns the Docker socket; project containers do not receive it by default.</td></tr>
         <tr><td><strong>Database writes</strong></td><td>DB Studio requires a temporary write session and primary-key guards for update or delete.</td></tr>
+        <tr><td><strong>Rate limiting</strong></td><td>Request budgets on login, webhook, and general API traffic per IP, project, and user.</td></tr>
+        <tr><td><strong>Audit trail</strong></td><td>Administrative actions are recorded with actor, timestamp, and request context.</td></tr>
       </tbody>
     </table>
   </section>
@@ -61,7 +63,7 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     <ul>
       <li>Restrict SSH and operating-system administration access.</li>
       <li>Keep the VM, Docker Engine, Compose plugin, and MyPaas checkout updated.</li>
-      <li>Configure, test, and retain database backups outside the running database volume.</li>
+      <li>Verify the built-in daily database backups and retain additional off-host copies.</li>
       <li>Review repository Dockerfiles and Compose files before deploying them.</li>
       <li>Monitor host disk, memory, CPU, and Cloudflare configuration.</li>
       <li>Remove collaborators and rotate credentials when access is no longer required.</li>

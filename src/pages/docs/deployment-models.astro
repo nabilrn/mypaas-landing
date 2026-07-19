@@ -11,7 +11,7 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     <h2>Priority and validation</h2>
     <p>MyPaas inspects the selected branch in this order:</p>
     <ol class="steps">
-      <li>A root <code>docker-compose.yml</code> or <code>compose.yml</code>.</li>
+      <li>A Compose file — <code>docker-compose.yml</code>, <code>compose.yml</code>/<code>.yaml</code>, or a prod variant — discovered at the root or recursively within the repository (depth ≤ 4), or an explicit repo-relative path you choose.</li>
       <li>A root <code>Dockerfile</code>.</li>
       <li>A ready <code>index.html</code> in <code>dist</code>, <code>build</code>, <code>public</code>, or root.</li>
     </ol>
@@ -45,6 +45,8 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     </p>
     <ul>
       <li>Compose Doctor checks build context, required variables, port hints, and unsafe configuration flags.</li>
+      <li>Compose files can live in subdirectories; chain additional <code>-f</code> override files, select <code>COMPOSE_PROFILES</code>, and override the working directory from project settings.</li>
+      <li>One repository can host several MyPaas projects, each pointing at a different Compose file.</li>
       <li>MyPaas applies resource limits and the public port through an override file.</li>
       <li>Logs and metrics remain selectable per service.</li>
       <li>Existing Compose resources can be audited and explicitly reset when stale volumes or credentials cause conflicts.</li>
@@ -66,6 +68,8 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     <p>
       A failed Dockerfile or Compose build does not replace the currently routed
       release. Deployment state, build logs, and the failure message remain available for diagnosis.
+      Builds are serialized per project, at most two builds run concurrently, and a build
+      that exceeds the configured timeout is stopped and marked failed.
     </p>
   </section>
 </DocsLayout>

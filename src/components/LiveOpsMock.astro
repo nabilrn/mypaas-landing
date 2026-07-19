@@ -1,0 +1,268 @@
+---
+interface Props { label: string }
+
+const { label } = Astro.props;
+const initialLogs = [
+  "[INFO] server listening on :3000",
+  "[metrics] cpu 12.4% · mem 234/512MB",
+  "[deploy] release #43 routed via caddy",
+];
+---
+
+<div class="live-ops" data-reveal data-live-ops>
+  <div class="live-head">
+    <span class="live-dot" aria-hidden="true"></span>
+    <span class="live-title">{label}</span>
+    <span class="live-uptime">up&nbsp;<b data-live-uptime>1d 23:41:07</b></span>
+  </div>
+  <div class="live-metrics">
+    <div class="live-metric">
+      <span class="live-metric-label">CPU</span>
+      <svg class="live-spark" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
+        <path data-live-area fill="currentColor" opacity="0.12"></path>
+        <polyline data-live-line fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"></polyline>
+      </svg>
+      <span class="live-metric-value" data-live-cpu>12.4%</span>
+    </div>
+    <div class="live-metric">
+      <span class="live-metric-label">MEM</span>
+      <span class="live-bar" aria-hidden="true"><i data-live-mem style="width: 45.7%"></i></span>
+      <span class="live-metric-value" data-live-mem-text>234/512</span>
+    </div>
+  </div>
+  <div class="live-logs" data-live-logs>
+    {initialLogs.map((line) => <p class="live-log">{line}</p>)}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-live-ops]:not([data-live-ready])").forEach((panel) => {
+    panel.dataset.liveReady = "true";
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || !("IntersectionObserver" in window)) return;
+
+    const line = panel.querySelector<SVGPolylineElement>("[data-live-line]");
+    const area = panel.querySelector<SVGPathElement>("[data-live-area]");
+    const cpuText = panel.querySelector<HTMLElement>("[data-live-cpu]");
+    const memBar = panel.querySelector<HTMLElement>("[data-live-mem]");
+    const memText = panel.querySelector<HTMLElement>("[data-live-mem-text]");
+    const logsBox = panel.querySelector<HTMLElement>("[data-live-logs]");
+    const uptimeEl = panel.querySelector<HTMLElement>("[data-live-uptime]");
+
+    const pool = [
+      "[INFO] server listening on :3000",
+      "[metrics] cpu 12.4% · mem 234/512MB",
+      "[deploy] release #43 routed via caddy",
+      "[INFO] GET /health 200 · 3ms",
+      "[webhook] push main · signature ok · queued",
+      "[metrics] cpu 9.8% · mem 231/512MB",
+    ];
+    const values = Array.from({ length: 24 }, (_, i) => 10 + Math.sin(i / 3) * 4 + Math.random() * 3);
+    let logIndex = 3;
+    let cpu = 12.4;
+    let mem = 234;
+    const baseUptime = Date.now() - (1 * 86400 + 23 * 3600 + 41 * 60 + 7) * 1000;
+
+    const renderSpark = () => {
+      if (!line || !area) return;
+      const points = values.map((v, i) => `${((i / (values.length - 1)) * 120).toFixed(1)},${(31 - (v / 20) * 29).toFixed(1)}`);
+      line.setAttribute("points", points.join(" "));
+      area.setAttribute("d", `M0,32 L${points.join(" L")} L120,32 Z`);
+    };
+    renderSpark();
+
+    const tickMetrics = () => {
+      cpu = Math.min(19, Math.max(4, cpu + (Math.random() - 0.5) * 3));
+      values.push(cpu);
+      values.shift();
+      renderSpark();
+      if (cpuText) cpuText.textContent = `${cpu.toFixed(1)}%`;
+      mem = Math.min(300, Math.max(200, mem + (Math.random() - 0.5) * 8));
+      if (memBar) memBar.style.width = `${(mem / 512) * 100}%`;
+      if (memText) memText.textContent = `${Math.round(mem)}/512`;
+    };
+
+    const tickLog = () => {
+      if (!logsBox) return;
+      const entry = document.createElement("p");
+      entry.className = "live-log is-new";
+      entry.textContent = pool[logIndex % pool.length];
+      logIndex += 1;
+      logsBox.append(entry);
+      while (logsBox.children.length > 3) logsBox.firstElementChild?.remove();
+    };
+
+    const tickUptime = () => {
+      if (!uptimeEl) return;
+      const seconds = Math.floor((Date.now() - baseUptime) / 1000);
+      const days = Math.floor(seconds / 86400);
+      const hh = String(Math.floor((seconds % 86400) / 3600)).padStart(2, "0");
+      const mm = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+      const ss = String(seconds % 60).padStart(2, "0");
+      uptimeEl.textContent = `${days}d ${hh}:${mm}:${ss}`;
+    };
+
+    let started = false;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || started) return;
+        started = true;
+        observer.disconnect();
+        window.setInterval(tickMetrics, 1600);
+        window.setInterval(tickLog, 2400);
+        window.setInterval(tickUptime, 1000);
+      });
+    }, { threshold: 0.3 });
+    observer.observe(panel);
+  });
+</script>
+
+<style>
+  .live-ops {
+    margin-top: 1.35rem;
+    overflow: hidden;
+    border: 1px solid oklch(0.32 0.016 255);
+    border-radius: 0.6rem;
+    background: oklch(0.155 0.014 255);
+    color: oklch(0.86 0.012 255);
+    font-family: var(--font-mono);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .live-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid oklch(0.28 0.016 255);
+    background: oklch(0.19 0.014 255);
+  }
+
+  .live-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: oklch(0.78 0.16 165);
+    box-shadow: 0 0 8px oklch(0.78 0.16 165 / 0.8);
+    animation: live-pulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  .live-title {
+    overflow: hidden;
+    color: oklch(0.66 0.014 255);
+    font-size: 0.64rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .live-uptime {
+    margin-left: auto;
+    color: oklch(0.6 0.014 255);
+    font-size: 0.62rem;
+    white-space: nowrap;
+  }
+
+  .live-uptime b {
+    color: oklch(0.8 0.16 165);
+    font-weight: 500;
+  }
+
+  .live-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid oklch(0.28 0.016 255);
+  }
+
+  .live-metric {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .live-metric + .live-metric {
+    border-left: 1px solid oklch(0.28 0.016 255);
+  }
+
+  .live-metric-label {
+    color: oklch(0.6 0.014 255);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+  }
+
+  .live-spark {
+    flex: 1;
+    height: 1.6rem;
+    color: oklch(0.78 0.16 165);
+  }
+
+  .live-metric-value {
+    color: oklch(0.92 0.02 155);
+    font-size: 0.62rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .live-bar {
+    flex: 1;
+    height: 0.42rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: oklch(0.3 0.016 255);
+  }
+
+  .live-bar i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, oklch(0.55 0.14 165), oklch(0.78 0.16 165));
+    transition: width 1.2s cubic-bezier(0.22, 0.61, 0.21, 1);
+  }
+
+  .live-logs {
+    min-height: 5.15rem;
+    padding: 0.6rem 0.85rem 0.75rem;
+  }
+
+  .live-log {
+    margin: 0;
+    overflow: hidden;
+    color: oklch(0.62 0.014 255);
+    font-size: 0.62rem;
+    line-height: 1.75;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .live-log.is-new {
+    color: oklch(0.78 0.014 255);
+    animation: live-in 400ms ease;
+  }
+
+  @keyframes live-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-dot {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .live-metrics {
+      grid-template-columns: 1fr;
+    }
+
+    .live-metric + .live-metric {
+      border-top: 1px solid oklch(0.28 0.016 255);
+      border-left: 0;
+    }
+  }
+</style>

@@ -29,6 +29,9 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     <p>
       Compose projects receive additional preflight checks for the public service,
       build context, port mapping, required environment values, and unsupported configuration flags.
+      A repository scan lists ranked Compose file candidates — root files first — and the
+      selected path, optional override files, profiles, and working directory are stored
+      on the project and reused on every redeploy.
     </p>
   </section>
 
@@ -53,6 +56,8 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     <p>
       Project settings provide a webhook URL and per-project secret. Add both to
       the GitHub repository and select push events. Only signed pushes to the configured branch trigger a deployment.
+      The secret can be regenerated from settings at any time. Webhook deliveries are
+      rate-limited per project and deduplicated — a new push replaces a still-pending deployment.
     </p>
     <aside class="warning"><p>MyPaas does not currently create the GitHub webhook automatically. Manual repository setup is required.</p></aside>
   </section>
@@ -71,7 +76,9 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     <h2>Resource profiles</h2>
     <p>
       Projects use a named CPU and memory profile based on the detected deployment
-      model. You can override it within the configured owner quota. The dashboard
+      model — a small static site does not get the same allocation as a Node service.
+      You can override it within the configured owner quota (by default 6 GB memory,
+      3 CPU cores, and 20 projects per owner). The dashboard
       reports configured allocation separately from best-effort live Docker usage.
     </p>
   </section>
