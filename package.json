@@ -1,9 +1,8 @@
 {
   "name": "mypaas-public",
-  "version": "1.0.0",
-  "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.22.0",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -13,11 +12,15 @@
   "dependencies": {
     "@fontsource-variable/instrument-sans": "^5.2.8",
     "@fontsource/ibm-plex-mono": "^5.2.7",
-    "astro": "^5.18.2",
-    "simple-icons": "^16.26.0"
-  },
-  "devDependencies": {
-    "sharp": "^0.34.5",
+    "astro": "^5.6.1",
+    "sharp": "^0.34.2",
+    "simple-icons": "^16.26.0",
     "typescript": "^5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }
