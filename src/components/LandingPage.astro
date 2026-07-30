@@ -80,7 +80,7 @@ const capabilityIcons = [
       </div>
 
       <div class="pipeline-ticker" aria-label={copy.pipelineLabel}>
-        <div class="pipeline-track">
+        <div class="pipeline-track" data-pipeline-track>
           {[0, 1].map((group) => (
             <div class="pipeline-group" aria-hidden={group === 1 ? "true" : undefined}>
               {pipelineWords.map((word, index) => (
@@ -275,6 +275,33 @@ const capabilityIcons = [
 
 <script>
   const prefersReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Seamless marquee: the -50% loop only lines up when half of the track is at
+  // least as wide as the viewport, so clone groups until that invariant holds.
+  const pipelineTrack = document.querySelector<HTMLElement>("[data-pipeline-track]");
+  if (pipelineTrack) {
+    const template = pipelineTrack.querySelector<HTMLElement>(".pipeline-group");
+    const fillPipeline = () => {
+      if (!template) return;
+      const viewport = pipelineTrack.parentElement?.clientWidth ?? 0;
+      let guard = 0;
+      while ((pipelineTrack.scrollWidth / 2 < viewport || pipelineTrack.childElementCount % 2 !== 0) && guard < 14) {
+        const clone = template.cloneNode(true) as HTMLElement;
+        clone.setAttribute("aria-hidden", "true");
+        pipelineTrack.appendChild(clone);
+        guard += 1;
+      }
+      // Keep the original per-group speed: 32s per pair of groups.
+      pipelineTrack.style.animationDuration = `${16 * pipelineTrack.childElementCount}s`;
+    };
+    fillPipeline();
+    document.fonts?.ready.then(fillPipeline);
+    let resizeFrame = 0;
+    addEventListener("resize", () => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(fillPipeline);
+    });
+  }
 
   const hero = document.querySelector<HTMLElement>("[data-hero]");
   if (hero && !prefersReduced && matchMedia("(pointer: fine)").matches) {

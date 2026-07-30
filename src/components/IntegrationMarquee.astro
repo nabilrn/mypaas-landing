@@ -22,7 +22,7 @@ const integrations = [
 ---
 
 <div class="marquee" aria-label="Technology integrations">
-  <div class="marquee-track">
+  <div class="marquee-track" data-marquee-track>
     {[0, 1].map((group) => (
       <div class="marquee-group" aria-hidden={group === 1 ? "true" : undefined}>
         {integrations.map((item) => (
@@ -40,6 +40,35 @@ const integrations = [
     ))}
   </div>
 </div>
+
+<script>
+  // Seamless marquee: the -50% loop only lines up when half of the track is at
+  // least as wide as the viewport, so clone groups until that invariant holds.
+  document.querySelectorAll<HTMLElement>("[data-marquee-track]:not([data-marquee-ready])").forEach((track) => {
+    track.dataset.marqueeReady = "true";
+    const template = track.querySelector<HTMLElement>(".marquee-group");
+    const fill = () => {
+      if (!template) return;
+      const viewport = track.parentElement?.clientWidth ?? 0;
+      let guard = 0;
+      while ((track.scrollWidth / 2 < viewport || track.childElementCount % 2 !== 0) && guard < 14) {
+        const clone = template.cloneNode(true) as HTMLElement;
+        clone.setAttribute("aria-hidden", "true");
+        track.appendChild(clone);
+        guard += 1;
+      }
+      // Keep the original per-group speed: 42s per pair of groups.
+      track.style.animationDuration = `${21 * track.childElementCount}s`;
+    };
+    fill();
+    document.fonts?.ready.then(fill);
+    let resizeFrame = 0;
+    addEventListener("resize", () => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(fill);
+    });
+  });
+</script>
 
 <style>
   .marquee {
