@@ -7,6 +7,7 @@ const staticPaths = [
   "/docs/deployment-models/",
   "/docs/configuration/",
   "/docs/operations/",
+  "/docs/migration/",
   "/docs/security/",
   "/docs/limitations/",
   "/privacy/",

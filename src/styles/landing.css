@@ -372,17 +372,13 @@ html:has(.landing-page) {
   display: grid;
   grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
   gap: clamp(1rem, 2.5vw, 1.75rem);
-  align-items: stretch;
+  align-items: start;
   margin-top: clamp(2.2rem, 4vw, 3.5rem);
 }
 
 .hero-command {
   display: flex;
   flex-direction: column;
-}
-
-.hero-command .command-box {
-  flex: 1;
 }
 
 .command-label {

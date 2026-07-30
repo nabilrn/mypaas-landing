@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import CommandTabs from "./CommandTabs.astro";
 import CopyCommand from "./CopyCommand.astro";
 import DeployTerminal from "./DeployTerminal.astro";
 import DetectionSimulator from "./DetectionSimulator.astro";
@@ -63,7 +64,7 @@ const capabilityIcons = [
         <div class="hero-panels">
           <div class="hero-command" data-reveal style="--reveal-delay:120ms">
             <p class="command-label">{copy.commandLabel}</p>
-            <CopyCommand command={installCommand} label={copy.commandPlatform} copyLabel={copy.copy} copiedLabel={copy.copied} failedLabel={copy.copyFailed} />
+            <CommandTabs tabs={copy.commandTabs} copyLabel={copy.copy} copiedLabel={copy.copied} failedLabel={copy.copyFailed} />
             <p class="command-note">{copy.commandNote}</p>
           </div>
           <DeployTerminal label={copy.terminalLabel} lines={copy.terminalLines} />

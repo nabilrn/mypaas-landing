@@ -1,0 +1,110 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+---
+
+<DocsLayout
+  title="Migration"
+  description="Move a complete MyPaas installation to a new VM with the migration wizard or the migration scripts."
+>
+  <section>
+    <p class="overline">Server moves</p>
+    <h2>What a migration package contains</h2>
+    <p>
+      A migration package is a single <code>.tar.gz</code> archive that carries the
+      complete MyPaas state, so a new server can restore the platform without
+      manual reconfiguration:
+    </p>
+    <ul>
+      <li>The MyPaas system database — projects, users, settings, and deployment history.</li>
+      <li>Shared project databases (<code>mypaas_p_*</code>) and their roles.</li>
+      <li>The <code>.env</code> file, including the keys that decrypt stored secrets.</li>
+      <li>Persistent data: project volumes, generated compose files, and static output.</li>
+    </ul>
+    <aside class="note">
+      <p>
+        Project containers are temporarily stopped while the package is created and
+        start again automatically afterward. Plan a short maintenance window for
+        production workloads.
+      </p>
+    </aside>
+  </section>
+
+  <section>
+    <h2>One-step migration (recommended)</h2>
+    <ol class="steps">
+      <li>
+        On the <strong>old server</strong>, open the dashboard and go to
+        <strong>Admin → Platform settings → VM Migration</strong>, then choose
+        <strong>Prepare Migration Package</strong>. Preparation runs in the
+        background and can take a few minutes depending on data size.
+      </li>
+      <li>
+        When the package is ready, the dashboard shows a
+        <strong>one-line migration command</strong>. Copy it — the download link is
+        token-protected and expires after 24 hours.
+      </li>
+      <li>
+        On the <strong>new VM</strong> (Ubuntu or Debian), paste the command. It
+        clones MyPaas, downloads the package, installs Docker when needed, restores
+        databases, volumes, and configuration, then builds and starts the full stack.
+      </li>
+    </ol>
+    <pre><code>git clone https://github.com/nabilrn/MyPaas.git mypaas && cd mypaas \
+  && bash scripts/install-vm.sh --migrate-url "&lt;package-url-from-dashboard&gt;"</code></pre>
+    <p>
+      After an import, all projects are reset to the stopped state so the dashboard
+      reflects reality, and the API automatically recovers and redeploys missing
+      containers on startup.
+    </p>
+    <aside class="warning">
+      <p>
+        The migration URL downloads your entire platform state, including encrypted
+        secrets. Treat it like a password: share it over secure channels only, and
+        let it expire if the move is postponed.
+      </p>
+    </aside>
+  </section>
+
+  <section>
+    <h2>Manual migration with scripts</h2>
+    <p>
+      The same flow is available as standalone scripts when you prefer to inspect
+      each step or transfer the archive yourself.
+    </p>
+    <ol class="steps">
+      <li>
+        On the old VM, from the MyPaas project root:
+        <pre><code>bash scripts/migrate-export.sh</code></pre>
+        This creates <code>/tmp/mypaas-export-&lt;timestamp&gt;.tar.gz</code>.
+      </li>
+      <li>
+        Transfer the archive to the new VM:
+        <pre><code>scp /tmp/mypaas-export-&lt;timestamp&gt;.tar.gz user@new-vm:/tmp/</code></pre>
+      </li>
+      <li>
+        On the new VM, clone MyPaas and run the importer from the project root:
+        <pre><code>bash scripts/migrate-import.sh /tmp/mypaas-export-&lt;timestamp&gt;.tar.gz</code></pre>
+        The importer restores the environment file, persistent directories, and all
+        databases, then builds and starts the production stack.
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>After the move</h2>
+    <table>
+      <thead><tr><th>Setting</th><th>What to do</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ENCRYPTION_KEY</strong> and <strong>JWT_SECRET</strong></td><td>Must stay identical — stored environment values cannot be decrypted with new keys. The restored <code>.env</code> keeps them.</td></tr>
+        <tr><td><strong>CLOUDFLARE_TUNNEL_TOKEN</strong></td><td>Update if you create a new tunnel for the new VM, then restart the cloudflared service.</td></tr>
+        <tr><td><strong>GITHUB_CALLBACK_URL</strong></td><td>Update the OAuth app and the value when the dashboard domain changes.</td></tr>
+        <tr><td><strong>DNS and hostnames</strong></td><td>Point the root and wildcard Cloudflare hostnames at the new server.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Finish by verifying the dashboard is reachable, redeploying any projects that
+      did not recover automatically, and checking that every project subdomain
+      responds.
+    </p>
+  </section>
+</DocsLayout>
