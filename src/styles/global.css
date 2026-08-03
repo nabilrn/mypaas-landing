@@ -17,6 +17,8 @@
   --app-accent-strong: oklch(0.45 0.13 165);
   --app-accent-soft: oklch(0.94 0.04 165);
   --app-accent-ink: oklch(0.25 0.09 165);
+  --app-warning-strong: oklch(0.68 0.16 70);
+  --app-warning-soft: oklch(0.94 0.05 70);
   --app-glow: oklch(0.6 0.16 165);
   --btn-bg: oklch(0.47 0.13 165);
   --btn-bg-hover: oklch(0.42 0.13 165);
@@ -43,6 +45,8 @@
   --app-accent-strong: oklch(0.78 0.14 165);
   --app-accent-soft: oklch(0.29 0.055 165);
   --app-accent-ink: oklch(0.86 0.12 165);
+  --app-warning-strong: oklch(0.68 0.16 70);
+  --app-warning-soft: oklch(0.29 0.055 70);
   --app-glow: oklch(0.78 0.16 165);
   --btn-bg: oklch(0.8 0.16 165);
   --btn-bg-hover: oklch(0.86 0.16 165);

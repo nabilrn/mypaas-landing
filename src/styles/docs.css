@@ -216,8 +216,8 @@
 }
 
 .docs-content .warning {
-  border-left-color: oklch(0.68 0.16 70);
-  background: color-mix(in oklch, oklch(0.94 0.05 70) 70%, var(--app-surface));
+  border-left-color: var(--app-warning-strong);
+  background: var(--app-warning-soft);
 }
 
 .docs-content .note p,
