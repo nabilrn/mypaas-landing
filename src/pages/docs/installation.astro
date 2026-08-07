@@ -78,4 +78,14 @@ docker compose -f docker-compose.prod.yml ps</code></pre>
       See <a href="/docs/migration/">Migration</a>.
     </p>
   </section>
+
+  <section>
+    <h2>Uninstall or Destroy</h2>
+    <p>
+      If you need to completely remove MyPaas from your VM, you can use the uninstall script. This will permanently delete all projects, databases, volumes, and MyPaas Docker containers.
+    </p>
+    <pre><code>cd ~/MyPaas
+bash scripts/uninstall-vm.sh</code></pre>
+    <aside class="warning"><p>This action is destructive and irreversible. Make sure you have exported any necessary data before proceeding.</p></aside>
+  </section>
 </DocsLayout>

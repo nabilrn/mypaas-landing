@@ -32,6 +32,7 @@ export const landingCopy = {
     commandTabs: [
       { id: "install", tab: "Fresh install", lines: ["curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh | bash"], steps: ["Checks out MyPaas and opens the guided setup wizard", "Installs Docker when needed, then starts the production stack", "You bring the domain, Cloudflare Tunnel token, and GitHub OAuth app"] },
       { id: "migrate", tab: "Move to a new VM", lines: ["git clone https://github.com/nabilrn/MyPaas.git mypaas && cd mypaas", "bash scripts/install-vm.sh --migrate-url \"<package-url>\""], steps: ["Dashboard → Settings → VM Migration → Prepare Migration Package", "The package carries databases, volumes, compose files, and .env secrets", "The new server restores everything and redeploys your projects"] },
+      { id: "uninstall", tab: "Uninstall MyPaas", lines: ["cd ~/MyPaas && bash scripts/uninstall-vm.sh"], steps: ["Permanently deletes all projects, databases, and volumes", "Removes all Docker containers and network associated with MyPaas", "Leaves a clean VM environment"] },
     ],
     commandNote: "The bootstrap checks out MyPaas and opens guided setup. Moving servers? The migration wizard packs your entire installation — databases, volumes, and encrypted secrets — into one restorable archive.",
     integrationsLabel: "Integrations", integrationsTitle: "Infrastructure MyPaas coordinates on your host.", integrationsBody: "Runtime and integration points used by the platform—not bundled replacements or partnership claims.",
@@ -78,6 +79,7 @@ export const landingCopy = {
     commandTabs: [
       { id: "install", tab: "Instalasi baru", lines: ["curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh | bash"], steps: ["Mengambil source MyPaas dan membuka wizard setup terpandu", "Menginstal Docker bila perlu, lalu menjalankan stack production", "Anda menyiapkan domain, token Cloudflare Tunnel, dan aplikasi GitHub OAuth"] },
       { id: "migrate", tab: "Pindah ke VM baru", lines: ["git clone https://github.com/nabilrn/MyPaas.git mypaas && cd mypaas", "bash scripts/install-vm.sh --migrate-url \"<package-url>\""], steps: ["Dashboard → Settings → VM Migration → Prepare Migration Package", "Paket berisi database, volume, file compose, dan secret .env", "Server baru memulihkan semuanya lalu men-deploy ulang project Anda"] },
+      { id: "uninstall", tab: "Uninstall MyPaas", lines: ["cd ~/MyPaas && bash scripts/uninstall-vm.sh"], steps: ["Menghapus permanen seluruh project, database, dan volume", "Menghapus semua container Docker dan jaringan yang terkait MyPaas", "Meninggalkan VM dalam keadaan bersih"] },
     ],
     commandNote: "Bootstrap mengambil source MyPaas dan membuka guided setup. Pindah server? Wizard migrasi mengemas seluruh instalasi — database, volume, dan secret terenkripsi — menjadi satu arsip yang dapat dipulihkan.",
     integrationsLabel: "Integrasi", integrationsTitle: "Infrastruktur yang dikoordinasikan MyPaas di host Anda.", integrationsBody: "Titik integrasi dan runtime yang digunakan platform—bukan pengganti bawaan atau klaim kemitraan.",
@@ -124,6 +126,7 @@ export const landingCopy = {
     commandTabs: [
       { id: "install", tab: "全新安装", lines: ["curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh | bash"], steps: ["拉取 MyPaas 源码并打开配置向导", "按需安装 Docker，然后启动生产环境", "你需要准备域名、Cloudflare Tunnel 令牌和 GitHub OAuth 应用"] },
       { id: "migrate", tab: "迁移到新服务器", lines: ["git clone https://github.com/nabilrn/MyPaas.git mypaas && cd mypaas", "bash scripts/install-vm.sh --migrate-url \"<package-url>\""], steps: ["仪表盘 → 设置 → VM 迁移 → 准备迁移包", "迁移包包含数据库、数据卷、Compose 文件和 .env 密钥", "新服务器会恢复所有内容并重新部署你的项目"] },
+      { id: "uninstall", tab: "卸载 MyPaas", lines: ["cd ~/MyPaas && bash scripts/uninstall-vm.sh"], steps: ["永久删除所有项目、数据库和数据卷", "移除与 MyPaas 相关的所有 Docker 容器和网络", "恢复干净的虚拟机环境"] },
     ],
     commandNote: "引导脚本会拉取 MyPaas 并打开配置向导。需要更换服务器？迁移向导会将整个安装——数据库、数据卷和加密密钥——打包成一个可恢复的归档文件。",
     integrationsLabel: "集成", integrationsTitle: "MyPaas 在你的主机上协调这些基础设施。", integrationsBody: "这些是平台使用的运行时与集成点，不代表内置替代品或合作关系。",
