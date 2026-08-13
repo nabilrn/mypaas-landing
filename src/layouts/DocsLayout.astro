@@ -1,0 +1,14 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import LandingHeader from "../components/LandingHeader.astro";
+import "../styles/docs.css";
+const { title, description } = Astro.props;
+const path=Astro.url.pathname;
+const nav=[["Overview","/docs/"],["Installation","/docs/installation/"],["Deployment models","/docs/deployment-models/"],["Configuration & routing","/docs/configuration/"],["Operations","/docs/operations/"],["Automation & agents","/docs/automation/"],["Migration","/docs/migration/"],["Security","/docs/security/"],["Limitations","/docs/limitations/"]];
+const active=(href:string)=>href==="/docs/"?path===href:path.startsWith(href);
+---
+<BaseLayout title={`${title} — MyPaaS Docs`} description={description}>
+<LandingHeader />
+<div class="docs-page"><div class="docs-shell"><aside class="docs-sidebar"><p class="docs-nav-title">Documentation</p><nav>{nav.map(([label,href])=><a class:list={{active:active(href)}} href={href}>{label}</a>)}</nav></aside><main class="docs-main"><header class="docs-header"><p>MyPaaS documentation</p><h1>{title}</h1><div>{description}</div><small>Current public docs · reviewed against MyPaaS main · 13 Aug 2026</small></header><article class="docs-content"><slot /></article><footer class="docs-footer"><span>MyPaaS documentation</span><nav><a href="/">Landing page</a><a href="https://github.com/nabilrn/MyPaas/issues">Report an issue</a></nav></footer></main></div></div>
+</BaseLayout>
+<style>small{display:block;margin-top:1rem;color:var(--app-subtle);font-family:var(--font-mono);font-size:.65rem}</style>
