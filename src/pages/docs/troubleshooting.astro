@@ -1,0 +1,10 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+---
+<DocsLayout title="Troubleshooting" description="Common MyPaaS installation and deployment checks.">
+<section><h2>Authentication</h2><p>When GitHub sign-in fails, compare the configured instance domain with the OAuth callback URL and review the GitHub OAuth setup page.</p><p><a href="/docs/github-oauth/">GitHub OAuth setup →</a></p></section>
+<section><h2>Project hostnames</h2><p>When the dashboard is reachable but project subdomains are not, review both the root and wildcard Cloudflare Tunnel routes.</p><p><a href="/docs/cloudflare-tunnel/">Cloudflare Tunnel setup →</a></p></section>
+<section><h2>Repository detection</h2><p>Review the selected branch and base directory. MyPaaS prefers Compose, then a production Dockerfile, then supported static/SPA detection. Unsupported backend or SSR sources require an explicit production contract.</p></section>
+<section><h2>Deployment and routing</h2><p>A failed route activation should be diagnosed from deployment state and logs. The routing model intentionally fails closed when the expected runtime cannot be validated.</p></section>
+<section><h2>Observability</h2><p>Runtime metrics can use statd with a Docker-compatible fallback. Host telemetry has a different trust boundary and is not synthesized from the API container namespace.</p><p><a href="/docs/observability/">Observability →</a></p></section>
+</DocsLayout>
