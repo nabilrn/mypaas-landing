@@ -8,13 +8,14 @@ import DeploymentSection from "./rebrand/DeploymentSection.astro";
 import IntegrationSection from "./rebrand/IntegrationSection.astro";
 import LogsProof from "./rebrand/LogsProof.astro";
 import OperationsSection from "./rebrand/OperationsSection.astro";
+import heroImage from "../../mypaas-dashboard-screenshots/2026-08-13T14-22-46-474Z-focused/desktop-dark-01-project-overview-metrics.png";
 import { installCommand, landingCopy, podmanInstallCommand, repositoryUrl, type Locale } from "../lib/site";
 interface Props { locale?: Locale }
 const { locale = "en" } = Astro.props;
 const copy = landingCopy[locale];
 const path = locale === "en" ? "/" : `/${locale}/`;
 ---
-<BaseLayout title={copy.metaTitle} description={copy.metaDescription} locale={locale} path={path} localizedAlternates>
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription} locale={locale} path={path} localizedAlternates image={heroImage} imageAlt="MyPaaS project overview and runtime metrics">
   <LandingHeader {locale} />
   <main>
     <div class="shell"><LandingHero title={copy.heroTitle} body={copy.heroSummary} eyebrow={copy.eyebrow} primary={copy.primaryCta} secondary={copy.secondaryCta} {repositoryUrl} /></div>
