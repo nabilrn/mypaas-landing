@@ -1,65 +1,8 @@
 ---
 import DocsLayout from "../../layouts/DocsLayout.astro";
 ---
-
-<DocsLayout
-  title="Limitations"
-  description="Know the product boundaries before using MyPaas as the deployment control plane for a server."
->
-  <section>
-    <p class="overline">Product scope</p>
-    <h2>Single-node by design</h2>
-    <p>
-      The MyPaas API, dashboard, Caddy, PostgreSQL, and project workloads share one
-      host. The VM is a failure domain and a capacity boundary. MyPaas does not provide
-      automatic failover to another server.
-    </p>
-  </section>
-
-  <section>
-    <h2>Explicit non-goals</h2>
-    <ul>
-      <li>Public signup, hosted plans, billing, or metered usage.</li>
-      <li>Enterprise tenant isolation, organizations, or broad team administration.</li>
-      <li>Buildpacks or source-language runtime inference.</li>
-      <li>Kubernetes, Nomad, Docker Swarm, or multi-node scheduling.</li>
-      <li>High availability, multi-region deployment, or fully automatic horizontal autoscaling.</li>
-      <li>A general managed database replacement.</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Operational implications</h2>
-    <table>
-      <thead><tr><th>Area</th><th>Implication</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Host outage</strong></td><td>The dashboard and all projects on that VM become unavailable.</td></tr>
-        <tr><td><strong>Capacity</strong></td><td>CPU, memory, disk, build concurrency, and project count must fit the host.</td></tr>
-        <tr><td><strong>Backups</strong></td><td>The owner must configure and verify local and off-host backups.</td></tr>
-        <tr><td><strong>Static projects</strong></td><td>MyPaas publishes ready output; it does not run arbitrary framework builds.</td></tr>
-        <tr><td><strong>GitHub webhook</strong></td><td>The generated URL and secret must currently be added to GitHub manually.</td></tr>
-        <tr><td><strong>Rollback</strong></td><td>Image rollback applies to successful Dockerfile and Compose releases, not static output.</td></tr>
-        <tr><td><strong>Build queue</strong></td><td>Builds are serialized per project with at most two concurrent builds; further work waits.</td></tr>
-        <tr><td><strong>History bounds</strong></td><td>The 20 most recent deployments per project are kept; runtime log history is capped at 5,000 lines.</td></tr>
-        <tr><td><strong>Metrics</strong></td><td>Dashboard metrics are live Docker Stats snapshots, not long-term historical series.</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section>
-    <h2>Do not assume these features exist</h2>
-    <p>
-      The product requirements describe staged improvements, but documentation and
-      deployment decisions should not assume the following are currently available:
-    </p>
-    <ul>
-      <li>Idle sleep and wake-on-request.</li>
-      <li>Historical autosizing or automatic limit changes.</li>
-      <li>Multiple replicas and automatic Caddy load balancing.</li>
-      <li>Custom domains per project or branch/PR preview deployments.</li>
-      <li>Automatic GitHub webhook registration.</li>
-      <li>Backup restore UI, team collaboration suite, or chat notifications.</li>
-    </ul>
-    <aside class="note"><p>Use the repository changelog and release notes as the implementation record. Planning documents are not release guarantees.</p></aside>
-  </section>
+<DocsLayout title="Limitations" description="Understand the current single-host boundaries before using MyPaaS.">
+<section><p class="overline">Scope</p><h2>Single host by design</h2><p>MyPaaS runs its control plane and project workloads on one Linux host. The VM remains the capacity and availability boundary.</p></section>
+<section><h2>Current boundaries</h2><ul><li>No public signup, hosted plans, or billing.</li><li>No Kubernetes or multi-node scheduling.</li><li>No multi-region high availability or automatic horizontal scaling.</li><li>Registry deployment currently targets public OCI images.</li><li>Static recovery uses redeploy or roll-forward instead of container rollback.</li></ul></section>
+<section><h2>Operator responsibility</h2><p>Host capacity, provider availability, backup verification, and recovery material remain the operator's responsibility.</p></section>
 </DocsLayout>
