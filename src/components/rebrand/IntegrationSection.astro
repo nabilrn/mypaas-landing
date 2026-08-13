@@ -1,0 +1,7 @@
+---
+const { copy } = Astro.props;
+---
+<section id="integrations"><p class="label">{copy.ownershipLabel}</p><h2>{copy.ownershipTitle}</h2><p>{copy.ownershipBody}</p><div><article><strong>Portable core</strong><span>{copy.ownershipItems.join(" · ")}</span></article><article><strong>Integration edge</strong><span>{copy.integrationItems.join(" · ")}</span></article></div></section>
+<style>
+section{padding:5rem 1rem;border-top:1px solid var(--app-border);background:var(--app-surface-muted)}section>*{max-width:76rem;margin-left:auto;margin-right:auto}.label,strong{font-family:var(--font-mono);color:var(--app-subtle)}h2{max-width:13ch;font-size:3rem;letter-spacing:-.05em}p,span{color:var(--app-muted);line-height:1.7}section>div{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}article{display:grid;gap:.8rem;padding:1rem;border:1px solid var(--app-border);border-radius:.5rem;background:var(--app-surface)}
+</style>
