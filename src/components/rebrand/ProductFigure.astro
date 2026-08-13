@@ -1,6 +1,10 @@
 ---
-interface Props { src: string; alt: string; label: string; detail?: string; eager?: boolean }
+type ImageLike = string | { src: string; width?: number; height?: number };
+interface Props { src: ImageLike; alt: string; label: string; detail?: string; eager?: boolean }
 const { src, alt, label, detail = "real product UI", eager = false } = Astro.props;
+const imageSrc = typeof src === "string" ? src : src.src;
+const width = typeof src === "string" ? undefined : src.width;
+const height = typeof src === "string" ? undefined : src.height;
 ---
-<figure class="product-figure"><figcaption><span>{label}</span><span>{detail}</span></figcaption><img {src} {alt} loading={eager ? "eager" : "lazy"} /></figure>
+<figure class="product-figure"><figcaption><span>{label}</span><span>{detail}</span></figcaption><img src={imageSrc} {alt} {width} {height} decoding="async" loading={eager ? "eager" : "lazy"} /></figure>
 <style>.product-figure{overflow:hidden;margin:0;border:1px solid var(--app-border);border-radius:.75rem;background:var(--app-surface)}figcaption{display:flex;justify-content:space-between;padding:.7rem .85rem;border-bottom:1px solid var(--app-border);color:var(--app-subtle);font-family:var(--font-mono);font-size:.66rem}img{width:100%;height:auto}</style>
