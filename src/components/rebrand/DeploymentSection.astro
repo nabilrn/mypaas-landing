@@ -1,0 +1,10 @@
+---
+const { copy } = Astro.props;
+---
+<section id="deployment">
+<p class="label">{copy.deployLabel}</p><h2>{copy.deployTitle}</h2><p>{copy.deployBody}</p>
+<div class="items">{copy.deployGroups.map((group) => <article><strong>{group[0]}</strong><span>{group[1].join(" · ")}</span></article>)}</div>
+</section>
+<style>
+section{padding:5rem 1rem;border-top:1px solid var(--app-border)}section>*{max-width:76rem;margin-left:auto;margin-right:auto}.label,strong{font-family:var(--font-mono);color:var(--app-subtle)}h2{font-size:3rem;letter-spacing:-.05em}p{color:var(--app-muted)}.items{display:grid;grid-template-columns:1fr 1fr}.items article{display:grid;gap:.5rem;padding:1rem;border-top:1px solid var(--app-border)}span{color:var(--app-muted)}
+</style>

@@ -1,0 +1,8 @@
+---
+interface Props { title: string; body: string; eyebrow: string; primary: string; secondary: string; repositoryUrl: string }
+const { title, body, eyebrow, primary, secondary, repositoryUrl } = Astro.props;
+---
+<section class="rb-hero"><p>{eyebrow}</p><h1>{title}</h1><div>{body}</div><nav><a href="/docs/">{primary}</a><a href={repositoryUrl}>{secondary}</a></nav></section>
+<style>
+.rb-hero{padding:6rem 0 3rem}.rb-hero>p{font-family:var(--font-mono);font-size:.7rem;color:var(--app-subtle)}h1{max-width:13ch;font-size:clamp(3rem,8vw,6rem);line-height:.95;letter-spacing:-.06em}div{max-width:48rem;color:var(--app-muted);line-height:1.7}nav{display:flex;gap:.75rem;margin-top:2rem}a{padding:.7rem 1rem;border:1px solid var(--app-border-strong);border-radius:.5rem;text-decoration:none}a:first-child{background:var(--app-ink);color:var(--app-surface)}
+</style>

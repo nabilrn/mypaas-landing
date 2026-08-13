@@ -1,0 +1,10 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+---
+<DocsLayout title="Automation & agents" description="Operate MyPaaS through the CLI, API, GitHub webhooks, and the local MCP bridge for AI agents.">
+<section><p class="overline">Interfaces</p><h2>One control plane, multiple clients</h2><p>The dashboard is not the only way to operate MyPaaS. The CLI, HTTP API, GitHub webhooks, and MCP bridge use the same control-plane state and deployment model.</p></section>
+<section><h2>CLI</h2><p>The <code>mypaas</code> CLI covers routine administration including configuration, user management, project listing and deployment, logs, and manual backups.</p></section>
+<section><h2>GitHub webhooks</h2><p>Git-backed projects can receive signed push events. MyPaaS verifies the HMAC signature, filters the configured branch, records deliveries, rate-limits repeated events, and queues the deployment through the normal worker path.</p><aside class="note"><p>Webhook registration is still manual. Project settings provide the URL and secret that must be added to the GitHub repository.</p></aside></section>
+<section><h2>MCP for AI agents</h2><p>The local MCP bridge exposes bounded tools for repository inspection, project management, lifecycle actions, deployment and rollback, logs, metrics, environment configuration, quota information, and host statistics.</p><p>MCP is an operator interface over MyPaaS. It does not grant an agent a separate orchestration path around authorization, deployment state, or runtime policy.</p></section>
+<section><h2>API</h2><p>The Go API remains the orchestration authority behind the dashboard, CLI, and MCP surfaces. Automation should prefer documented MyPaaS operations instead of manipulating containers, Caddy routes, or platform PostgreSQL state directly.</p></section>
+</DocsLayout>
