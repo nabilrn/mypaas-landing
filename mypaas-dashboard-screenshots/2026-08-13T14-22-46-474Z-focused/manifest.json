@@ -1,0 +1,148 @@
+{
+  "generatedAt": "2026-08-13T14:24:09.180Z",
+  "baseURL": "https://nabilrn.space",
+  "outDir": "C:\\Projects\\mypaas-public\\mypaas-dashboard-screenshots\\2026-08-13T14-22-46-474Z-focused",
+  "note": "Focused UI reference screenshots only: desktop dark and mobile light. Metrics placeholders were waited out before capture where possible.",
+  "pages": [
+    {
+      "label": "Projects dashboard",
+      "path": "/projects",
+      "name": "projects-dashboard"
+    },
+    {
+      "label": "Project overview with metrics",
+      "path": "/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054",
+      "name": "project-overview-metrics"
+    },
+    {
+      "label": "Project logs",
+      "path": "/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054/logs",
+      "name": "project-logs"
+    },
+    {
+      "label": "Project settings",
+      "path": "/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054/settings",
+      "name": "project-settings"
+    },
+    {
+      "label": "Create project",
+      "path": "/projects/new",
+      "name": "create-project"
+    },
+    {
+      "label": "Admin settings",
+      "path": "/admin/settings",
+      "name": "admin-settings"
+    }
+  ],
+  "results": [
+    {
+      "profile": "desktop-dark",
+      "theme": "dark",
+      "viewport": "1440x900",
+      "label": "Projects dashboard",
+      "url": "https://nabilrn.space/projects",
+      "screenshot": "desktop-dark-00-projects-dashboard.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "desktop-dark",
+      "theme": "dark",
+      "viewport": "1440x900",
+      "label": "Project overview with metrics",
+      "url": "https://nabilrn.space/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054",
+      "screenshot": "desktop-dark-01-project-overview-metrics.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "desktop-dark",
+      "theme": "dark",
+      "viewport": "1440x900",
+      "label": "Project logs",
+      "url": "https://nabilrn.space/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054/logs",
+      "screenshot": "desktop-dark-02-project-logs.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "desktop-dark",
+      "theme": "dark",
+      "viewport": "1440x900",
+      "label": "Project settings",
+      "url": "https://nabilrn.space/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054/settings",
+      "screenshot": "desktop-dark-03-project-settings.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "desktop-dark",
+      "theme": "dark",
+      "viewport": "1440x900",
+      "label": "Create project",
+      "url": "https://nabilrn.space/projects/new",
+      "screenshot": "desktop-dark-04-create-project.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "desktop-dark",
+      "theme": "dark",
+      "viewport": "1440x900",
+      "label": "Admin settings",
+      "url": "https://nabilrn.space/admin/settings",
+      "screenshot": "desktop-dark-05-admin-settings.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "mobile-light",
+      "theme": "light",
+      "viewport": "390x844",
+      "label": "Projects dashboard",
+      "url": "https://nabilrn.space/projects",
+      "screenshot": "mobile-light-00-projects-dashboard.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "mobile-light",
+      "theme": "light",
+      "viewport": "390x844",
+      "label": "Project overview with metrics",
+      "url": "https://nabilrn.space/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054",
+      "screenshot": "mobile-light-01-project-overview-metrics.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "mobile-light",
+      "theme": "light",
+      "viewport": "390x844",
+      "label": "Project logs",
+      "url": "https://nabilrn.space/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054/logs",
+      "screenshot": "mobile-light-02-project-logs.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "mobile-light",
+      "theme": "light",
+      "viewport": "390x844",
+      "label": "Project settings",
+      "url": "https://nabilrn.space/projects/97d127c4-0deb-4a01-a2ec-7541ba8c5054/settings",
+      "screenshot": "mobile-light-03-project-settings.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "mobile-light",
+      "theme": "light",
+      "viewport": "390x844",
+      "label": "Create project",
+      "url": "https://nabilrn.space/projects/new",
+      "screenshot": "mobile-light-04-create-project.png",
+      "stillCalculating": false
+    },
+    {
+      "profile": "mobile-light",
+      "theme": "light",
+      "viewport": "390x844",
+      "label": "Admin settings",
+      "url": "https://nabilrn.space/admin/settings",
+      "screenshot": "mobile-light-05-admin-settings.png",
+      "stillCalculating": false
+    }
+  ]
+}
