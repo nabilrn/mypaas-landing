@@ -1,0 +1,8 @@
+---
+import SearchDialog from "./SearchDialog.astro";
+import { localeMeta, locales, repositoryUrl, uiCopy, type Locale } from "../lib/site";
+const { locale = "en" } = Astro.props as { locale?: Locale };
+const copy = uiCopy[locale];
+---
+<header><a class="brand" href={localeMeta[locale].path}><img src="/brand/logowithtext_black.png" alt="MyPaaS" /></a><nav><a href="/docs/">{copy.docs}</a><a href="/docs/installation/">{copy.install}</a><a href={`${localeMeta[locale].path}#integrations`}>{copy.integrations}</a><a href={`${localeMeta[locale].path}#operations`}>{copy.operations}</a></nav><button data-search-trigger>{copy.search}</button><details><summary>{localeMeta[locale].short}</summary>{locales.map((item)=><a href={localeMeta[item].path}>{localeMeta[item].short}</a>)}</details><a href={repositoryUrl}>GitHub</a></header><SearchDialog {locale} />
+<style>header{display:flex;min-height:4rem;align-items:center;gap:1rem;padding:0 max(1rem,calc((100% - 76rem)/2));border-bottom:1px solid var(--app-border);background:var(--app-bg)}.brand{margin-right:auto}.brand img{width:7rem}nav{display:flex;gap:1rem}a,button,summary{color:var(--app-muted);font-size:.8rem;text-decoration:none}button,summary{border:0;background:none}@media(max-width:700px){nav{display:none}}</style>
