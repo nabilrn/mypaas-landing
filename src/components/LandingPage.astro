@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CopyCommand from "./CopyCommand.astro";
+import LandingHeader from "./LandingHeader.astro";
+import LandingHero from "./rebrand/LandingHero.astro";
+import ProductProof from "./rebrand/ProductProof.astro";
+import DeploymentSection from "./rebrand/DeploymentSection.astro";
+import IntegrationSection from "./rebrand/IntegrationSection.astro";
+import LogsProof from "./rebrand/LogsProof.astro";
+import OperationsSection from "./rebrand/OperationsSection.astro";
+import { installCommand, landingCopy, podmanInstallCommand, repositoryUrl, type Locale } from "../lib/site";
+interface Props { locale?: Locale }
+const { locale = "en" } = Astro.props;
+const copy = landingCopy[locale];
+const path = locale === "en" ? "/" : `/${locale}/`;
+---
+<BaseLayout title={copy.metaTitle} description={copy.metaDescription} locale={locale} path={path} localizedAlternates>
+  <LandingHeader {locale} />
+  <main>
+    <div class="shell"><LandingHero title={copy.heroTitle} body={copy.heroSummary} eyebrow={copy.eyebrow} primary={copy.primaryCta} secondary={copy.secondaryCta} {repositoryUrl} /></div>
+    <ProductProof />
+    <DeploymentSection {copy} />
+    <IntegrationSection {copy} />
+    <LogsProof />
+    <OperationsSection {copy} />
+    <section id="automation" class="simple"><p>{copy.interfacesLabel}</p><h2>{copy.interfacesTitle}</h2><div>{copy.interfacesBody}</div><ul>{copy.interfaces.map((item) => <li><strong>{item[0]} · {item[1]}</strong><span>{item[2]}</span></li>)}</ul></section>
+    <section class="simple"><p>{copy.boundariesLabel}</p><h2>{copy.boundariesTitle}</h2><div>{copy.boundariesBody}</div><ul>{copy.boundaries.map((item) => <li><span>{item}</span></li>)}</ul></section>
+    <section id="install" class="simple"><p>{copy.installLabel}</p><h2>{copy.installTitle}</h2><div>{copy.installBody}</div><CopyCommand command={installCommand} label={copy.installDocker} copyLabel="Copy" copiedLabel="Copied" failedLabel="Copy failed" /><CopyCommand command={podmanInstallCommand} label={copy.installPodman} copyLabel="Copy" copiedLabel="Copied" failedLabel="Copy failed" /><a href="/docs/installation/">{copy.installGuide} →</a></section>
+  </main>
+</BaseLayout>
+<style>
+.shell,.simple{width:min(calc(100% - 2rem),76rem);margin:auto}.simple{padding:5rem 0;border-top:1px solid var(--app-border)}.simple>p{font-family:var(--font-mono);color:var(--app-subtle)}.simple h2{max-width:13ch;font-size:3rem;letter-spacing:-.05em}.simple>div,.simple span{color:var(--app-muted)}.simple ul{padding:0;list-style:none}.simple li{display:grid;gap:.4rem;padding:1rem 0;border-bottom:1px solid var(--app-border)}.simple a{display:inline-block;margin-top:1rem}
+</style>
