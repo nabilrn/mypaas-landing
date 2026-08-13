@@ -1,4 +1,8 @@
 ---
 import DocsLayout from "../../layouts/DocsLayout.astro";
 ---
-<DocsLayout title="Operations" description="Operate and observe MyPaaS projects."><section><h2>Operations</h2><p>Use the project dashboard for deployment state, logs, metrics, lifecycle actions, release history, and data tooling.</p></section></DocsLayout>
+<DocsLayout title="Operations" description="Operate and observe MyPaaS projects.">
+<section><h2>Project operations</h2><p>Use the project dashboard for deployment state, build and runtime logs, metrics, lifecycle actions, release history, and data tooling.</p></section>
+<section><h2>Recovery</h2><p>Container-backed projects can use successful release history for recovery. Static projects recover by redeploying the desired revision.</p></section>
+<section><h2>Data</h2><p>Shared PostgreSQL, DB Studio Lite, and scheduled PostgreSQL backups cover common single-host data workflows.</p></section>
+</DocsLayout>
