@@ -1,73 +1,9 @@
 ---
 import DocsLayout from "../../layouts/DocsLayout.astro";
 ---
-
-<DocsLayout
-  title="MyPaas documentation"
-  description="Install, configure, deploy, and operate MyPaas on a single Linux VM."
->
-  <section>
-    <p class="overline">Overview</p>
-    <h2>What MyPaas is</h2>
-    <p>
-      MyPaas is a self-hosted PaaS control plane for one Linux server. It accepts
-      repositories with an explicit deployment contract, runs the workload on
-      Docker or publishes ready static output through Caddy, and keeps operational
-      state in a dashboard.
-    </p>
-    <p>
-      It is built for an owner and a small whitelist of trusted collaborators.
-      It is not a hosted service, public registration system, or multi-tenant cloud.
-    </p>
-    <aside class="note">
-      <p>
-        These docs describe current behavior from the product requirements,
-        repository changelog, installer, and implementation. Roadmap items are
-        not presented as available features.
-      </p>
-    </aside>
-  </section>
-
-  <section>
-    <h2>Supported project contracts</h2>
-    <table>
-      <thead><tr><th>Mode</th><th>Repository requirement</th><th>Runtime</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Dockerfile</strong></td><td>Root <code>Dockerfile</code> and an application port.</td><td>One application container.</td></tr>
-        <tr><td><strong>Docker Compose</strong></td><td>A Compose file at the root or in a subdirectory — auto-discovered or set explicitly — plus a selected public service.</td><td>Main service plus private supporting services.</td></tr>
-        <tr><td><strong>Static</strong></td><td>Ready <code>index.html</code> in <code>dist</code>, <code>build</code>, <code>public</code>, or root.</td><td>Caddy file server without an app container.</td></tr>
-      </tbody>
-    </table>
-    <p>
-      Detection priority is Compose, then Dockerfile, then static output. Compose
-      discovery walks the repository tree (depth ≤ 4), ranks root files highest, and
-      skips dependency and build-output directories; the chosen path is persisted so
-      webhook redeploys use the same file. Detection prepares a plan; the user still
-      reviews branch, ports, resources, and environment values.
-    </p>
-  </section>
-
-  <section>
-    <h2>System model</h2>
-    <ol class="steps">
-      <li><strong>GitHub</strong> provides repository access, OAuth identity, and signed push events.</li>
-      <li><strong>MyPaas</strong> validates the project, queues deployment work, and stores operational state.</li>
-      <li><strong>Docker and Compose</strong> build and run project workloads on the host.</li>
-      <li><strong>Caddy</strong> maps project hostnames to local runtime ports or static files.</li>
-      <li><strong>Cloudflare Tunnel</strong> provides configured public ingress and TLS.</li>
-    </ol>
-  </section>
-
-  <section>
-    <h2>Start here</h2>
-    <ul class="link-list">
-      <li><a href="/docs/installation/">Installation</a><span>Prepare a VM and run the guided bootstrap.</span></li>
-      <li><a href="/docs/deployment-models/">Deployment models</a><span>Understand Dockerfile, Compose, and static contracts.</span></li>
-      <li><a href="/docs/configuration/">Configuration & routing</a><span>Set GitHub, Cloudflare, domains, and project environment values.</span></li>
-      <li><a href="/docs/operations/">Operations</a><span>Use logs, metrics, lifecycle actions, history, and rollback.</span></li>
-      <li><a href="/docs/migration/">Migration</a><span>Move the whole platform to a new VM with one command.</span></li>
-      <li><a href="/docs/security/">Security</a><span>Review trust boundaries and operator responsibilities.</span></li>
-      <li><a href="/docs/limitations/">Limitations</a><span>Know what the single-node product does not provide.</span></li>
-    </ul>
-  </section>
+<DocsLayout title="MyPaaS documentation" description="Install, deploy, configure, operate, and automate MyPaaS on a single Linux VM.">
+<section><p class="overline">Overview</p><h2>What MyPaaS is</h2><p>MyPaaS is a self-hosted deployment control plane for one Linux server. It accepts Git repositories and public OCI images, operates container workloads through a Docker-compatible contract on Docker Engine or rootful Podman, and serves static releases directly through Caddy.</p><aside class="note"><p>These public docs describe current behavior on <code>main</code>. Roadmap and historical requirements are not presented as available features.</p></aside></section>
+<section><h2>Deployment contracts</h2><table><tbody><tr><td><strong>Dockerfile</strong></td><td>Build and run a Git repository Dockerfile.</td></tr><tr><td><strong>Docker Compose</strong></td><td>Resolve multi-service Compose configuration and route the selected public service.</td></tr><tr><td><strong>Static / SPA</strong></td><td>Build when needed, publish an atomic static release, and serve it through Caddy without a persistent app container.</td></tr><tr><td><strong>Public OCI image</strong></td><td>Pull and run a compatible public registry image.</td></tr></tbody></table></section>
+<section><h2>System model</h2><ol class="steps"><li>GitHub provides OAuth identity, repository access, and optional signed push events.</li><li>MyPaaS stores project configuration and deployment state and coordinates the deployment lifecycle.</li><li>Docker Engine or Podman provides the container runtime through the Docker-compatible command/socket contract.</li><li>Caddy routes container-backed projects and serves static releases.</li><li>Cloudflare Tunnel is the current production ingress path.</li></ol></section>
+<section><h2>Start here</h2><ul class="link-list"><li><a href="/docs/installation/">Installation</a><span>Prepare the VM, GitHub OAuth, Cloudflare Tunnel, and installer.</span></li><li><a href="/docs/deployment-models/">Deployment models</a><span>Choose Dockerfile, Compose, static/SPA, or public image.</span></li><li><a href="/docs/operations/">Operations</a><span>Use logs, metrics, lifecycle, history, and data tooling.</span></li><li><a href="/docs/automation/">Automation & agents</a><span>Use CLI, API, webhooks, and MCP.</span></li></ul></section>
 </DocsLayout>
