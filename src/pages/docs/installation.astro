@@ -1,91 +1,19 @@
 ---
 import CopyCommand from "../../components/CopyCommand.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
-
-const installCommand = "curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh | bash";
+import { installCommand, podmanInstallCommand } from "../../lib/site";
 ---
-
-<DocsLayout
-  title="Installation"
-  description="Prepare a Linux VM, launch the bootstrap, and finish setup through the guided installer."
->
-  <section>
-    <p class="overline">Quick start</p>
-    <h2>Start the installer</h2>
-    <CopyCommand command={installCommand} label="Ubuntu / Debian" />
-    <p>
-      The bootstrap installs Git when needed, checks out MyPaas into
-      <code>~/MyPaas</code>, and opens the browser setup wizard. It is a starting
-      command, not a zero-configuration install.
-    </p>
-  </section>
-
-  <section>
-    <h2>Prerequisites</h2>
-    <table>
-      <thead><tr><th>Requirement</th><th>What to prepare</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Linux VM or VPS</strong></td><td>Ubuntu or Debian is the supported path for automatic Docker installation.</td></tr>
-        <tr><td><strong>Cloudflare domain</strong></td><td>An active zone with root and wildcard hostnames routed to the MyPaas Caddy service.</td></tr>
-        <tr><td><strong>GitHub OAuth app</strong></td><td>Client ID, client secret, and the correct callback URL for your MyPaas domain.</td></tr>
-        <tr><td><strong>Cloudflare Tunnel</strong></td><td>A tunnel token and public hostname routes for the root and wildcard project domains.</td></tr>
-      </tbody>
-    </table>
-    <aside class="warning"><p>Hardware figures in the PRD describe the original host context. Treat them as planning context, not a universal minimum.</p></aside>
-  </section>
-
-  <section>
-    <h2>What the bootstrap does</h2>
-    <ol class="steps">
-      <li>Checks or installs Git, then creates or safely updates the MyPaas checkout.</li>
-      <li>Starts the setup wizard on the VM and attempts a temporary, token-protected Cloudflare Quick Tunnel.</li>
-      <li>Falls back to printed SSH port forwarding instructions if the temporary tunnel cannot start.</li>
-      <li>Collects the owner email, public domain, GitHub OAuth credentials, Cloudflare Tunnel token, and production secrets.</li>
-      <li>Checks Docker and Compose, creates host directories, runs migrations, and starts the production stack.</li>
-    </ol>
-  </section>
-
-  <section>
-    <h2>Cloudflare routing</h2>
-    <p>Configure both of these public hostname patterns to the MyPaas Caddy service over HTTP:</p>
-    <ul>
-      <li>The root MyPaas domain, for example <code>mypaas.example.com</code>.</li>
-      <li>The wildcard project domain, for example <code>*.mypaas.example.com</code>.</li>
-    </ul>
-    <p>
-      Caddy performs internal routing. Cloudflare Tunnel provides public ingress
-      and TLS. Project containers remain bound to local host ports rather than being exposed directly.
-    </p>
-  </section>
-
-  <section>
-    <h2>Verify the installation</h2>
-    <pre><code>cd ~/MyPaas
+<DocsLayout title="Installation" description="Prepare a Linux VM, GitHub OAuth, Cloudflare Tunnel, and complete the guided MyPaaS installer.">
+<section><p class="overline">Quick start</p><h2>Choose the container engine</h2><p>Automatic dependency preparation targets fresh Ubuntu or Debian hosts. Docker Engine is the default path; rootful Podman is supported through the Docker-compatible command and socket contract.</p><CopyCommand command={installCommand} label="Docker Engine" /><CopyCommand command={podmanInstallCommand} label="Podman" /></section>
+<section><h2>1. Prepare the domain</h2><p>Choose the hostname for the MyPaaS dashboard, for example <code>mypaas.example.com</code>. Project routes use hostnames below the configured public domain, so prepare both the root route and a wildcard route.</p><pre><code>mypaas.example.com
+*.mypaas.example.com</code></pre></section>
+<section><h2>2. Create the GitHub OAuth App</h2><p>Open GitHub account settings, then Developer settings → OAuth Apps → New OAuth App. Vendor navigation labels can change; the values below are the MyPaaS contract.</p><table><tbody><tr><td><strong>Application name</strong></td><td>MyPaaS</td></tr><tr><td><strong>Homepage URL</strong></td><td><code>https://mypaas.example.com</code></td></tr><tr><td><strong>Authorization callback URL</strong></td><td><code>https://mypaas.example.com/api/auth/github/callback</code></td></tr></tbody></table><p>Keep the generated Client ID and Client Secret ready. The installer derives the callback above from <code>PUBLIC_DOMAIN</code> when no explicit override is supplied.</p><aside class="warning"><p>Do not commit the GitHub Client Secret to a repository or paste it into project environment variables.</p></aside></section>
+<section><h2>3. Create the Cloudflare Tunnel</h2><p>Create a remotely managed Cloudflare Tunnel for the MyPaaS host and copy its tunnel token. Configure published hostname routes for the dashboard hostname and wildcard project hostname, both targeting the MyPaaS Caddy service over HTTP.</p><aside class="note"><p>MyPaaS runs its own <code>cloudflared</code> container using the tunnel token. Do not install a second permanent cloudflared service on the host for the same tunnel.</p></aside></section>
+<section><h2>4. Run the bootstrap</h2><p>The bootstrap installs Git when required, checks out <code>main</code> into <code>~/MyPaas</code>, prepares the selected container-engine dependencies, and starts the browser installer. The wizard binds to <code>127.0.0.1:8787</code> and can use a temporary token-protected Quick Tunnel; SSH port forwarding remains the fallback.</p><pre><code>ssh -L 8787:127.0.0.1:8787 user@your-vm</code></pre></section>
+<section><h2>5. Complete the installer</h2><p>The guided installer collects the public domain, owner GitHub email, GitHub Client ID and Client Secret, and Cloudflare Tunnel token. Production database, JWT, encryption, and metrics secrets are generated or entered during this step.</p><ol class="steps"><li>Confirm the public domain.</li><li>Enter the GitHub primary email that should become owner.</li><li>Paste the OAuth Client ID and Client Secret.</li><li>Paste the Cloudflare Tunnel token.</li><li>Review generated production secrets and submit the configuration.</li></ol></section>
+<section><h2>6. What gets installed</h2><p>The production control plane runs PostgreSQL, the Go API, SvelteKit dashboard, Caddy, and cloudflared. When enabled and supported, the installer also installs the pinned <code>mypaas-statd</code> release as a host-native systemd service.</p></section>
+<section><h2>7. Verify production</h2><pre><code>cd ~/MyPaas
 bash scripts/verify-production.sh
-docker compose -f docker-compose.prod.yml ps</code></pre>
-    <p>
-      Confirm the dashboard resolves, the API health check responds, Caddy can be
-      reached by the stack, and the Cloudflare root and wildcard records are active.
-    </p>
-  </section>
-
-  <section>
-    <h2>Moving an existing installation?</h2>
-    <p>
-      If MyPaas already runs on another server, skip the fresh setup and restore it
-      here instead — the migration wizard transfers databases, volumes,
-      configuration, and encrypted secrets in one step.
-      See <a href="/docs/migration/">Migration</a>.
-    </p>
-  </section>
-
-  <section>
-    <h2>Uninstall or Destroy</h2>
-    <p>
-      If you need to completely remove MyPaas from your VM, you can use the uninstall script. This will permanently delete all projects, databases, volumes, and MyPaas Docker containers.
-    </p>
-    <pre><code>cd ~/MyPaas
-bash scripts/uninstall-vm.sh</code></pre>
-    <aside class="warning"><p>This action is destructive and irreversible. Make sure you have exported any necessary data before proceeding.</p></aside>
-  </section>
+docker compose -f docker-compose.prod.yml ps</code></pre><p>Confirm the dashboard resolves, API readiness succeeds, Caddy control path is healthy, the configured statd socket is available when enabled, and both root and wildcard tunnel routes work.</p></section>
+<section><h2>Moving an existing installation?</h2><p>Use the supported VM migration flow instead of changing container engines in place. See <a href="/docs/migration/">Migration</a>.</p></section>
 </DocsLayout>
