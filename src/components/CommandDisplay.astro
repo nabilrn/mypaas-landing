@@ -1,0 +1,5 @@
+---
+const { command, label = "Shell" } = Astro.props;
+---
+<div class="cmd"><span>{label}</span><pre><code>{command}</code></pre></div>
+<style>.cmd{margin:1rem 0;border:1px solid var(--app-border-strong);border-radius:.5rem;background:var(--app-surface)}.cmd>span{display:block;padding:.6rem .8rem;border-bottom:1px solid var(--app-border);color:var(--app-subtle);font-family:var(--font-mono);font-size:.7rem}pre{margin:0;overflow:auto;padding:1rem;color:var(--app-ink);font-size:.78rem}</style>
