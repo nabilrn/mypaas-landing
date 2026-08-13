@@ -1,0 +1,10 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import DocMedia from "../../components/DocMedia.astro";
+import settingsShot from "../../../mypaas-dashboard-screenshots/2026-08-13T14-22-46-474Z-focused/desktop-dark-03-project-settings.png";
+---
+<DocsLayout title="Environment variables" description="Review detected environment keys and manage encrypted project configuration.">
+<section><p class="overline">Configuration</p><h2>Discovery creates a draft</h2><p>MyPaaS can discover candidate environment keys from common environment templates and Compose interpolation. Detection prepares values for review instead of silently persisting guessed configuration.</p><ul><li>Common example environment files.</li><li>Compose interpolation, including default and required forms.</li><li>Manual rows and reviewed environment-file paste or upload.</li></ul></section>
+<section><h2>Encrypted project values</h2><p>Persisted project environment values use AES-256-GCM encryption and remain masked in normal dashboard views until an explicit reveal action is used.</p><DocMedia src={settingsShot} alt="MyPaaS project settings" title="Project settings" source="MyPaaS dashboard" note="captured 13 Aug 2026" /></section>
+<section><h2>Managed database URL</h2><p>When optional shared PostgreSQL provisioning is selected, MyPaaS creates project-specific database access and stores the generated <code>DATABASE_URL</code> as a managed encrypted value.</p></section>
+</DocsLayout>

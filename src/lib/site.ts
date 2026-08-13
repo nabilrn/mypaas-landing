@@ -39,50 +39,27 @@ const en = {
   primaryCta: "Read the docs",
   secondaryCta: "View on GitHub",
   proof: ["Self-hosted", "Docker Engine / Podman", "No vendor lock-in", "Agent-accessible"],
-
   deployLabel: "Deployment contract",
   deployTitle: "Explicit inputs. Predictable runtime behavior.",
   deployBody: "MyPaaS inspects the source, presents the deployment contract, and keeps the runtime choice visible instead of silently inventing a platform-specific build environment.",
-  deployGroups: [
-    ["Source", ["Git repository", "Public OCI image"]],
-    ["Deploy", ["Dockerfile", "Docker Compose", "Static / SPA", "Container image"]],
-    ["Runtime", ["Docker Engine", "Rootful Podman"]],
-    ["Route", ["Caddy", "Cloudflare Tunnel"]],
-  ] as const,
-
+  deployGroups: [["Source", ["Git repository", "Public OCI image"]],["Deploy", ["Dockerfile", "Docker Compose", "Static / SPA", "Container image"]],["Runtime", ["Docker Engine", "Rootful Podman"]],["Route", ["Caddy", "Cloudflare Tunnel"]]] as const,
   ownershipLabel: "Ownership + integrations",
   ownershipTitle: "Own the infrastructure. Integrate the workflow.",
   ownershipBody: "No vendor lock-in does not mean operating in isolation. Workloads and persistent data stay on infrastructure you control while MyPaaS connects the tools around the deployment lifecycle.",
   ownershipItems: ["Linux host", "OCI workloads", "PostgreSQL", "Persistent volumes", "Git source", "VM migration"],
   integrationItems: ["GitHub OAuth + webhooks", "Public OCI registries", "Cloudflare Tunnel", "Docker / Podman", "Caddy", "Prometheus-compatible metrics"],
-
   operationsLabel: "Operate after deploy",
   operationsTitle: "Deployment is the beginning of the operational loop.",
   operationsBody: "The project view keeps live state, observability, lifecycle controls, release history, and data tooling close to the workload.",
-  operations: [
-    ["Observe", "Follow runtime metrics and host telemetry without turning configured quotas into fake usage."],
-    ["Diagnose", "Inspect build output, runtime logs, and Compose service context from the same project."],
-    ["Operate", "Deploy, start, stop, restart, and redeploy with explicit lifecycle actions."],
-    ["Recover", "Use release history for Dockerfile, Compose, and registry-image rollback; static projects recover by redeploying the target revision."],
-    ["Manage data", "Provision optional shared PostgreSQL and inspect PostgreSQL, MySQL, or MariaDB through DB Studio Lite."],
-    ["Move the platform", "Export and restore the installation when moving to a fresh VM instead of binding the workload to one provider."],
-  ] as const,
-
+  operations: [["Observe", "Follow runtime metrics and host telemetry without turning configured quotas into fake usage."],["Diagnose", "Inspect build output, runtime logs, and Compose service context from the same project."],["Operate", "Deploy, start, stop, restart, and redeploy with explicit lifecycle actions."],["Recover", "Use release history for Dockerfile, Compose, and registry-image rollback; static projects recover by redeploying the target revision."],["Manage data", "Provision optional shared PostgreSQL and inspect PostgreSQL, MySQL, or MariaDB through DB Studio Lite."],["Move the platform", "Export and restore the installation when moving to a fresh VM instead of binding the workload to one provider."]] as const,
   interfacesLabel: "Automation surface",
   interfacesTitle: "One control plane. Multiple interfaces.",
   interfacesBody: "Use the interface that fits the operator: browser for humans, CLI and API for automation, webhooks for events, and MCP for AI agents.",
-  interfaces: [
-    ["Human", "Dashboard", "Create projects, inspect state, manage settings, databases, and recovery workflows."],
-    ["Developer", "CLI", "Deploy, inspect logs, manage users, and run operational tasks from the terminal."],
-    ["Automation", "API + webhooks", "Drive deployments and integrate repository events with the same control-plane state."],
-    ["Agent", "MCP", "Expose bounded project, deployment, log, metric, environment, quota, and host-stat tools to local AI agents."],
-  ] as const,
-
+  interfaces: [["Human", "Dashboard", "Create projects, inspect state, manage settings, databases, and recovery workflows."],["Developer", "CLI", "Deploy, inspect logs, manage users, and run operational tasks from the terminal."],["Automation", "API + webhooks", "Drive deployments and integrate repository events with the same control-plane state."],["Agent", "MCP", "Expose bounded project, deployment, log, metric, environment, quota, and host-stat tools to local AI agents."]] as const,
   boundariesLabel: "Scope",
   boundariesTitle: "Designed for one server. Intentionally.",
   boundariesBody: "MyPaaS is a focused control plane for an owner developer or a small trusted team. The VM remains the capacity and failure boundary.",
   boundaries: ["Single Linux VM", "No Kubernetes or multi-node scheduler", "No multi-region HA or automatic horizontal scaling", "Public registry images only; private registry credentials are not implemented", "Host capacity, backups, and provider reliability remain operator responsibilities"],
-
   installLabel: "Install",
   installTitle: "Your server is the platform.",
   installBody: "The bootstrap prepares a fresh Ubuntu or Debian host and opens the guided installer. Bring a domain, GitHub OAuth credentials, and a Cloudflare Tunnel token.",
@@ -153,7 +130,26 @@ export function searchEntries(locale: Locale) {
   const home = localeMeta[locale].path;
   const section = locale === "zh" ? "产品" : locale === "id" ? "Produk" : "Product";
   const docsSection = locale === "zh" ? "文档" : locale === "id" ? "Dokumentasi" : "Documentation";
-
+  const docs = [
+    ["Documentation overview", "/docs/", "install deploy configure operate architecture"],
+    ["Installation", "/docs/installation/", "install bootstrap ubuntu debian setup"],
+    ["GitHub OAuth setup", "/docs/github-oauth/", "github oauth identity callback"],
+    ["Cloudflare Tunnel setup", "/docs/cloudflare-tunnel/", "cloudflare tunnel wildcard ingress caddy"],
+    ["First deployment", "/docs/first-deployment/", "create project repository image deploy"],
+    ["Deployment models", "/docs/deployment-models/", "dockerfile compose static spa registry image"],
+    ["Environment variables", "/docs/environment-variables/", "environment env encryption configuration"],
+    ["Domains, routing & webhooks", "/docs/routing-webhooks/", "domain routing caddy webhook github"],
+    ["Configuration and routing", "/docs/configuration/", "configuration project resources routing"],
+    ["Operations", "/docs/operations/", "operations lifecycle rollback recovery"],
+    ["Observability", "/docs/observability/", "logs metrics statd telemetry health"],
+    ["Databases & DB Studio", "/docs/databases/", "postgresql mysql mariadb db studio database"],
+    ["Backups & recovery", "/docs/backups-recovery/", "backup retention recovery rollback"],
+    ["Migration", "/docs/migration/", "migration export import vm move"],
+    ["Automation & agents", "/docs/automation/", "cli api webhook mcp ai agent automation"],
+    ["Security", "/docs/security/", "security trust boundary engine operator"],
+    ["Limitations", "/docs/limitations/", "limitations single host non goals"],
+    ["Troubleshooting", "/docs/troubleshooting/", "troubleshooting oauth cloudflare routing detection metrics"],
+  ] as const;
   return [
     { title: copy.heroTitle, section, description: copy.heroSummary, href: home, keywords: "self hosted paas deployment linux server git oci docker podman" },
     { title: copy.deployTitle, section, description: copy.deployBody, href: `${home}#deployment`, keywords: "dockerfile compose static spa registry image deployment" },
@@ -161,13 +157,6 @@ export function searchEntries(locale: Locale) {
     { title: copy.operationsTitle, section, description: copy.operationsBody, href: `${home}#operations`, keywords: "logs metrics telemetry lifecycle rollback databases migration" },
     { title: copy.interfacesTitle, section, description: copy.interfacesBody, href: `${home}#automation`, keywords: "cli api webhook mcp ai agents automation" },
     { title: copy.installTitle, section, description: copy.installBody, href: `${home}#install`, keywords: "install ubuntu debian cloudflare github oauth" },
-    { title: locale === "zh" ? "文档概览" : locale === "id" ? "Ringkasan dokumentasi" : "Documentation overview", section: docsSection, description: "Install, deploy, configure, operate, automate, and troubleshoot MyPaaS.", href: "/docs/", keywords: "docs documentation overview architecture" },
-    { title: locale === "zh" ? "安装" : locale === "id" ? "Instalasi" : "Installation", section: docsSection, description: "Prepare a Linux VM, GitHub OAuth, Cloudflare Tunnel, and complete the guided installer.", href: "/docs/installation/", keywords: "install bootstrap oauth cloudflare tunnel" },
-    { title: locale === "zh" ? "部署模式" : locale === "id" ? "Model deployment" : "Deployment models", section: docsSection, description: "Dockerfile, Compose, static/SPA, and public OCI image deployment contracts.", href: "/docs/deployment-models/", keywords: "dockerfile compose static spa registry image deployment" },
-    { title: locale === "zh" ? "配置与路由" : locale === "id" ? "Konfigurasi dan routing" : "Configuration and routing", section: docsSection, description: "Identity, environment variables, webhooks, Caddy, Cloudflare, and routing.", href: "/docs/configuration/", keywords: "configuration env domain caddy cloudflare routing webhook" },
-    { title: locale === "zh" ? "运维" : locale === "id" ? "Operasional" : "Operations", section: docsSection, description: "Logs, statd telemetry, lifecycle controls, history, databases, and recovery.", href: "/docs/operations/", keywords: "operations logs metrics statd rollback database" },
-    { title: locale === "zh" ? "迁移" : locale === "id" ? "Migrasi" : "Migration", section: docsSection, description: "Move a complete MyPaaS installation to a fresh VM.", href: "/docs/migration/", keywords: "migration export import vm" },
-    { title: locale === "zh" ? "安全" : locale === "id" ? "Keamanan" : "Security", section: docsSection, description: "Trust boundaries, secrets, engine authority, and operator responsibilities.", href: "/docs/security/", keywords: "security secrets trust boundaries" },
-    { title: locale === "zh" ? "限制" : locale === "id" ? "Keterbatasan" : "Limitations", section: docsSection, description: "Single-host boundaries and explicit product non-goals.", href: "/docs/limitations/", keywords: "limitations single host non goals" },
+    ...docs.map(([title, href, keywords]) => ({ title, section: docsSection, description: `MyPaaS documentation: ${title}.`, href, keywords })),
   ];
 }

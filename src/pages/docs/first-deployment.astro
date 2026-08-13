@@ -1,0 +1,12 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import DocMedia from "../../components/DocMedia.astro";
+import createShot from "../../../mypaas-dashboard-screenshots/2026-08-13T14-22-46-474Z-focused/desktop-dark-04-create-project.png";
+import overviewShot from "../../../mypaas-dashboard-screenshots/2026-08-13T14-22-46-474Z-focused/desktop-dark-01-project-overview-metrics.png";
+---
+<DocsLayout title="First deployment" description="Create a project from an explicit Git or public OCI source and verify the resulting workload.">
+<section><p class="overline">Start with the source</p><h2>Create a project</h2><p>Open <strong>Projects → New project</strong>. Git-backed projects begin with repository inspection and deployment detection. Registry-backed projects begin with a public image reference.</p><DocMedia src={createShot} alt="MyPaaS Create Project workflow" title="Create Project" source="MyPaaS dashboard" note="captured 13 Aug 2026" /></section>
+<section><h2>Review the detected contract</h2><p>For a Git source, review the branch, base directory, deployment type, port, environment discovery, and any Compose-specific settings before creation. Detection is a proposal; MyPaaS does not silently invent a backend runtime when no supported production contract exists.</p><p>Supported deployment paths are Dockerfile, Docker Compose, static/SPA, and public OCI image. See <a href="/docs/deployment-models/">Deployment models</a>.</p></section>
+<section><h2>Watch the deployment</h2><p>The deployment record progresses asynchronously through the stages that apply to the selected mode. A failed replacement is recorded for diagnosis instead of being presented as a successful release.</p><ul><li>Use build logs while source is being built.</li><li>Use runtime logs after a container-backed project starts.</li><li>Use project metrics for running container-backed workloads.</li><li>Static projects are served directly by Caddy and have no persistent application runtime.</li></ul></section>
+<section><h2>Verify the project overview</h2><DocMedia src={overviewShot} alt="MyPaaS project overview and runtime metrics" title="Project overview" source="MyPaaS dashboard" note="captured 13 Aug 2026" /><p>Confirm the project state, route, active deployment, and the observability surfaces that apply to the project type.</p></section>
+</DocsLayout>

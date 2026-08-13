@@ -1,0 +1,10 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import DocMedia from "../../components/DocMedia.astro";
+---
+<DocsLayout title="GitHub OAuth setup" description="Prepare the GitHub OAuth application used by a MyPaaS instance.">
+<section><p class="overline">Identity integration</p><h2>Create the OAuth application</h2><p>Open GitHub Settings, then Developer settings, OAuth Apps, and New OAuth App.</p><DocMedia title="New OAuth App form" source="GitHub" note="vendor UI · capture pending" placeholder="Capture the GitHub form showing the application name, homepage URL, and callback URL fields." /></section>
+<section><h2>Instance URLs</h2><table><thead><tr><th>Field</th><th>Example</th></tr></thead><tbody><tr><td>Homepage URL</td><td><code>https://mypaas.example.com</code></td></tr><tr><td>Callback URL</td><td><code>https://mypaas.example.com/api/auth/github/callback</code></td></tr></tbody></table><p>The install wizard derives the callback from <code>PUBLIC_DOMAIN</code> unless an explicit callback override is supplied.</p></section>
+<section><h2>Application credentials</h2><p>Use the Client ID and client credential created for this OAuth application in the install wizard. Keep the credential private and redact it from documentation captures.</p><DocMedia title="OAuth application credentials" source="GitHub" note="vendor UI · capture pending" placeholder="Capture the OAuth App settings page while keeping every real credential hidden." /></section>
+<section><h2>Access model</h2><p>GitHub authentication is combined with the MyPaaS owner and collaborator whitelist. It does not enable public registration.</p><p><a href="/docs/installation/">Return to Installation →</a></p></section>
+</DocsLayout>
