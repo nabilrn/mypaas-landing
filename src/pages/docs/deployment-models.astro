@@ -1,75 +1,11 @@
 ---
 import DocsLayout from "../../layouts/DocsLayout.astro";
 ---
-
-<DocsLayout
-  title="Deployment models"
-  description="Choose an explicit repository contract: Dockerfile, Docker Compose, or ready static output."
->
-  <section>
-    <p class="overline">Detection</p>
-    <h2>Priority and validation</h2>
-    <p>MyPaas inspects the selected branch in this order:</p>
-    <ol class="steps">
-      <li>A Compose file — <code>docker-compose.yml</code>, <code>compose.yml</code>/<code>.yaml</code>, or a prod variant — discovered at the root or recursively within the repository (depth ≤ 4), or an explicit repo-relative path you choose.</li>
-      <li>A root <code>Dockerfile</code>.</li>
-      <li>A ready <code>index.html</code> in <code>dist</code>, <code>build</code>, <code>public</code>, or root.</li>
-    </ol>
-    <p>
-      If no supported contract is found, project creation or deployment stops
-      with an actionable error. MyPaas does not infer a buildpack or invent a runtime.
-    </p>
-  </section>
-
-  <section>
-    <h2>Dockerfile mode</h2>
-    <p>
-      Dockerfile mode builds one application image from the repository root. The
-      project needs an application port, which may be inferred from <code>EXPOSE</code>
-      or reviewed manually before creation.
-    </p>
-    <ol class="steps">
-      <li>Clone the selected commit into an isolated build workspace.</li>
-      <li>Generate the runtime environment file from encrypted project values.</li>
-      <li>Build the image and capture build output.</li>
-      <li>Start the replacement on a fresh local port with explicit CPU and memory limits.</li>
-      <li>Switch the Caddy route only after the replacement starts successfully.</li>
-    </ol>
-  </section>
-
-  <section>
-    <h2>Docker Compose mode</h2>
-    <p>
-      Compose mode is for an application plus supporting services such as a
-      database, cache, broker, or worker. Select the service that should receive public traffic.
-    </p>
-    <ul>
-      <li>Compose Doctor checks build context, required variables, port hints, and unsafe configuration flags.</li>
-      <li>Compose files can live in subdirectories; chain additional <code>-f</code> override files, select <code>COMPOSE_PROFILES</code>, and override the working directory from project settings.</li>
-      <li>One repository can host several MyPaas projects, each pointing at a different Compose file.</li>
-      <li>MyPaas applies resource limits and the public port through an override file.</li>
-      <li>Logs and metrics remain selectable per service.</li>
-      <li>Existing Compose resources can be audited and explicitly reset when stale volumes or credentials cause conflicts.</li>
-    </ul>
-    <aside class="warning"><p>Resetting Compose resources is destructive and remains an explicit owner action.</p></aside>
-  </section>
-
-  <section>
-    <h2>Static mode</h2>
-    <p>
-      Static mode publishes output that already exists in the repository. MyPaas
-      copies the selected directory atomically and configures Caddy to serve it.
-      There is no application container and MyPaas does not run framework build commands.
-    </p>
-  </section>
-
-  <section>
-    <h2>Failure behavior</h2>
-    <p>
-      A failed Dockerfile or Compose build does not replace the currently routed
-      release. Deployment state, build logs, and the failure message remain available for diagnosis.
-      Builds are serialized per project, at most two builds run concurrently, and a build
-      that exceeds the configured timeout is stopped and marked failed.
-    </p>
-  </section>
+<DocsLayout title="Deployment models" description="Use an explicit contract: Dockerfile, Docker Compose, static/SPA, or a public OCI image.">
+<section><p class="overline">Current modes</p><h2>Four deployment paths</h2><table><thead><tr><th>Source</th><th>Mode</th><th>Execution</th><th>Recovery</th></tr></thead><tbody><tr><td>Git</td><td><code>dockerfile</code></td><td>Build the repository Dockerfile and run the resulting image.</td><td>Historical rollback</td></tr><tr><td>Git</td><td><code>compose</code></td><td>Resolve Compose configuration, start the services, and route the selected public service.</td><td>Historical rollback</td></tr><tr><td>Git</td><td><code>static</code></td><td>Build when required, publish an atomic static release, and serve it through Caddy.</td><td>Redeploy / roll-forward</td></tr><tr><td>Registry</td><td><code>image</code></td><td>Pull a public OCI image and run it through the managed runtime lifecycle.</td><td>Historical rollback</td></tr></tbody></table><aside class="note"><p>Registry deployment currently targets public images. Private registry credential management is outside the current implementation.</p></aside></section>
+<section><h2>Git source detection</h2><ol class="steps"><li>Discover and rank Compose candidates.</li><li>Otherwise use a production Dockerfile when available.</li><li>Otherwise detect a static site or static SPA.</li><li>Use Nixpacks only as an additional framework/provider inspection signal.</li></ol><p>Nixpacks is not a deployment mode. Backend or SSR projects without Compose or a production Dockerfile are asked to provide an explicit production contract.</p></section>
+<section><h2>Dockerfile</h2><p>MyPaaS builds the configured Dockerfile, starts the managed runtime with the selected resources, and activates the Caddy route after the replacement runtime is ready.</p></section>
+<section><h2>Docker Compose</h2><p>Compose projects can use files below the repository root, ordered override files, profiles, explicit working directories, a selected public service, and per-service resource overrides. Logs and metrics remain available with service context.</p></section>
+<section><h2>Static / SPA</h2><p>Static projects have no persistent application container. When a supported project needs a build, MyPaaS can run a bounded build, publish the resulting release atomically, and serve it directly through Caddy. SPA history routes fall back to the release <code>index.html</code>.</p></section>
+<section><h2>Public OCI image</h2><p>Registry projects can deploy compatible public images from sources such as Docker Hub or GHCR. They use the normal lifecycle, resource, routing, log, metric, and rollback model but do not use Git webhooks.</p></section>
 </DocsLayout>
