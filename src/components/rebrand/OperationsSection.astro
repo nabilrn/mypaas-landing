@@ -1,7 +1,13 @@
 ---
+import TechLabel from "../pixel/TechLabel.astro";
 const { copy } = Astro.props;
 ---
-<section id="operations"><p class="label">{copy.operationsLabel}</p><h2>{copy.operationsTitle}</h2><p>{copy.operationsBody}</p><ol>{copy.operations.map((item) => <li><strong>{item[0]}</strong><span>{item[1]}</span></li>)}</ol></section>
+<section id="operate" class="operations">
+  <div class="intro"><TechLabel label={copy.operationsLabel} index="02" /><h2>{copy.operationsTitle}</h2><p>{copy.operationsBody}</p></div>
+  <ol>{copy.operations.map((item, index) => <li><span class="index">{String(index + 1).padStart(2,"0")}</span><strong>{item[0]}</strong><p>{item[1]}</p></li>)}</ol>
+</section>
 <style>
-section{padding:5rem 1rem}section>*{max-width:76rem;margin-left:auto;margin-right:auto}.label{font-family:var(--font-mono);color:var(--app-subtle)}h2{font-size:3rem;letter-spacing:-.05em}p,span{color:var(--app-muted)}ol{padding:0;list-style:none}li{display:grid;grid-template-columns:9rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--app-border)}
+.operations{display:grid;grid-template-columns:minmax(16rem,.75fr) minmax(0,1.25fr);gap:clamp(3rem,7vw,7rem);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(5rem,9vw,7rem) 0}.intro h2{max-width:10ch;margin:1.3rem 0 1rem;color:var(--app-ink);font-size:clamp(2.25rem,4vw,3.55rem);font-weight:620;letter-spacing:-.035em;line-height:1.02}.intro>p{max-width:30rem;margin:0;color:var(--app-muted);line-height:1.65}ol{margin:0;padding:0;border-top:1px solid var(--app-border-strong);list-style:none}li{display:grid;grid-template-columns:2.5rem minmax(7rem,.45fr) minmax(0,1fr);gap:1rem;align-items:start;padding:1.15rem 0;border-bottom:1px solid var(--app-border)}.index{color:var(--app-subtle);font-family:var(--font-mono);font-size:.62rem}li strong{color:var(--app-ink);font-size:.88rem;font-weight:600}li p{margin:0;color:var(--app-muted);font-size:.84rem;line-height:1.58}
+@media(max-width:800px){.operations{grid-template-columns:1fr;gap:2.5rem;width:min(calc(100% - 1.25rem),var(--page-width));padding:4.5rem 0}.intro h2{font-size:clamp(2.15rem,10vw,3rem)}}
+@media(max-width:520px){li{grid-template-columns:2rem 1fr;gap:.5rem 1rem}li p{grid-column:2}}
 </style>
