@@ -1,70 +1,84 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 640" fill="none">
   <defs>
     <pattern id="grid" width="22" height="22" patternUnits="userSpaceOnUse">
-      <path d="M22 0H0V22" stroke="#fff" stroke-opacity=".048" stroke-width="1"/>
+      <path d="M22 0H0V22" stroke="#fff" stroke-opacity=".05" stroke-width="1"/>
+    </pattern>
+    <pattern id="fineGrid" width="14" height="14" patternUnits="userSpaceOnUse">
+      <path d="M14 0H0V14" stroke="#fff" stroke-opacity=".026" stroke-width="1"/>
     </pattern>
     <pattern id="micro" width="10" height="10" patternUnits="userSpaceOnUse">
-      <rect x="4" y="4" width="2" height="2" fill="#fff" fill-opacity=".19"/>
+      <rect x="4" y="4" width="2" height="2" fill="#fff" fill-opacity=".18"/>
     </pattern>
     <linearGradient id="leftFade" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#050505"/>
-      <stop offset=".34" stop-color="#050505"/>
-      <stop offset=".52" stop-color="#050505" stop-opacity=".92"/>
-      <stop offset=".72" stop-color="#050505" stop-opacity=".18"/>
+      <stop offset=".32" stop-color="#050505"/>
+      <stop offset=".48" stop-color="#050505" stop-opacity=".94"/>
+      <stop offset=".69" stop-color="#050505" stop-opacity=".16"/>
       <stop offset="1" stop-color="#050505" stop-opacity="0"/>
     </linearGradient>
-    <radialGradient id="halo" cx="0" cy="0" r="1" gradientTransform="translate(1185 330) rotate(180) scale(470 330)" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#fff" stop-opacity=".045"/>
+    <linearGradient id="microFade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".25" stop-color="#fff" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".04"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientTransform="translate(1185 330) rotate(180) scale(500 350)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity=".055"/>
       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </radialGradient>
   </defs>
 
   <rect width="1600" height="640" fill="#050505"/>
   <rect x="560" width="1040" height="640" fill="url(#grid)"/>
-  <rect x="770" y="128" width="730" height="430" fill="url(#micro)" opacity=".5"/>
-  <rect x="700" y="70" width="830" height="520" fill="url(#halo)"/>
+  <rect x="740" y="76" width="860" height="506" fill="url(#fineGrid)" opacity=".95"/>
+  <rect x="720" y="116" width="820" height="456" fill="url(#micro)" opacity=".52"/>
+  <rect x="700" y="70" width="850" height="520" fill="url(#halo)"/>
 
-  <g stroke="#fff" stroke-width="1.35" stroke-linecap="square" stroke-linejoin="miter">
-    <path d="M788 0V48H746V95H704V145H661V199H620V250H580V302H540V350H502" stroke-opacity=".42"/>
-    <path d="M1600 68H1550V116H1509V165H1466V218H1423V270H1382V324H1340V374H1297V425H1254V477H1212V528H1168V580H1127V640" stroke-opacity=".46"/>
-    <path d="M1098 0V40H1058V82H1019V123H978V166H938V208H898V250H858V292" stroke-opacity=".22"/>
-    <path d="M1600 330H1550V377H1507V423H1464V469H1420V514H1377V558H1334V602H1291" stroke-opacity=".3"/>
-    <path d="M930 640V596H888V551H848V507H807V464H768V421H727" stroke-opacity=".21"/>
+  <g fill="#fff" opacity=".055">
+    <rect x="708" y="205" width="24" height="24"/><rect x="732" y="229" width="24" height="24"/><rect x="756" y="253" width="24" height="24"/>
+    <rect x="780" y="277" width="24" height="24"/><rect x="804" y="301" width="24" height="24"/><rect x="828" y="325" width="24" height="24"/>
+    <rect x="748" y="349" width="18" height="18"/><rect x="772" y="373" width="18" height="18"/><rect x="796" y="397" width="18" height="18"/>
+    <rect x="820" y="421" width="18" height="18"/>
   </g>
 
-  <g stroke="#fff" stroke-opacity=".2" stroke-width="1">
-    <rect x="1000" y="106" width="24" height="24"/>
-    <rect x="1007" y="113" width="10" height="10"/>
-    <rect x="1393" y="147" width="16" height="16"/>
-    <rect x="1453" y="344" width="15" height="15"/>
-    <rect x="928" y="493" width="20" height="20"/>
-    <rect x="1232" y="548" width="16" height="16"/>
+  <g stroke="#fff" stroke-width="1.35" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M788 0V48H746V95H704V145H661V199H620V250H580V302H540V350H502" stroke-opacity=".44"/>
+    <path d="M1600 68H1550V116H1509V165H1466V218H1423V270H1382V324H1340V374H1297V425H1254V477H1212V528H1168V580H1127V640" stroke-opacity=".5"/>
+    <path d="M1098 0V40H1058V82H1019V123H978V166H938V208H898V250H858V292" stroke-opacity=".24"/>
+    <path d="M1600 330H1550V377H1507V423H1464V469H1420V514H1377V558H1334V602H1291" stroke-opacity=".34"/>
+    <path d="M930 640V596H888V551H848V507H807V464H768V421H727" stroke-opacity=".24"/>
+    <path d="M1286 0V42H1248V82H1208V120H1170V158H1132V198H1092" stroke-opacity=".12"/>
+  </g>
+
+  <g stroke="#fff" stroke-opacity=".22" stroke-width="1">
+    <rect x="1000" y="106" width="24" height="24"/><rect x="1007" y="113" width="10" height="10"/>
+    <rect x="1393" y="147" width="16" height="16"/><rect x="1453" y="344" width="15" height="15"/>
+    <rect x="928" y="493" width="20" height="20"/><rect x="1232" y="548" width="16" height="16"/>
+    <rect x="1512" y="236" width="12" height="12"/><rect x="1352" y="518" width="11" height="11"/>
+    <rect x="812" y="318" width="13" height="13"/><rect x="842" y="352" width="9" height="9"/>
   </g>
 
   <g fill="#fff">
-    <rect x="815" y="225" width="6" height="6" fill-opacity=".78"/>
-    <rect x="852" y="248" width="4" height="4" fill-opacity=".5"/>
-    <rect x="884" y="278" width="7" height="7" fill-opacity=".85"/>
-    <rect x="916" y="304" width="3" height="3" fill-opacity=".4"/>
-    <rect x="950" y="333" width="5" height="5" fill-opacity=".66"/>
-    <rect x="985" y="362" width="8" height="8" fill-opacity=".9"/>
-    <rect x="1020" y="393" width="4" height="4" fill-opacity=".52"/>
-    <rect x="1052" y="423" width="6" height="6" fill-opacity=".74"/>
-    <rect x="1090" y="453" width="3" height="3" fill-opacity=".45"/>
-    <rect x="1125" y="484" width="7" height="7" fill-opacity=".76"/>
-    <rect x="1180" y="238" width="5" height="5" fill-opacity=".62"/>
-    <rect x="1328" y="286" width="7" height="7" fill-opacity=".86"/>
-    <rect x="1396" y="408" width="6" height="6" fill-opacity=".72"/>
-    <rect x="1452" y="511" width="4" height="4" fill-opacity=".52"/>
+    <rect x="815" y="225" width="6" height="6" fill-opacity=".78"/><rect x="852" y="248" width="4" height="4" fill-opacity=".5"/>
+    <rect x="884" y="278" width="7" height="7" fill-opacity=".85"/><rect x="916" y="304" width="3" height="3" fill-opacity=".4"/>
+    <rect x="950" y="333" width="5" height="5" fill-opacity=".66"/><rect x="985" y="362" width="8" height="8" fill-opacity=".9"/>
+    <rect x="1020" y="393" width="4" height="4" fill-opacity=".52"/><rect x="1052" y="423" width="6" height="6" fill-opacity=".74"/>
+    <rect x="1090" y="453" width="3" height="3" fill-opacity=".45"/><rect x="1125" y="484" width="7" height="7" fill-opacity=".76"/>
+    <rect x="1180" y="238" width="5" height="5" fill-opacity=".62"/><rect x="1328" y="286" width="7" height="7" fill-opacity=".86"/>
+    <rect x="1396" y="408" width="6" height="6" fill-opacity=".72"/><rect x="1452" y="511" width="4" height="4" fill-opacity=".52"/>
+    <rect x="1270" y="188" width="4" height="4" fill-opacity=".42"/><rect x="1488" y="152" width="5" height="5" fill-opacity=".68"/>
+    <rect x="1526" y="422" width="7" height="7" fill-opacity=".58"/><rect x="1218" y="590" width="4" height="4" fill-opacity=".48"/>
   </g>
 
-  <g fill="#fff" fill-opacity=".19">
+  <g fill="#fff" fill-opacity=".2">
     <rect x="772" y="374" width="8" height="8"/><rect x="786" y="374" width="8" height="8"/><rect x="800" y="374" width="8" height="8"/><rect x="814" y="374" width="8" height="8"/>
     <rect x="758" y="388" width="8" height="8"/><rect x="772" y="388" width="8" height="8"/><rect x="786" y="388" width="8" height="8"/><rect x="800" y="388" width="8" height="8"/><rect x="814" y="388" width="8" height="8"/><rect x="828" y="388" width="8" height="8"/>
     <rect x="744" y="402" width="8" height="8"/><rect x="758" y="402" width="8" height="8"/><rect x="772" y="402" width="8" height="8"/><rect x="786" y="402" width="8" height="8"/><rect x="800" y="402" width="8" height="8"/><rect x="814" y="402" width="8" height="8"/><rect x="828" y="402" width="8" height="8"/><rect x="842" y="402" width="8" height="8"/>
-    <rect x="758" y="416" width="8" height="8"/><rect x="772" y="416" width="8" height="8"/><rect x="786" y="416" width="8" height="8"/><rect x="800" y="416" width="8" height="8"/><rect x="814" y="416" width="8" height="8"/><rect x="828" y="416" width="8" height="8"/>
-    <rect x="772" y="430" width="8" height="8"/><rect x="786" y="430" width="8" height="8"/><rect x="800" y="430" width="8" height="8"/><rect x="814" y="430" width="8" height="8"/>
+    <rect x="730" y="416" width="8" height="8"/><rect x="744" y="416" width="8" height="8"/><rect x="758" y="416" width="8" height="8"/><rect x="772" y="416" width="8" height="8"/><rect x="786" y="416" width="8" height="8"/><rect x="800" y="416" width="8" height="8"/><rect x="814" y="416" width="8" height="8"/><rect x="828" y="416" width="8" height="8"/><rect x="842" y="416" width="8" height="8"/><rect x="856" y="416" width="8" height="8"/>
+    <rect x="744" y="430" width="8" height="8"/><rect x="758" y="430" width="8" height="8"/><rect x="772" y="430" width="8" height="8"/><rect x="786" y="430" width="8" height="8"/><rect x="800" y="430" width="8" height="8"/><rect x="814" y="430" width="8" height="8"/><rect x="828" y="430" width="8" height="8"/><rect x="842" y="430" width="8" height="8"/>
+    <rect x="758" y="444" width="8" height="8"/><rect x="772" y="444" width="8" height="8"/><rect x="786" y="444" width="8" height="8"/><rect x="800" y="444" width="8" height="8"/><rect x="814" y="444" width="8" height="8"/><rect x="828" y="444" width="8" height="8"/>
+    <rect x="772" y="458" width="8" height="8"/><rect x="786" y="458" width="8" height="8"/><rect x="800" y="458" width="8" height="8"/><rect x="814" y="458" width="8" height="8"/>
   </g>
 
+  <rect x="650" y="82" width="950" height="480" fill="url(#microFade)" opacity=".05"/>
   <rect width="930" height="640" fill="url(#leftFade)"/>
 </svg>
