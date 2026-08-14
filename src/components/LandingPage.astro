@@ -24,7 +24,7 @@ const footerLabels = locale === "id" ? { docs:"Dokumentasi", privacy:"Privasi" }
     <div class="shell"><LandingHero title={copy.heroTitle} body={copy.heroSummary} eyebrow={copy.eyebrow} primary={copy.primaryCta} secondary={copy.secondaryCta} proof={copy.proof} {repositoryUrl} /></div>
     <ProductProof />
     <PixelRule />
-    <DeploymentSection {copy} />
+    <DeploymentSection {copy} {locale} />
     <PixelRule />
     <OperationsSection {copy} />
     <LogsProof />
