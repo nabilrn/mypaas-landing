@@ -2,6 +2,8 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CopyCommand from "./CopyCommand.astro";
 import LandingHeader from "./LandingHeader.astro";
+import PixelRule from "./pixel/PixelRule.astro";
+import TechLabel from "./pixel/TechLabel.astro";
 import LandingHero from "./rebrand/LandingHero.astro";
 import ProductProof from "./rebrand/ProductProof.astro";
 import DeploymentSection from "./rebrand/DeploymentSection.astro";
@@ -14,21 +16,34 @@ interface Props { locale?: Locale }
 const { locale = "en" } = Astro.props;
 const copy = landingCopy[locale];
 const path = locale === "en" ? "/" : `/${locale}/`;
+const footerLabels = locale === "id" ? { docs:"Dokumentasi", privacy:"Privasi" } : locale === "zh" ? { docs:"文档", privacy:"隐私" } : { docs:"Docs", privacy:"Privacy" };
 ---
 <BaseLayout title={copy.metaTitle} description={copy.metaDescription} locale={locale} path={path} localizedAlternates image={heroImage.src} imageAlt="MyPaaS project overview and runtime metrics">
   <LandingHeader {locale} />
   <main>
-    <div class="shell"><LandingHero title={copy.heroTitle} body={copy.heroSummary} eyebrow={copy.eyebrow} primary={copy.primaryCta} secondary={copy.secondaryCta} {repositoryUrl} /></div>
+    <div class="shell"><LandingHero title={copy.heroTitle} body={copy.heroSummary} eyebrow={copy.eyebrow} primary={copy.primaryCta} secondary={copy.secondaryCta} proof={copy.proof} {repositoryUrl} /></div>
     <ProductProof />
+    <PixelRule />
     <DeploymentSection {copy} />
-    <IntegrationSection {copy} />
-    <LogsProof />
+    <PixelRule />
     <OperationsSection {copy} />
-    <section id="automation" class="simple"><p>{copy.interfacesLabel}</p><h2>{copy.interfacesTitle}</h2><div>{copy.interfacesBody}</div><ul>{copy.interfaces.map((item) => <li><strong>{item[0]} · {item[1]}</strong><span>{item[2]}</span></li>)}</ul></section>
-    <section class="simple"><p>{copy.boundariesLabel}</p><h2>{copy.boundariesTitle}</h2><div>{copy.boundariesBody}</div><ul>{copy.boundaries.map((item) => <li><span>{item}</span></li>)}</ul></section>
-    <section id="install" class="simple"><p>{copy.installLabel}</p><h2>{copy.installTitle}</h2><div>{copy.installBody}</div><CopyCommand command={installCommand} label={copy.installDocker} copyLabel="Copy" copiedLabel="Copied" failedLabel="Copy failed" /><CopyCommand command={podmanInstallCommand} label={copy.installPodman} copyLabel="Copy" copiedLabel="Copied" failedLabel="Copy failed" /><a href="/docs/installation/">{copy.installGuide} →</a></section>
+    <LogsProof />
+    <PixelRule />
+    <IntegrationSection {copy} {locale} />
+    <PixelRule />
+    <section id="scope" class="compact-section scope">
+      <div><TechLabel label={copy.boundariesLabel} index="04" /><h2>{copy.boundariesTitle}</h2><p>{copy.boundariesBody}</p></div>
+      <ul>{copy.boundaries.map((item)=><li><span aria-hidden="true"></span>{item}</li>)}</ul>
+    </section>
+    <PixelRule />
+    <section id="install" class="compact-section install">
+      <div class="install-copy"><TechLabel label={copy.installLabel} index="05" /><h2>{copy.installTitle}</h2><p>{copy.installBody}</p><a class="docs-link" href="/docs/installation/">{copy.installGuide} <span aria-hidden="true">→</span></a></div>
+      <div class="commands"><CopyCommand command={installCommand} label={copy.installDocker} /><CopyCommand command={podmanInstallCommand} label={copy.installPodman} /></div>
+    </section>
   </main>
+  <footer class="site-footer"><div><strong>MyPaaS</strong><span>{copy.footer}</span></div><nav><a href="/docs/">{footerLabels.docs}</a><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a><a href="/privacy/">{footerLabels.privacy}</a><span>MIT</span></nav></footer>
 </BaseLayout>
 <style>
-.shell,.simple{width:min(calc(100% - 2rem),76rem);margin:auto}.simple{padding:5rem 0;border-top:1px solid var(--app-border)}.simple>p{font-family:var(--font-mono);color:var(--app-subtle)}.simple h2{max-width:13ch;font-size:3rem;letter-spacing:-.05em}.simple>div,.simple span{color:var(--app-muted)}.simple ul{padding:0;list-style:none}.simple li{display:grid;gap:.4rem;padding:1rem 0;border-bottom:1px solid var(--app-border)}.simple a{display:inline-block;margin-top:1rem}
+.shell{width:min(calc(100% - 2rem),var(--page-width));margin:auto}.compact-section{display:grid;grid-template-columns:minmax(15rem,.72fr) minmax(0,1.28fr);gap:clamp(3rem,7vw,7rem);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(5rem,9vw,7rem) 0}.compact-section h2{max-width:11ch;margin:1.25rem 0 1rem;color:var(--app-ink);font-size:clamp(2.25rem,4vw,3.55rem);font-weight:620;letter-spacing:-.035em;line-height:1.02}.compact-section p{max-width:31rem;margin:0;color:var(--app-muted);line-height:1.65}.scope ul{display:grid;align-self:end;margin:0;padding:0;border-top:1px solid var(--app-border-strong);list-style:none}.scope li{display:flex;align-items:center;gap:.8rem;padding:.75rem 0;border-bottom:1px solid var(--app-border);color:var(--app-body);font-size:.86rem}.scope li span{width:6px;height:6px;border:1px solid var(--app-ink)}.commands{display:grid;align-content:end;gap:.85rem;min-width:0}.docs-link{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;color:var(--app-ink);font-size:.82rem;font-weight:600;text-decoration:none}.docs-link:hover{text-decoration:underline;text-underline-offset:.25em}.site-footer{display:flex;justify-content:space-between;gap:2rem;width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:2rem 0 3rem;border-top:1px solid var(--app-border-strong)}.site-footer>div{display:grid;gap:.35rem}.site-footer strong{color:var(--app-ink);font-size:.86rem}.site-footer span{max-width:28rem;color:var(--app-subtle);font-size:.7rem;line-height:1.5}.site-footer nav{display:flex;flex-wrap:wrap;align-content:start;justify-content:flex-end;gap:1rem}.site-footer nav a,.site-footer nav span{color:var(--app-muted);font-size:.7rem;text-decoration:none}.site-footer nav a:hover{color:var(--app-ink)}
+@media(max-width:780px){.shell,.compact-section,.site-footer{width:min(calc(100% - 1.25rem),var(--page-width))}.compact-section{grid-template-columns:1fr;gap:2.5rem;padding:4.5rem 0}.compact-section h2{font-size:clamp(2.15rem,10vw,3rem)}.site-footer{align-items:flex-start;flex-direction:column}.site-footer nav{justify-content:flex-start}}
 </style>
