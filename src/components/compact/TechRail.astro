@@ -1,27 +1,33 @@
 ---
-import { siCaddy, siCloudflare, siDocker, siGithub, siGit, siLinux, siPodman, siPostgresql, siUbuntu } from "simple-icons";
+import { siCaddy, siCloudflare, siDocker, siGithub, siLinux, siPodman, siPostgresql, siUbuntu } from "simple-icons";
 const items = [
+  ["GitHub", siGithub],
+  ["Cloudflare", siCloudflare],
   ["Ubuntu", siUbuntu],
   ["Linux", siLinux],
   ["Docker", siDocker],
   ["Podman", siPodman],
   ["Caddy", siCaddy],
-  ["Cloudflare", siCloudflare],
   ["PostgreSQL", siPostgresql],
-  ["GitHub", siGithub],
-  ["Git", siGit],
 ] as const;
 ---
-<div class="tech-rail" aria-label="Technology stack">
-  {items.map(([name, icon]) => (
-    <div class="tech-item" style={`--brand:#${icon.hex}`}>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg>
-      <span>{name}</span>
+<div class="integration-stack" aria-label="MyPaaS integrations and runtime ecosystem">
+  <div class="logo-row">
+    {items.map(([name, icon]) => (
+      <div class="logo-bubble" style={`--brand:#${icon.hex}`} title={name} aria-label={name}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg>
+      </div>
+    ))}
+    <div class="logo-bubble mcp" title="Model Context Protocol" aria-label="Model Context Protocol">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.25"/><circle cx="18" cy="6" r="2.25"/><circle cx="18" cy="18" r="2.25"/><path d="M8 11.2 15.7 7M8 12.8l7.7 4.2"/></svg>
     </div>
-  ))}
+    <div class="logo-bubble more" aria-hidden="true">+</div>
+  </div>
+  <p>GitHub · Cloudflare · Docker / Podman · Caddy · PostgreSQL · MCP</p>
 </div>
+
 <style>
-.tech-rail{display:grid;grid-template-columns:repeat(9,1fr);border-block:1px solid var(--app-border-strong);background:var(--app-surface)}.tech-item{position:relative;display:flex;min-width:0;align-items:center;justify-content:center;gap:.5rem;padding:.82rem .45rem;border-right:1px solid var(--app-border);color:var(--app-ink)}.tech-item:last-child{border-right:0}.tech-item::before{position:absolute;top:-1px;left:-1px;width:5px;height:5px;background:var(--brand);content:""}.tech-item svg{width:1.05rem;height:1.05rem;fill:var(--brand);flex:0 0 auto}.tech-item span{overflow:hidden;font-family:var(--font-mono);font-size:.58rem;letter-spacing:.03em;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:900px){.tech-rail{grid-template-columns:repeat(3,1fr)}.tech-item{border-bottom:1px solid var(--app-border)}.tech-item:nth-child(3n){border-right:0}.tech-item:nth-last-child(-n+3){border-bottom:0}}
-@media(max-width:460px){.tech-rail{grid-template-columns:repeat(2,1fr)}.tech-item:nth-child(3n){border-right:1px solid var(--app-border)}.tech-item:nth-child(even){border-right:0}.tech-item:nth-last-child(-n+3){border-bottom:1px solid var(--app-border)}.tech-item:last-child{grid-column:1/-1;border-right:0;border-bottom:0}}
+.integration-stack{display:flex;align-items:center;justify-content:space-between;gap:1.25rem;padding:1rem 0;border-block:1px solid var(--app-border-strong)}.logo-row{display:flex;align-items:center;padding-left:.2rem}.logo-bubble{position:relative;display:grid;width:2.65rem;height:2.65rem;margin-left:-.42rem;border:1px solid var(--app-border-strong);border-radius:999px;background:var(--app-surface);box-shadow:0 0 0 3px var(--app-bg);place-items:center}.logo-bubble:first-child{margin-left:0}.logo-bubble svg{width:1.2rem;height:1.2rem;fill:var(--brand);color:var(--brand)}.logo-bubble.mcp{--brand:var(--app-ink)}.logo-bubble.mcp svg{fill:none;stroke:var(--app-ink);stroke-width:1.7;stroke-linecap:square;stroke-linejoin:miter}.logo-bubble.more{color:var(--app-muted);font-family:var(--font-mono);font-size:1rem;font-weight:600}.integration-stack p{margin:0;color:var(--app-muted);font-size:.9rem;line-height:1.45;text-align:right}
+@media(max-width:760px){.integration-stack{align-items:flex-start;flex-direction:column}.integration-stack p{text-align:left}.logo-bubble{width:2.45rem;height:2.45rem}.logo-bubble svg{width:1.05rem;height:1.05rem}}
+@media(max-width:440px){.logo-row{max-width:100%;overflow-x:auto;padding:.2rem .35rem .45rem .2rem}.logo-bubble{flex:0 0 auto}.integration-stack p{font-size:.82rem}}
 </style>
