@@ -2,48 +2,107 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CopyCommand from "./CopyCommand.astro";
 import LandingHeader from "./LandingHeader.astro";
-import PixelRule from "./pixel/PixelRule.astro";
-import TechLabel from "./pixel/TechLabel.astro";
-import LandingHero from "./rebrand/LandingHero.astro";
-import ProductProof from "./rebrand/ProductProof.astro";
-import DeploymentSection from "./rebrand/DeploymentSection.astro";
-import IntegrationSection from "./rebrand/IntegrationSection.astro";
-import LogsProof from "./rebrand/LogsProof.astro";
-import OperationsSection from "./rebrand/OperationsSection.astro";
-import heroImage from "../../mypaas-dashboard-screenshots/2026-08-13T14-22-46-474Z-focused/desktop-dark-01-project-overview-metrics.png";
-import { installCommand, landingCopy, podmanInstallCommand, repositoryUrl, type Locale } from "../lib/site";
+import ArchitectureBlueprint from "./compact/ArchitectureBlueprint.astro";
+import TechRail from "./compact/TechRail.astro";
+import { installCommand, repositoryUrl, type Locale } from "../lib/site";
+
 interface Props { locale?: Locale }
 const { locale = "en" } = Astro.props;
-const copy = landingCopy[locale];
 const path = locale === "en" ? "/" : `/${locale}/`;
-const footerLabels = locale === "id" ? { docs:"Dokumentasi", privacy:"Privasi" } : locale === "zh" ? { docs:"文档", privacy:"隐私" } : { docs:"Docs", privacy:"Privacy" };
+
+const copy = {
+  en: {
+    title: "MyPaaS — Deploy to your own Linux server",
+    description: "Self-hosted deployment control plane for Git repositories and public OCI images on one Linux host.",
+    eyebrow: "OPEN SOURCE / SINGLE HOST / MIT",
+    h1: "Deploy apps on your own server.",
+    intro: "MyPaaS turns Git repositories or public OCI images into routed deployments, then gives you logs, metrics, lifecycle controls, recovery, databases, and automation from one control plane.",
+    docs: "Read docs",
+    github: "GitHub",
+    facts: [["SOURCE","Git / public OCI"],["DEPLOY","Dockerfile / Compose / Static"],["RUNTIME","Docker / rootful Podman"],["ROUTE","Caddy / Cloudflare Tunnel"]],
+    deployTitle: "Deploy",
+    deploy: ["Git repository", "Public OCI image", "Dockerfile", "Docker Compose", "Static / SPA"],
+    operateTitle: "Operate",
+    operate: ["Logs + metrics", "Environment variables", "Lifecycle controls", "Release recovery", "Database backups", "CLI / API / MCP"],
+    scopeTitle: "Scope",
+    scope: ["One Linux VM or host", "No Kubernetes or multi-node scheduler", "No multi-region HA or autoscaling", "Public registry images only"],
+    installTitle: "Install",
+    installBody: "Bootstrap on Ubuntu or Debian. Docker is the default path; rootful Podman uses the same Docker-compatible contract.",
+    installGuide: "Installation guide",
+    footer: "Self-hosted deployment control plane for one Linux host.",
+  },
+  id: {
+    title: "MyPaaS — Deploy ke server Linux milik sendiri",
+    description: "Control plane deployment self-hosted untuk repositori Git dan public OCI image pada satu host Linux.",
+    eyebrow: "OPEN SOURCE / SINGLE HOST / MIT",
+    h1: "Deploy aplikasi di server milikmu.",
+    intro: "MyPaaS mengubah repositori Git atau public OCI image menjadi deployment yang sudah dirouting, lalu menyediakan log, metrik, lifecycle control, recovery, database, dan automation dari satu control plane.",
+    docs: "Baca dokumentasi",
+    github: "GitHub",
+    facts: [["SOURCE","Git / public OCI"],["DEPLOY","Dockerfile / Compose / Static"],["RUNTIME","Docker / rootful Podman"],["ROUTE","Caddy / Cloudflare Tunnel"]],
+    deployTitle: "Deploy",
+    deploy: ["Repositori Git", "Public OCI image", "Dockerfile", "Docker Compose", "Static / SPA"],
+    operateTitle: "Operasikan",
+    operate: ["Log + metrik", "Environment variables", "Lifecycle controls", "Release recovery", "Database backups", "CLI / API / MCP"],
+    scopeTitle: "Batasan",
+    scope: ["Satu VM atau host Linux", "Bukan Kubernetes atau scheduler multi-node", "Tidak ada multi-region HA atau autoscaling", "Registry image publik saja"],
+    installTitle: "Instalasi",
+    installBody: "Bootstrap di Ubuntu atau Debian. Docker adalah jalur default; rootful Podman memakai kontrak kompatibel Docker yang sama.",
+    installGuide: "Panduan instalasi",
+    footer: "Control plane deployment self-hosted untuk satu host Linux.",
+  },
+  zh: {
+    title: "MyPaaS — 部署到你自己的 Linux 服务器",
+    description: "面向单台 Linux 主机的自托管部署控制平面，支持 Git 仓库和公共 OCI 镜像。",
+    eyebrow: "OPEN SOURCE / SINGLE HOST / MIT",
+    h1: "把应用部署到自己的服务器。",
+    intro: "MyPaaS 将 Git 仓库或公共 OCI 镜像转换为可路由部署，并在一个控制平面中提供日志、指标、生命周期控制、恢复、数据库和自动化能力。",
+    docs: "阅读文档",
+    github: "GitHub",
+    facts: [["SOURCE","Git / public OCI"],["DEPLOY","Dockerfile / Compose / Static"],["RUNTIME","Docker / rootful Podman"],["ROUTE","Caddy / Cloudflare Tunnel"]],
+    deployTitle: "部署",
+    deploy: ["Git 仓库", "公共 OCI 镜像", "Dockerfile", "Docker Compose", "Static / SPA"],
+    operateTitle: "运维",
+    operate: ["日志 + 指标", "环境变量", "生命周期控制", "发布恢复", "数据库备份", "CLI / API / MCP"],
+    scopeTitle: "边界",
+    scope: ["一台 Linux VM 或主机", "不是 Kubernetes 或多节点调度器", "不提供多区域 HA 或自动扩缩容", "仅支持公共镜像仓库"],
+    installTitle: "安装",
+    installBody: "在 Ubuntu 或 Debian 上引导安装。Docker 是默认路径；rootful Podman 使用相同的 Docker 兼容契约。",
+    installGuide: "安装指南",
+    footer: "面向单台 Linux 主机的自托管部署控制平面。",
+  },
+}[locale];
 ---
-<BaseLayout title={copy.metaTitle} description={copy.metaDescription} locale={locale} path={path} localizedAlternates image={heroImage.src} imageAlt="MyPaaS project overview and runtime metrics">
+<BaseLayout title={copy.title} description={copy.description} locale={locale} path={path} localizedAlternates>
   <LandingHeader {locale} />
   <main>
-    <div class="shell"><LandingHero title={copy.heroTitle} body={copy.heroSummary} eyebrow={copy.eyebrow} primary={copy.primaryCta} secondary={copy.secondaryCta} proof={copy.proof} {repositoryUrl} /></div>
-    <ProductProof />
-    <PixelRule />
-    <DeploymentSection {copy} {locale} />
-    <PixelRule />
-    <OperationsSection {copy} />
-    <LogsProof />
-    <PixelRule />
-    <IntegrationSection {copy} {locale} />
-    <PixelRule />
-    <section id="scope" class="compact-section scope">
-      <div><TechLabel label={copy.boundariesLabel} index="04" /><h2>{copy.boundariesTitle}</h2><p>{copy.boundariesBody}</p></div>
-      <ul>{copy.boundaries.map((item)=><li><span aria-hidden="true"></span>{item}</li>)}</ul>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h1>{copy.h1}</h1>
+        <p class="intro">{copy.intro}</p>
+        <div class="actions"><a class="primary" href="/docs/">{copy.docs}</a><a href={repositoryUrl} target="_blank" rel="noreferrer">{copy.github} ↗</a></div>
+      </div>
+      <dl class="facts">{copy.facts.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
     </section>
-    <PixelRule />
-    <section id="install" class="compact-section install">
-      <div class="install-copy"><TechLabel label={copy.installLabel} index="05" /><h2>{copy.installTitle}</h2><p>{copy.installBody}</p><a class="docs-link" href="/docs/installation/">{copy.installGuide} <span aria-hidden="true">→</span></a></div>
-      <div class="commands"><CopyCommand command={installCommand} label={copy.installDocker} /><CopyCommand command={podmanInstallCommand} label={copy.installPodman} /></div>
+
+    <ArchitectureBlueprint />
+
+    <div class="tech-shell"><TechRail /></div>
+
+    <section class="dense-grid">
+      <article><p class="section-id">01 / {copy.deployTitle}</p><h2>{copy.deployTitle}</h2><ul>{copy.deploy.map((item)=><li>{item}</li>)}</ul></article>
+      <article><p class="section-id">02 / {copy.operateTitle}</p><h2>{copy.operateTitle}</h2><ul>{copy.operate.map((item)=><li>{item}</li>)}</ul></article>
+      <article><p class="section-id">03 / {copy.scopeTitle}</p><h2>{copy.scopeTitle}</h2><ul>{copy.scope.map((item)=><li>{item}</li>)}</ul></article>
+      <article id="install" class="install-card"><p class="section-id">04 / {copy.installTitle}</p><h2>{copy.installTitle}</h2><p class="install-copy">{copy.installBody}</p><CopyCommand command={installCommand} label="bootstrap.sh" /><a class="guide" href="/docs/installation/">{copy.installGuide} →</a></article>
     </section>
   </main>
-  <footer class="site-footer"><div><strong>MyPaaS</strong><span>{copy.footer}</span></div><nav><a href="/docs/">{footerLabels.docs}</a><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a><a href="/privacy/">{footerLabels.privacy}</a><span>MIT</span></nav></footer>
+  <footer><span>MyPaaS</span><span>{copy.footer}</span><nav><a href="/docs/">Docs</a><a href={repositoryUrl}>GitHub</a><span>MIT</span></nav></footer>
 </BaseLayout>
+
 <style>
-.shell{width:min(calc(100% - 2rem),var(--page-width));margin:auto}.compact-section{display:grid;grid-template-columns:minmax(15rem,.72fr) minmax(0,1.28fr);gap:clamp(3rem,7vw,7rem);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(5rem,9vw,7rem) 0}.compact-section h2{max-width:11ch;margin:1.25rem 0 1rem;color:var(--app-ink);font-size:clamp(2.25rem,4vw,3.55rem);font-weight:620;letter-spacing:-.035em;line-height:1.02}.compact-section p{max-width:31rem;margin:0;color:var(--app-muted);line-height:1.65}.scope ul{display:grid;align-self:end;margin:0;padding:0;border-top:1px solid var(--app-border-strong);list-style:none}.scope li{display:flex;align-items:center;gap:.8rem;padding:.75rem 0;border-bottom:1px solid var(--app-border);color:var(--app-body);font-size:.86rem}.scope li span{width:6px;height:6px;border:1px solid var(--app-ink)}.commands{display:grid;align-content:end;gap:.85rem;min-width:0}.docs-link{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;color:var(--app-ink);font-size:.82rem;font-weight:600;text-decoration:none}.docs-link:hover{text-decoration:underline;text-underline-offset:.25em}.site-footer{display:flex;justify-content:space-between;gap:2rem;width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:2rem 0 3rem;border-top:1px solid var(--app-border-strong)}.site-footer>div{display:grid;gap:.35rem}.site-footer strong{color:var(--app-ink);font-size:.86rem}.site-footer span{max-width:28rem;color:var(--app-subtle);font-size:.7rem;line-height:1.5}.site-footer nav{display:flex;flex-wrap:wrap;align-content:start;justify-content:flex-end;gap:1rem}.site-footer nav a,.site-footer nav span{color:var(--app-muted);font-size:.7rem;text-decoration:none}.site-footer nav a:hover{color:var(--app-ink)}
-@media(max-width:780px){.shell,.compact-section,.site-footer{width:min(calc(100% - 1.25rem),var(--page-width))}.compact-section{grid-template-columns:1fr;gap:2.5rem;padding:4.5rem 0}.compact-section h2{font-size:clamp(2.15rem,10vw,3rem)}.site-footer{align-items:flex-start;flex-direction:column}.site-footer nav{justify-content:flex-start}}
+.hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(18rem,.55fr);gap:clamp(2rem,7vw,7rem);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(4rem,8vw,7rem) 0 2.75rem}.eyebrow,.section-id,dt{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--app-subtle)}h1{max-width:12ch;margin:.7rem 0 1rem;font-size:clamp(3rem,6.4vw,5.7rem);font-weight:620;line-height:.94;letter-spacing:-.045em}.intro{max-width:47rem;margin:0;color:var(--app-muted);font-size:clamp(.92rem,1.3vw,1.05rem);line-height:1.58}.actions{display:flex;gap:.7rem;margin-top:1.5rem}.actions a{display:inline-flex;align-items:center;min-height:2.35rem;padding:.52rem .78rem;border:1px solid var(--app-border-strong);color:var(--app-ink);font-size:.72rem;font-weight:620;text-decoration:none}.actions a.primary{background:var(--app-ink);color:var(--app-bg)}.facts{align-self:end;margin:0;border-top:1px solid var(--app-border-strong)}.facts div{display:grid;grid-template-columns:5rem 1fr;gap:.75rem;padding:.68rem 0;border-bottom:1px solid var(--app-border)}.facts dd{margin:0;color:var(--app-ink);font-size:.72rem;font-weight:560}
+.tech-shell{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding-top:.5rem}.dense-grid{display:grid;grid-template-columns:repeat(4,1fr);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:2rem 0 2.5rem;border-bottom:1px solid var(--app-border-strong)}.dense-grid article{min-width:0;padding:0 1.1rem 0 0;border-right:1px solid var(--app-border)}.dense-grid article+article{padding-left:1.1rem}.dense-grid article:last-child{padding-right:0;border-right:0}.dense-grid h2{margin:.45rem 0 .7rem;font-size:1.25rem;letter-spacing:-.025em}.dense-grid ul{margin:0;padding:0;list-style:none}.dense-grid li{padding:.38rem 0;border-top:1px solid var(--app-border);color:var(--app-muted);font-size:.7rem;line-height:1.4}.dense-grid li:last-child{border-bottom:1px solid var(--app-border)}.install-copy{margin:0 0 .75rem;color:var(--app-muted);font-size:.7rem;line-height:1.45}.guide{display:inline-block;margin-top:.6rem;color:var(--app-ink);font-size:.68rem;font-weight:620;text-decoration:none}.guide:hover{text-decoration:underline;text-underline-offset:.2em}footer{display:flex;align-items:flex-start;gap:1rem;width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:1.4rem 0 2.25rem;color:var(--app-subtle);font-size:.62rem}footer>span:first-child{color:var(--app-ink);font-weight:700}footer>span:nth-child(2){margin-right:auto}footer nav{display:flex;gap:.8rem}footer a{color:var(--app-muted);text-decoration:none}
+@media(max-width:900px){.hero{grid-template-columns:1fr;gap:2rem}.facts{display:grid;grid-template-columns:1fr 1fr}.facts div{grid-template-columns:4.5rem 1fr}.dense-grid{grid-template-columns:1fr 1fr;gap:0}.dense-grid article{padding:0 1rem 1.5rem 0;border-right:1px solid var(--app-border);border-bottom:1px solid var(--app-border-strong)}.dense-grid article:nth-child(even){padding-left:1rem;padding-right:0;border-right:0}.dense-grid article:nth-last-child(-n+2){padding-top:1.5rem;padding-bottom:0;border-bottom:0}}
+@media(max-width:560px){.hero,.tech-shell,.dense-grid,footer{width:min(calc(100% - 1.25rem),var(--page-width))}.hero{padding:3.4rem 0 2rem}.facts{grid-template-columns:1fr}.dense-grid{grid-template-columns:1fr}.dense-grid article,.dense-grid article:nth-child(even),.dense-grid article:nth-last-child(-n+2){padding:1.3rem 0;border-right:0;border-bottom:1px solid var(--app-border-strong)}.dense-grid article:first-child{padding-top:0}.dense-grid article:last-child{border-bottom:0}.actions{flex-wrap:wrap}footer{flex-wrap:wrap}footer>span:nth-child(2){width:100%;order:3}}
 </style>
