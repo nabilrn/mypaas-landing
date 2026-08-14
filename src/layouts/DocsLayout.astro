@@ -5,11 +5,18 @@ import "../styles/docs.css";
 const { title, description } = Astro.props;
 const path=Astro.url.pathname;
 const verifiedCommit="b94361be993963c0ad04a5c3a76130bc8d8ef8ee";
-const nav=[["Overview","/docs/"],["Installation","/docs/installation/"],["GitHub OAuth","/docs/github-oauth/"],["Cloudflare Tunnel","/docs/cloudflare-tunnel/"],["First deployment","/docs/first-deployment/"],["Deployment models","/docs/deployment-models/"],["Environment variables","/docs/environment-variables/"],["Domains & webhooks","/docs/routing-webhooks/"],["Configuration","/docs/configuration/"],["Operations","/docs/operations/"],["Observability","/docs/observability/"],["Databases","/docs/databases/"],["Backups & recovery","/docs/backups-recovery/"],["Migration","/docs/migration/"],["Automation & agents","/docs/automation/"],["Security","/docs/security/"],["Limitations","/docs/limitations/"],["Troubleshooting","/docs/troubleshooting/"]];
+const navGroups=[
+  { label:"Getting started", items:[["Overview","/docs/"],["Installation","/docs/installation/"],["First deployment","/docs/first-deployment/"]] },
+  { label:"Integrations", items:[["GitHub OAuth","/docs/github-oauth/"],["Cloudflare Tunnel","/docs/cloudflare-tunnel/"],["Domains & webhooks","/docs/routing-webhooks/"]] },
+  { label:"Deploy & configure", items:[["Deployment models","/docs/deployment-models/"],["Environment variables","/docs/environment-variables/"],["Configuration","/docs/configuration/"]] },
+  { label:"Operate", items:[["Operations","/docs/operations/"],["Observability","/docs/observability/"],["Databases","/docs/databases/"],["Backups & recovery","/docs/backups-recovery/"],["Migration","/docs/migration/"],["Troubleshooting","/docs/troubleshooting/"]] },
+  { label:"Automation & trust", items:[["Automation & agents","/docs/automation/"],["Security","/docs/security/"],["Limitations","/docs/limitations/"]] },
+];
 const active=(href:string)=>href==="/docs/"?path===href:path.startsWith(href);
+const groupActive=(items:string[][])=>items.some(([,href])=>active(href));
 ---
 <BaseLayout title={`${title} — MyPaaS Docs`} description={description}>
 <LandingHeader />
-<div class="docs-page"><div class="docs-shell"><aside class="docs-sidebar"><p class="docs-nav-title">Documentation</p><nav>{nav.map(([label,href])=><a class:list={{active:active(href)}} href={href} aria-current={active(href)?"page":undefined}>{label}</a>)}</nav></aside><main class="docs-main"><header class="docs-header"><p>MyPaaS documentation</p><h1>{title}</h1><div>{description}</div><small>Current public docs · verified 13 Aug 2026 · <a href={`https://github.com/nabilrn/MyPaas/commit/${verifiedCommit}`}>MyPaaS {verifiedCommit.slice(0,8)}</a></small></header><article class="docs-content"><slot /></article><footer class="docs-footer"><span>MyPaaS documentation</span><nav><a href="/">Landing page</a><a href="https://github.com/nabilrn/MyPaas/issues">Report an issue</a></nav></footer></main></div></div>
+<div class="docs-page"><div class="docs-shell"><aside class="docs-sidebar"><p class="docs-nav-title">Documentation</p><nav>{navGroups.map((group,index)=><details class="docs-nav-group" open={groupActive(group.items)}><summary><span>{String(index+1).padStart(2,"0")}</span>{group.label}</summary><div>{group.items.map(([label,href])=><a class:list={{active:active(href)}} href={href} aria-current={active(href)?"page":undefined}>{label}</a>)}</div></details>)}</nav></aside><main class="docs-main"><header class="docs-header"><p>MyPaaS documentation</p><h1>{title}</h1><div>{description}</div><small>Current public docs · verified 13 Aug 2026 · <a href={`https://github.com/nabilrn/MyPaas/commit/${verifiedCommit}`}>MyPaaS {verifiedCommit.slice(0,8)}</a></small></header><article class="docs-content"><slot /></article><footer class="docs-footer"><span>MyPaaS documentation</span><nav><a href="/">Landing page</a><a href="https://github.com/nabilrn/MyPaas/issues">Report an issue</a></nav></footer></main></div></div>
 </BaseLayout>
 <style>small{display:block;margin-top:1rem;color:var(--app-subtle);font-family:var(--font-mono);font-size:.65rem}small a{color:inherit;text-underline-offset:.18em}</style>

@@ -1,26 +1,27 @@
 ---
-import { siCaddy, siCloudflare, siDocker, siGithub, siGit, siLinux, siPodman, siPostgresql } from "simple-icons";
+import { siCaddy, siCloudflare, siDocker, siGithub, siGit, siLinux, siPodman, siPostgresql, siUbuntu } from "simple-icons";
 const items = [
+  ["Ubuntu", siUbuntu],
   ["Linux", siLinux],
   ["Docker", siDocker],
   ["Podman", siPodman],
   ["Caddy", siCaddy],
   ["Cloudflare", siCloudflare],
   ["PostgreSQL", siPostgresql],
-  ["Git", siGit],
   ["GitHub", siGithub],
+  ["Git", siGit],
 ] as const;
 ---
 <div class="tech-rail" aria-label="Technology stack">
   {items.map(([name, icon]) => (
-    <div class="tech-item">
+    <div class="tech-item" style={`--brand:#${icon.hex}`}>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg>
       <span>{name}</span>
     </div>
   ))}
 </div>
 <style>
-.tech-rail{display:grid;grid-template-columns:repeat(8,1fr);border-block:1px solid var(--app-border-strong)}.tech-item{display:flex;min-width:0;align-items:center;justify-content:center;gap:.5rem;padding:.8rem .45rem;border-right:1px solid var(--app-border);color:var(--app-ink)}.tech-item:last-child{border-right:0}.tech-item svg{width:1rem;height:1rem;fill:currentColor;flex:0 0 auto}.tech-item span{overflow:hidden;font-family:var(--font-mono);font-size:.58rem;letter-spacing:.03em;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:820px){.tech-rail{grid-template-columns:repeat(4,1fr)}.tech-item:nth-child(4){border-right:0}.tech-item:nth-child(-n+4){border-bottom:1px solid var(--app-border)}}
-@media(max-width:460px){.tech-rail{grid-template-columns:repeat(2,1fr)}.tech-item{border-bottom:1px solid var(--app-border)}.tech-item:nth-child(even){border-right:0}.tech-item:nth-last-child(-n+2){border-bottom:0}}
+.tech-rail{display:grid;grid-template-columns:repeat(9,1fr);border-block:1px solid var(--app-border-strong);background:var(--app-surface)}.tech-item{position:relative;display:flex;min-width:0;align-items:center;justify-content:center;gap:.5rem;padding:.82rem .45rem;border-right:1px solid var(--app-border);color:var(--app-ink)}.tech-item:last-child{border-right:0}.tech-item::before{position:absolute;top:-1px;left:-1px;width:5px;height:5px;background:var(--brand);content:""}.tech-item svg{width:1.05rem;height:1.05rem;fill:var(--brand);flex:0 0 auto}.tech-item span{overflow:hidden;font-family:var(--font-mono);font-size:.58rem;letter-spacing:.03em;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:900px){.tech-rail{grid-template-columns:repeat(3,1fr)}.tech-item{border-bottom:1px solid var(--app-border)}.tech-item:nth-child(3n){border-right:0}.tech-item:nth-last-child(-n+3){border-bottom:0}}
+@media(max-width:460px){.tech-rail{grid-template-columns:repeat(2,1fr)}.tech-item:nth-child(3n){border-right:1px solid var(--app-border)}.tech-item:nth-child(even){border-right:0}.tech-item:nth-last-child(-n+3){border-bottom:1px solid var(--app-border)}.tech-item:last-child{grid-column:1/-1;border-right:0;border-bottom:0}}
 </style>
