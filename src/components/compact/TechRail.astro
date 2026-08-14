@@ -40,7 +40,7 @@ const items = [
   grid-template-columns:minmax(15rem,.72fr) minmax(0,2.65fr);
   gap:1rem;
   width:min(calc(100vw - 56px),86.5rem);
-  margin:-49px 0 0 50%;
+  margin:0 0 0 50%;
   padding:.82rem 1rem;
   transform:translateX(-50%);
   align-items:center;
@@ -69,12 +69,12 @@ const items = [
 .logo-tile.mcp{color:#181818}.distro-tile span{font-size:.61rem}
 
 @media(max-width:1100px){
-  .integration-strip{grid-template-columns:1fr;width:min(calc(100vw - 36px),62rem);margin-top:-54px;padding:.8rem}
+  .integration-strip{grid-template-columns:1fr;width:min(calc(100vw - 36px),62rem);margin-left:50%;padding:.8rem}
   .integration-strip>p{max-width:38rem}
   .logo-row{grid-template-columns:repeat(5,1fr)}
 }
 @media(max-width:650px){
-  .integration-strip{width:calc(100vw - 24px);margin-top:-46px;padding:.72rem;border-radius:14px}
+  .integration-strip{width:calc(100vw - 24px);margin-left:50%;padding:.72rem;border-radius:14px}
   .logo-row{display:flex;overflow-x:auto;padding-bottom:.2rem;scrollbar-width:thin}
   .logo-tile{flex:0 0 5.1rem;min-height:4.3rem}
   .integration-strip>p{font-size:.82rem}
