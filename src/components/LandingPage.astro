@@ -5,7 +5,7 @@ import LandingHeader from "./LandingHeader.astro";
 import ArchitectureBlueprint from "./compact/ArchitectureBlueprint.astro";
 import PixelHeroArt from "./compact/PixelHeroArt.astro";
 import TechRail from "./compact/TechRail.astro";
-import { siCloudflare, siDocker, siGithub, siPodman, siUbuntu } from "simple-icons";
+import { siDocker, siPodman, siUbuntu } from "simple-icons";
 import { podmanInstallCommand, repositoryUrl, type Locale } from "../lib/site";
 
 interface Props { locale?: Locale }
@@ -24,40 +24,6 @@ const copy = {
     docs: "Read the docs",
     github: "View on GitHub",
     badges: ["Ubuntu / Debian Linux", "Podman for Linux hosts", "Docker for local/dev"],
-    integrationTitle: "Your tools stay part of the workflow.",
-    integrationBody: "GitHub remains the source workflow, Cloudflare remains the public edge, and MCP gives coding agents a bounded way to operate the same MyPaaS control plane.",
-    githubTitle: "GitHub for source",
-    githubBody: "OAuth, repository inspection, branch selection, deployment webhooks, and Git-based deploys.",
-    cloudflareTitle: "Cloudflare for the edge",
-    cloudflareBody: "Tunnel and TLS expose MyPaaS without opening inbound application ports, while Caddy handles routing on the host.",
-    mcpTitle: "MCP for agent workflows",
-    mcpBody: "MCP-compatible clients can inspect projects, deploy, restart, roll back, read logs and metrics, manage env keys, and inspect host capacity.",
-    agentEyebrow: "AGENT LOOP",
-    agentTitle: "MyPaaS can hand deployment context back to your coding agent.",
-    agentBody: "Create Project inspects the repository, detects the runtime, ports, environment requirements, and blockers. For Git Dockerfile or Compose projects, it can produce a copyable handoff prompt when the application needs changes before deployment.",
-    feedbackTitle: "Pre-deploy feedback",
-    feedbackLines: ["Repository inspected", "Runtime + port detected", "Required env checked", "Blocking issues surfaced", "Handoff prompt ready"],
-    mcpLoopTitle: "Operate through MCP",
-    mcpLoopBody: "After the project is ready, the agent can keep working through the same control plane instead of switching to a separate deployment system.",
-    whyEyebrow: "WHY MYPAAS",
-    whyTitle: "The middle ground between hosted PaaS and cluster complexity.",
-    whyItems: [
-      ["Self-hosted", "Your server, project data, routes, and workloads stay on infrastructure you control."],
-      ["Integration-first", "GitHub, Cloudflare, Caddy, Podman/Docker, PostgreSQL, CLI, API, and MCP stay visible."],
-      ["Single-server focused", "Designed around one Linux VM or bare-metal host instead of a multi-node scheduler."],
-      ["Deployment feedback", "Repository inspection detects runtime requirements and tells you what needs attention before deploy."],
-      ["Agent-ready", "Use a copyable handoff prompt before deploy and bounded MCP tools after deploy."],
-      ["Operational visibility", "Logs, metrics, lifecycle controls, recovery, backups, and host telemetry live in the same platform."],
-    ],
-    howEyebrow: "HOW IT WORKS",
-    howTitle: "From repository to running app.",
-    steps: [
-      ["01", "Connect GitHub", "Link a repository, choose a branch, or start from a public OCI image.", "GitHub connection screenshot"],
-      ["02", "Inspect and configure", "MyPaaS detects the deployment path, ports, env requirements, and Compose blockers.", "Create Project analysis screenshot"],
-      ["03", "Fix or deploy", "Copy the handoff prompt to your coding agent when source changes are needed, or deploy immediately when ready.", "Deployment feedback screenshot"],
-      ["04", "Operate", "Use dashboard, CLI, API, or MCP for logs, metrics, lifecycle actions, recovery, and automation.", "Project operations screenshot"],
-    ],
-    placeholder: "Screenshot placeholder",
     footer: "Open-source self-hosted PaaS for one Linux host.",
   },
   id: {
@@ -71,40 +37,6 @@ const copy = {
     docs: "Baca dokumentasi",
     github: "Lihat di GitHub",
     badges: ["Ubuntu / Debian Linux", "Podman untuk host Linux", "Docker untuk local/dev"],
-    integrationTitle: "Tools yang kamu pakai tetap menjadi bagian workflow.",
-    integrationBody: "GitHub tetap menjadi source workflow, Cloudflare tetap menjadi public edge, dan MCP memberi coding agent akses terukur ke control plane MyPaaS yang sama.",
-    githubTitle: "GitHub untuk source",
-    githubBody: "OAuth, inspeksi repositori, pemilihan branch, deployment webhook, dan deploy berbasis Git.",
-    cloudflareTitle: "Cloudflare untuk public edge",
-    cloudflareBody: "Tunnel dan TLS mengekspos MyPaaS tanpa membuka inbound application port, sementara Caddy menangani routing di host.",
-    mcpTitle: "MCP untuk workflow agent",
-    mcpBody: "Client yang kompatibel dengan MCP dapat inspeksi project, deploy, restart, rollback, baca log dan metrik, kelola env key, dan melihat kapasitas host.",
-    agentEyebrow: "AGENT LOOP",
-    agentTitle: "MyPaaS dapat mengembalikan context deployment ke coding agent-mu.",
-    agentBody: "Create Project menginspeksi repositori, mendeteksi runtime, port, kebutuhan environment, dan blocker. Untuk project Git Dockerfile atau Compose, MyPaaS dapat menghasilkan handoff prompt yang bisa disalin saat aplikasi perlu diperbaiki sebelum deploy.",
-    feedbackTitle: "Feedback sebelum deploy",
-    feedbackLines: ["Repositori diperiksa", "Runtime + port terdeteksi", "Required env diperiksa", "Blocking issue ditampilkan", "Handoff prompt siap"],
-    mcpLoopTitle: "Operasikan lewat MCP",
-    mcpLoopBody: "Setelah project siap, agent dapat lanjut bekerja melalui control plane yang sama tanpa pindah ke sistem deployment lain.",
-    whyEyebrow: "KENAPA MYPAAS",
-    whyTitle: "Jalan tengah antara hosted PaaS dan kompleksitas cluster.",
-    whyItems: [
-      ["Self-hosted", "Server, data project, route, dan workload tetap berada di infrastruktur yang kamu kontrol."],
-      ["Integration-first", "GitHub, Cloudflare, Caddy, Podman/Docker, PostgreSQL, CLI, API, dan MCP tetap terlihat."],
-      ["Fokus single-server", "Dibuat untuk satu VM Linux atau bare-metal host, bukan scheduler multi-node."],
-      ["Deployment feedback", "Repository inspection mendeteksi kebutuhan runtime dan menjelaskan apa yang perlu diperbaiki sebelum deploy."],
-      ["Agent-ready", "Gunakan handoff prompt sebelum deploy dan bounded MCP tools setelah deploy."],
-      ["Operational visibility", "Log, metrik, lifecycle control, recovery, backup, dan host telemetry ada di platform yang sama."],
-    ],
-    howEyebrow: "CARA KERJA",
-    howTitle: "Dari repositori sampai aplikasi berjalan.",
-    steps: [
-      ["01", "Hubungkan GitHub", "Hubungkan repository, pilih branch, atau mulai dari public OCI image.", "Screenshot koneksi GitHub"],
-      ["02", "Inspect dan konfigurasi", "MyPaaS mendeteksi deployment path, port, kebutuhan env, dan Compose blocker.", "Screenshot analisis Create Project"],
-      ["03", "Perbaiki atau deploy", "Salin handoff prompt ke coding agent saat source perlu diubah, atau langsung deploy jika sudah siap.", "Screenshot deployment feedback"],
-      ["04", "Operasikan", "Gunakan dashboard, CLI, API, atau MCP untuk log, metrik, lifecycle action, recovery, dan automation.", "Screenshot operasi project"],
-    ],
-    placeholder: "Placeholder screenshot",
     footer: "PaaS self-hosted open-source untuk satu host Linux.",
   },
   zh: {
@@ -118,40 +50,6 @@ const copy = {
     docs: "阅读文档",
     github: "在 GitHub 查看",
     badges: ["Ubuntu / Debian Linux", "Linux host 使用 Podman", "Docker 用于本地开发"],
-    integrationTitle: "继续使用你已经在用的工具。",
-    integrationBody: "GitHub 继续负责源码，Cloudflare 继续作为公共边缘，MCP 则让 coding agent 以受控方式使用同一个 MyPaaS control plane。",
-    githubTitle: "GitHub 负责源码",
-    githubBody: "OAuth、仓库检查、分支选择、部署 webhook 与 Git 部署。",
-    cloudflareTitle: "Cloudflare 负责公共边缘",
-    cloudflareBody: "Tunnel 与 TLS 无需开放应用入站端口即可暴露 MyPaaS，Caddy 在主机上负责路由。",
-    mcpTitle: "MCP 面向 agent workflow",
-    mcpBody: "兼容 MCP 的客户端可以检查项目、部署、重启、回滚、读取日志与指标、管理 env key，并查看主机容量。",
-    agentEyebrow: "AGENT LOOP",
-    agentTitle: "MyPaaS 可以把部署上下文交回给 coding agent。",
-    agentBody: "Create Project 会检查仓库并检测运行时、端口、环境要求与 blocker。对于 Git Dockerfile 或 Compose 项目，如果部署前需要修改应用，MyPaaS 可以生成可复制的 handoff prompt。",
-    feedbackTitle: "部署前反馈",
-    feedbackLines: ["仓库已检查", "运行时 + 端口已检测", "Required env 已检查", "Blocking issue 已显示", "Handoff prompt 已就绪"],
-    mcpLoopTitle: "通过 MCP 运维",
-    mcpLoopBody: "项目准备好后，agent 可以继续使用同一个 control plane，而不需要切换到其他部署系统。",
-    whyEyebrow: "为什么选择 MYPAAS",
-    whyTitle: "介于 hosted PaaS 与集群复杂度之间。",
-    whyItems: [
-      ["自托管", "服务器、项目数据、路由与 workload 留在你控制的基础设施上。"],
-      ["Integration-first", "GitHub、Cloudflare、Caddy、Podman/Docker、PostgreSQL、CLI、API 与 MCP 保持可见。"],
-      ["单机优先", "围绕一台 Linux VM 或裸机设计，而不是多节点 scheduler。"],
-      ["部署反馈", "Repository inspection 检测运行时要求，并在部署前告诉你哪里需要处理。"],
-      ["Agent-ready", "部署前使用 handoff prompt，部署后使用受控 MCP tools。"],
-      ["运维可见性", "日志、指标、生命周期、恢复、备份与 host telemetry 都在同一个平台。"],
-    ],
-    howEyebrow: "工作方式",
-    howTitle: "从仓库到运行中的应用。",
-    steps: [
-      ["01", "连接 GitHub", "连接仓库、选择分支，或从公共 OCI 镜像开始。", "GitHub 连接截图"],
-      ["02", "检查并配置", "MyPaaS 检测部署路径、端口、env 要求与 Compose blocker。", "Create Project 分析截图"],
-      ["03", "修复或部署", "需要修改源码时把 handoff prompt 交给 coding agent，否则直接部署。", "Deployment feedback 截图"],
-      ["04", "运维", "使用 Dashboard、CLI、API 或 MCP 查看日志、指标、生命周期、恢复与自动化。", "项目运维截图"],
-    ],
-    placeholder: "截图占位符",
     footer: "面向单台 Linux 主机的开源自托管 PaaS。",
   },
 }[locale];
@@ -187,91 +85,18 @@ const badgeIcons = [siUbuntu, siPodman, siDocker];
       </div>
     </section>
 
-    <section class="integration-section">
+    <div class="integration-section ecosystem-rail" id="integrations">
       <TechRail />
-      <header class="section-head">
-        <p class="section-id">01 / INTEGRATIONS</p>
-        <h2>{copy.integrationTitle}</h2>
-        <p>{copy.integrationBody}</p>
-      </header>
-      <div class="integration-grid">
-        <article>
-          <div class="integration-icon" style={`--brand:#${siGithub.hex}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg></div>
-          <h3>{copy.githubTitle}</h3><p>{copy.githubBody}</p>
-        </article>
-        <article>
-          <div class="integration-icon" style={`--brand:#${siCloudflare.hex}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siCloudflare.path}/></svg></div>
-          <h3>{copy.cloudflareTitle}</h3><p>{copy.cloudflareBody}</p>
-        </article>
-        <article class="mcp-card">
-          <div class="integration-icon mcp-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.25"/><circle cx="18" cy="6" r="2.25"/><circle cx="18" cy="18" r="2.25"/><path d="M8 11.2 15.7 7M8 12.8l7.7 4.2"/></svg></div>
-          <span class="agent-badge">MCP / AGENT INTERFACE</span>
-          <h3>{copy.mcpTitle}</h3><p>{copy.mcpBody}</p>
-        </article>
-      </div>
-    </section>
+    </div>
 
     <ArchitectureBlueprint />
-
-    <section class="agent-section">
-      <header class="section-head">
-        <p class="section-id">02 / {copy.agentEyebrow}</p>
-        <h2>{copy.agentTitle}</h2>
-        <p>{copy.agentBody}</p>
-      </header>
-      <div class="agent-loop">
-        <article class="feedback-panel">
-          <div class="panel-label">CREATE PROJECT / FEEDBACK</div>
-          <h3>{copy.feedbackTitle}</h3>
-          <ul>{copy.feedbackLines.map((line,index)=><li><span>{String(index+1).padStart(2,"0")}</span>{line}</li>)}</ul>
-          <div class="prompt-placeholder"><span>{copy.placeholder}</span><strong>Deployment handoff prompt</strong><small>runtime · ports · env keys · blockers</small></div>
-        </article>
-        <div class="agent-connector" aria-hidden="true"><i></i><i></i><i></i></div>
-        <article class="mcp-panel">
-          <div class="panel-label">MCP / CONTROL PLANE</div>
-          <h3>{copy.mcpLoopTitle}</h3>
-          <p>{copy.mcpLoopBody}</p>
-          <div class="mcp-tools"><span>inspect</span><span>deploy</span><span>logs</span><span>metrics</span><span>env</span><span>rollback</span></div>
-        </article>
-      </div>
-    </section>
-
-    <section class="why-section">
-      <header class="section-head">
-        <p class="section-id">03 / {copy.whyEyebrow}</p>
-        <h2>{copy.whyTitle}</h2>
-      </header>
-      <div class="why-grid">{copy.whyItems.map(([title,body],index)=><article><span>0{index+1}</span><h3>{title}</h3><p>{body}</p></article>)}</div>
-    </section>
-
-    <section class="how-section">
-      <header class="section-head compact">
-        <p class="section-id">04 / {copy.howEyebrow}</p>
-        <h2>{copy.howTitle}</h2>
-      </header>
-      <div class="steps-grid">
-        {copy.steps.map(([index,title,body,placeholder]) => (
-          <article class="step-card">
-            <div class="step-number">{index}</div>
-            <h3>{title}</h3>
-            <div class="shot-placeholder" role="img" aria-label={placeholder}><span>{copy.placeholder}</span><i></i><i></i><i></i><i></i></div>
-            <p>{body}</p>
-          </article>
-        ))}
-      </div>
-    </section>
   </main>
 
   <footer><div><strong>MyPaaS</strong><span>{copy.footer}</span></div><nav><a href="/docs/">Docs</a><a href={repositoryUrl}>GitHub</a><span>MIT</span></nav></footer>
 </BaseLayout>
 
 <style>
-.hero-shell{background:#080808;color:#f5f5f5}.hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(23rem,.92fr);width:min(100%,var(--page-width));margin:0 auto}.hero-copy{padding:clamp(3.5rem,7vw,6rem) clamp(1rem,3vw,2.4rem) 3.2rem}.eyebrow,.section-id,.panel-label,.install-head span,.agent-badge{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}.hero .eyebrow{margin:0;color:#bdbdbd}.hero h1{max-width:12ch;margin:.85rem 0 1rem;color:#fff;font-family:var(--font-display);font-size:clamp(3.25rem,6vw,5.8rem);font-weight:680;line-height:.96;letter-spacing:-.048em;text-wrap:balance}.intro{max-width:43rem;margin:0;color:#c0c0c0;font-size:clamp(1.03rem,1.35vw,1.17rem);line-height:1.62}.hero-install{max-width:49rem;margin-top:1.45rem;padding:.8rem;border:1px solid #555;background:#0f0f0f}.install-head{display:flex;justify-content:space-between;gap:1rem;padding:.05rem .08rem .62rem;color:#aaa}.install-head small{color:#858585;font-family:var(--font-mono);font-size:.68rem}.hero-install :global(.command-box){border-color:#4d4d4d!important;background:#0b0b0b!important;color:#f5f5f5!important}.runtime-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.85rem}.runtime-badges span{display:flex;align-items:center;gap:.4rem;padding:.38rem .55rem;border:1px solid #3a3a3a;background:#0e0e0e;color:#c6c6c6;font-size:.76rem}.runtime-badges svg{width:1rem;height:1rem;fill:var(--brand)}.actions{display:flex;gap:.65rem;margin-top:1rem}.actions a{display:inline-flex;align-items:center;min-height:2.55rem;padding:.62rem .85rem;border:1px solid #555;color:#f5f5f5;font-size:.84rem;font-weight:640;text-decoration:none}.actions a.primary{background:#f5f5f5;color:#080808}
-.integration-section,.agent-section,.why-section,.how-section{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:2.8rem 0;border-top:1px solid var(--app-border-strong)}.integration-section{padding-top:1.2rem;border-top:0}.section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,.72fr);gap:.65rem 3.5rem;align-items:end;margin:2rem 0 1.35rem}.section-head.compact{grid-template-columns:1fr}.section-id{grid-column:1/-1;margin:0;color:var(--app-subtle)}.section-head h2{max-width:19ch;margin:0;color:var(--app-ink);font-family:var(--font-display);font-size:clamp(2rem,3.6vw,3.35rem);font-weight:650;line-height:1;letter-spacing:-.035em}.section-head>p:last-child{margin:0;color:var(--app-muted);font-size:.98rem;line-height:1.58}.integration-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--app-border-strong);background:var(--app-border)}.integration-grid article{position:relative;min-height:13.5rem;padding:1.25rem;background:var(--app-surface)}.integration-icon{display:grid;width:2.7rem;height:2.7rem;margin-bottom:1rem;border:1px solid var(--app-border);background:var(--app-bg);place-items:center}.integration-icon svg{width:1.4rem;height:1.4rem;fill:var(--brand)}.mcp-icon svg{fill:none;stroke:var(--app-ink);stroke-width:1.65;stroke-linecap:square}.agent-badge{display:inline-block;margin:-.1rem 0 .65rem;color:var(--app-subtle);font-size:.62rem}.integration-grid h3,.agent-loop h3,.why-grid h3,.step-card h3{margin:0;color:var(--app-ink);font-family:var(--font-display);font-weight:650;letter-spacing:-.02em}.integration-grid h3{font-size:1.35rem}.integration-grid p{margin:.65rem 0 0;color:var(--app-muted);font-size:.9rem;line-height:1.55}.mcp-card::after{position:absolute;top:0;right:0;width:22px;height:22px;background:var(--app-ink);clip-path:polygon(50% 0,100% 0,100% 50%,75% 50%,75% 75%,50% 75%,50% 100%,25% 100%,25% 50%,0 50%,0 25%,50% 25%);content:""}
-.agent-loop{display:grid;grid-template-columns:minmax(0,1fr) 5rem minmax(0,1fr);align-items:stretch}.feedback-panel,.mcp-panel{min-width:0;padding:1.2rem;border:1px solid var(--app-border-strong);background:var(--app-surface)}.panel-label{margin-bottom:.75rem;color:var(--app-subtle);font-size:.62rem}.agent-loop h3{font-size:1.5rem}.feedback-panel ul{margin:1rem 0 0;padding:0;border-top:1px solid var(--app-border);list-style:none}.feedback-panel li{display:flex;gap:.7rem;padding:.48rem 0;border-bottom:1px solid var(--app-border);color:var(--app-muted);font-size:.84rem}.feedback-panel li span{color:var(--app-subtle);font-family:var(--font-mono);font-size:.67rem}.prompt-placeholder{position:relative;display:grid;gap:.18rem;margin-top:1rem;padding:1rem;border:1px dashed var(--app-border-strong);background-image:linear-gradient(var(--app-border) 1px,transparent 1px),linear-gradient(90deg,var(--app-border) 1px,transparent 1px);background-size:14px 14px}.prompt-placeholder span{justify-self:start;padding:.18rem .3rem;background:var(--app-surface);color:var(--app-subtle);font-family:var(--font-mono);font-size:.58rem;text-transform:uppercase}.prompt-placeholder strong{margin-top:.35rem;color:var(--app-ink);font-size:.92rem}.prompt-placeholder small{color:var(--app-muted);font-family:var(--font-mono);font-size:.64rem}.agent-connector{position:relative}.agent-connector::before{position:absolute;top:50%;left:.5rem;right:.5rem;height:1px;background:var(--app-border-strong);content:""}.agent-connector i{position:absolute;top:calc(50% - 3px);width:6px;height:6px;background:var(--app-ink)}.agent-connector i:first-child{left:.5rem}.agent-connector i:nth-child(2){left:calc(50% - 3px)}.agent-connector i:last-child{right:.5rem}.mcp-panel{display:grid;align-content:center}.mcp-panel p{margin:.7rem 0 1rem;color:var(--app-muted);font-size:.92rem;line-height:1.58}.mcp-tools{display:flex;flex-wrap:wrap;gap:.4rem}.mcp-tools span{padding:.28rem .42rem;border:1px solid var(--app-border);background:var(--app-bg);color:var(--app-muted);font-family:var(--font-mono);font-size:.63rem}
-.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--app-border-strong);background:var(--app-border)}.why-grid article{min-height:10rem;padding:1.05rem;background:var(--app-surface)}.why-grid article>span{color:var(--app-subtle);font-family:var(--font-mono);font-size:.64rem}.why-grid h3{margin-top:.7rem;font-size:1.1rem}.why-grid p{margin:.5rem 0 0;color:var(--app-muted);font-size:.84rem;line-height:1.5}
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--app-border-strong);background:var(--app-border)}.step-card{position:relative;min-width:0;padding:1rem;background:var(--app-surface)}.step-number{display:grid;width:1.55rem;height:1.55rem;margin-bottom:.55rem;border-radius:999px;background:var(--app-ink);color:var(--app-bg);font-family:var(--font-mono);font-size:.62rem;place-items:center}.step-card h3{font-size:1rem}.shot-placeholder{position:relative;display:grid;min-height:6.8rem;margin:.85rem 0;place-items:center;overflow:hidden;border:1px dashed var(--app-border-strong);background-image:linear-gradient(var(--app-border) 1px,transparent 1px),linear-gradient(90deg,var(--app-border) 1px,transparent 1px);background-size:16px 16px}.shot-placeholder span{z-index:1;padding:.24rem .38rem;background:var(--app-surface);color:var(--app-subtle);font-family:var(--font-mono);font-size:.56rem;text-transform:uppercase}.shot-placeholder i{position:absolute;width:5px;height:5px;background:var(--app-ink)}.shot-placeholder i:nth-of-type(1){top:7px;left:7px}.shot-placeholder i:nth-of-type(2){top:7px;right:7px}.shot-placeholder i:nth-of-type(3){bottom:7px;left:7px}.shot-placeholder i:nth-of-type(4){right:7px;bottom:7px}.step-card p{margin:0;color:var(--app-muted);font-size:.8rem;line-height:1.5}
-footer{display:flex;justify-content:space-between;gap:2rem;width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:1.5rem 0 2.4rem;border-top:1px solid var(--app-border);color:var(--app-subtle);font-size:.72rem}footer>div{display:grid;gap:.15rem}footer strong{color:var(--app-ink);font-size:.85rem}footer nav{display:flex;gap:1rem}footer a{text-decoration:none}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-copy{padding-bottom:2rem}.section-head{grid-template-columns:1fr;gap:.7rem}.integration-grid,.why-grid{grid-template-columns:1fr 1fr}.mcp-card{grid-column:1/-1}.agent-loop{grid-template-columns:1fr}.agent-connector{height:2rem}.agent-connector::before{top:.25rem;bottom:.25rem;left:50%;width:1px;height:auto}.agent-connector i{left:calc(50% - 3px)!important;right:auto!important}.agent-connector i:first-child{top:.25rem}.agent-connector i:nth-child(2){top:calc(50% - 3px)}.agent-connector i:last-child{top:auto;bottom:.25rem}.steps-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.integration-section,.agent-section,.why-section,.how-section,footer{width:min(calc(100% - 1.25rem),var(--page-width))}.hero h1{font-size:clamp(2.8rem,13vw,4rem)}.hero-copy{padding-inline:.75rem}.install-head{display:grid;gap:.2rem}.runtime-badges{display:grid}.runtime-badges span{width:max-content;max-width:100%}.actions{flex-wrap:wrap}.integration-grid,.why-grid,.steps-grid{grid-template-columns:1fr}.mcp-card{grid-column:auto}.section-head h2{font-size:2rem}.integration-grid article,.why-grid article{min-height:auto}.agent-loop h3{font-size:1.3rem}footer{flex-direction:column}}
+.hero-shell{background:#080808;color:#f5f5f5}.hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(23rem,.92fr);width:min(100%,var(--page-width));margin:0 auto}.hero-copy{padding:clamp(3.5rem,7vw,6rem) clamp(1rem,3vw,2.4rem) 3.2rem}.eyebrow,.install-head span{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}.hero .eyebrow{margin:0;color:#bdbdbd}.hero h1{max-width:12ch;margin:.85rem 0 1rem;color:#fff;font-family:var(--font-display);font-size:clamp(3.25rem,6vw,5.8rem);font-weight:680;line-height:.96;letter-spacing:-.048em;text-wrap:balance}.intro{max-width:43rem;margin:0;color:#c0c0c0;font-size:clamp(1.03rem,1.35vw,1.17rem);line-height:1.62}.hero-install{max-width:49rem;margin-top:1.45rem;padding:.8rem;border:1px solid #555;background:#0f0f0f}.install-head{display:flex;justify-content:space-between;gap:1rem;padding:.05rem .08rem .62rem;color:#aaa}.install-head small{color:#858585;font-family:var(--font-mono);font-size:.68rem}.hero-install :global(.command-box){border-color:#4d4d4d!important;background:#0b0b0b!important;color:#f5f5f5!important}.runtime-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.85rem}.runtime-badges span{display:flex;align-items:center;gap:.4rem;padding:.38rem .55rem;border:1px solid #3a3a3a;background:#0e0e0e;color:#c6c6c6;font-size:.76rem}.runtime-badges svg{width:1rem;height:1rem;fill:var(--brand)}.actions{display:flex;gap:.65rem;margin-top:1rem}.actions a{display:inline-flex;align-items:center;min-height:2.55rem;padding:.62rem .85rem;border:1px solid #555;color:#f5f5f5;font-size:.84rem;font-weight:640;text-decoration:none}.actions a.primary{background:#f5f5f5;color:#080808}.ecosystem-rail{position:relative;z-index:15;width:100%;height:34px;background:#f7f7f5}footer{display:flex;justify-content:space-between;gap:2rem;width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:1.5rem 0 2.4rem;border-top:1px solid var(--app-border);color:var(--app-subtle);font-size:.72rem}footer>div{display:grid;gap:.15rem}footer strong{color:var(--app-ink);font-size:.85rem}footer nav{display:flex;gap:1rem}footer a{text-decoration:none}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-copy{padding-bottom:2rem}}
+@media(max-width:560px){.hero h1{font-size:clamp(2.8rem,13vw,4rem)}.hero-copy{padding-inline:.75rem}.install-head{display:grid;gap:.2rem}.runtime-badges{display:grid}.runtime-badges span{width:max-content;max-width:100%}.actions{flex-wrap:wrap}footer{width:min(calc(100% - 1.25rem),var(--page-width));flex-direction:column}}
 </style>
