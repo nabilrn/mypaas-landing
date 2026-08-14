@@ -4,16 +4,15 @@ Astro website for the MyPaaS product landing page, public documentation, and pri
 
 The public site is intentionally evidence-driven: current product claims should follow the behavior implemented on `nabilrn/MyPaas` `main`, while roadmap items remain clearly separate.
 
-## Frontier-model refactor handoff
+## Landing visual source of truth
 
-Before performing a major landing-page visual or copy refactor, read these files completely:
+For any landing-page visual implementation or cleanup, read these files in this order:
 
-1. [`FRONTIER_MODEL_HANDOFF.md`](./FRONTIER_MODEL_HANDOFF.md) — execution prompt, sequencing, validation, PR contract, and anti-pattern rules.
-2. [`LANDING_REFACTOR_MASTER_PLAN.md`](./LANDING_REFACTOR_MASTER_PLAN.md) — product, visual, typography, copywriting, and information-architecture specification.
+1. [`CURRENT_LANDING_VISUAL_CONTRACT.md`](./CURRENT_LANDING_VISUAL_CONTRACT.md) — **current visual source of truth**. It defines the locked screenshot-clone direction, Inter + Inconsolata typography tokens, white post-hero surfaces, no landing theme toggle, integration-rail spacing, and the MCP robot glyph.
+2. [`FRONTIER_MODEL_HANDOFF.md`](./FRONTIER_MODEL_HANDOFF.md) — historical execution/refactor context. Any visual rule that conflicts with the current visual contract is superseded.
+3. [`LANDING_REFACTOR_MASTER_PLAN.md`](./LANDING_REFACTOR_MASTER_PLAN.md) — historical audit and product/copy context. Any old typography, color, information-architecture, or theme instruction that conflicts with the current visual contract is superseded.
 
-A sufficient handoff instruction for a capable coding model is:
-
-> Read the repository handoff and master plan, execute the landing refactor completely on a new branch, validate it, open a PR with screenshots if possible, and do not merge.
+For current UI work, screenshot fidelity and the current visual contract take precedence over earlier refactor proposals.
 
 ## Public routes
 
