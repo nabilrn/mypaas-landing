@@ -4,49 +4,46 @@
 </div>
 
 <style>
-/*
- * Hero-only fidelity pass.
- * Keep the rest of the landing untouched while matching the approved reference:
- * compact left copy, generous right artwork, official MyPaaS mark, and quiet pixel grid.
- */
+/* Hero-only visual reconstruction against the approved desktop reference. */
 :global(.hero){
   position:relative;
   display:grid!important;
-  grid-template-columns:minmax(0,47%) minmax(0,53%)!important;
-  min-height:34rem!important;
+  grid-template-columns:minmax(0,48%) minmax(0,52%)!important;
+  min-height:clamp(31.5rem,42vw,35.5rem)!important;
   isolation:isolate;
+  overflow:hidden;
 }
 :global(.hero-copy){
   position:relative;
   z-index:5;
-  padding:3.15rem 1.9rem 2.75rem!important;
-  align-self:center;
+  align-self:start!important;
+  padding:3rem 1.9rem 1.9rem!important;
 }
 :global(.hero .eyebrow){
   margin:0!important;
-  color:#c8c8c8!important;
+  color:#d0d0d0!important;
   font-size:.68rem!important;
-  letter-spacing:.13em!important;
+  letter-spacing:.14em!important;
 }
 :global(.hero h1){
-  max-width:15ch!important;
-  margin:.75rem 0 .85rem!important;
+  max-width:10.6em!important;
+  margin:.8rem 0 .9rem!important;
   color:#fff!important;
-  font-size:clamp(3.25rem,4.45vw,4.75rem)!important;
+  font-size:clamp(3.45rem,4.35vw,4rem)!important;
   font-weight:680!important;
-  line-height:.99!important;
-  letter-spacing:-.045em!important;
+  line-height:.95!important;
+  letter-spacing:-.043em!important;
   text-wrap:balance;
 }
 :global(.hero .intro){
-  max-width:35rem!important;
+  max-width:35.5rem!important;
   margin:0!important;
-  color:#c5c5c5!important;
-  font-size:clamp(.98rem,1.16vw,1.08rem)!important;
+  color:#c3c3c3!important;
+  font-size:clamp(.96rem,1.1vw,1.04rem)!important;
   line-height:1.55!important;
 }
 :global(.hero-install){
-  max-width:35.5rem!important;
+  width:min(100%,35.5rem)!important;
   margin-top:1.15rem!important;
   padding:0!important;
   border:0!important;
@@ -57,16 +54,16 @@
 :global(.hero .runtime-badges){
   display:flex!important;
   flex-wrap:wrap!important;
-  gap:.48rem!important;
+  gap:.5rem!important;
   margin-top:.72rem!important;
 }
 :global(.hero .runtime-badges span){
   gap:.38rem!important;
   min-height:2rem;
-  padding:.34rem .55rem!important;
-  border-color:#383838!important;
-  background:#0b0b0b!important;
-  color:#d2d2d2!important;
+  padding:.34rem .58rem!important;
+  border-color:#3c3c3c!important;
+  background:#0a0a0a!important;
+  color:#d0d0d0!important;
   font-size:.69rem!important;
 }
 
@@ -80,64 +77,65 @@
 }
 .hero-grid{
   position:absolute;
+  z-index:1;
   inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:69% center;
-  opacity:.84;
-}
-.hero-logo{
-  position:absolute;
-  z-index:2;
-  top:50%;
-  left:76.2%;
-  width:min(25vw,23.5rem);
-  max-height:68%;
-  object-fit:contain;
-  transform:translate(-50%,-50%);
-  filter:drop-shadow(0 0 24px rgb(255 255 255 / .035));
+  object-position:70% center;
+  opacity:.94;
 }
 .hero-art::before{
   position:absolute;
-  z-index:3;
+  z-index:2;
   inset:0;
-  background:linear-gradient(90deg,#050505 0%,#050505 31%,rgb(5 5 5 / .96) 38%,rgb(5 5 5 / .7) 48%,rgb(5 5 5 / .14) 65%,transparent 82%);
+  background:linear-gradient(90deg,#050505 0%,#050505 30%,rgb(5 5 5 / .98) 39%,rgb(5 5 5 / .78) 48%,rgb(5 5 5 / .18) 64%,transparent 79%);
   content:"";
+}
+.hero-logo{
+  position:absolute;
+  z-index:3;
+  top:49%;
+  left:75.4%;
+  width:min(21.5vw,19rem);
+  max-height:62%;
+  object-fit:contain;
+  transform:translate(-50%,-50%);
+  filter:drop-shadow(0 0 20px rgb(255 255 255 / .025));
 }
 .hero-art::after{
   position:absolute;
-  z-index:3;
+  z-index:2;
   inset:0;
-  background:radial-gradient(circle at 75% 50%,transparent 0 25%,rgb(0 0 0 / .04) 47%,rgb(0 0 0 / .2) 100%);
+  background:linear-gradient(180deg,rgb(0 0 0 / .08),transparent 20% 78%,rgb(0 0 0 / .16));
   content:"";
 }
 
-@media(max-width:1100px){
-  :global(.hero){grid-template-columns:minmax(0,52%) minmax(0,48%)!important}
-  :global(.hero-copy){padding-inline:1.35rem!important}
-  :global(.hero h1){font-size:clamp(3rem,5vw,4.15rem)!important}
-  .hero-logo{left:76%;width:min(29vw,21rem)}
+@media(max-width:1200px){
+  :global(.hero){grid-template-columns:minmax(0,50%) minmax(0,50%)!important}
+  :global(.hero-copy){padding-inline:1.45rem!important}
+  :global(.hero h1){font-size:clamp(3.2rem,5vw,3.85rem)!important}
+  .hero-logo{left:76%;width:min(24vw,18rem)}
 }
 
 @media(max-width:900px){
-  :global(.hero){grid-template-columns:1fr!important;min-height:auto!important}
-  :global(.hero-copy){padding:3rem 1rem 2.2rem!important}
-  :global(.hero h1){max-width:13ch!important}
-  .hero-art{position:relative;grid-column:1/-1;grid-row:2;min-height:24rem}
-  .hero-grid{object-position:71% center}
-  .hero-logo{top:50%;left:63%;width:min(45vw,20rem);max-height:67%}
-  .hero-art::before{background:linear-gradient(90deg,#050505 0%,rgb(5 5 5 / .7) 24%,rgb(5 5 5 / .08) 58%,transparent 76%)}
+  :global(.hero){grid-template-columns:1fr!important;min-height:auto!important;overflow:visible}
+  :global(.hero-copy){padding:2.8rem 1rem 2rem!important}
+  :global(.hero h1){max-width:11em!important;font-size:clamp(3rem,8vw,3.8rem)!important}
+  .hero-art{position:relative;grid-column:1/-1;grid-row:2;min-height:23rem}
+  .hero-grid{object-position:72% center}
+  .hero-logo{top:50%;left:64%;width:min(44vw,18rem);max-height:64%}
+  .hero-art::before{background:linear-gradient(90deg,#050505 0%,rgb(5 5 5 / .8) 24%,rgb(5 5 5 / .12) 58%,transparent 76%)}
 }
 
 @media(max-width:560px){
-  :global(.hero-copy){padding:2.5rem .75rem 1.8rem!important}
-  :global(.hero h1){max-width:12ch!important;font-size:clamp(2.65rem,12vw,3.55rem)!important;line-height:1!important}
-  :global(.hero .intro){font-size:.96rem!important}
+  :global(.hero-copy){padding:2.35rem .75rem 1.7rem!important}
+  :global(.hero h1){max-width:10.4em!important;font-size:clamp(2.55rem,11.5vw,3.35rem)!important;line-height:.98!important}
+  :global(.hero .intro){font-size:.95rem!important}
   :global(.hero .runtime-badges){display:grid!important}
   :global(.hero .runtime-badges span){width:max-content;max-width:100%}
-  .hero-art{min-height:18rem}
-  .hero-grid{object-position:73% center}
-  .hero-logo{left:64%;width:min(57vw,16rem);max-height:66%}
+  .hero-art{min-height:17.5rem}
+  .hero-grid{object-position:74% center}
+  .hero-logo{left:64%;width:min(55vw,15rem);max-height:64%}
 }
 </style>
