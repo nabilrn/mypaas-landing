@@ -1,6 +1,9 @@
 ---
-interface Props { src: string; alt: string; label: string; detail?: string; eager?: boolean }
-const { src, alt, label, detail = "real product UI", eager = false } = Astro.props;
+import PixelFrame from "../pixel/PixelFrame.astro";
+interface Props { src: string; alt: string; label: string; detail?: string; eager?: boolean; dither?: boolean }
+const { src, alt, label, detail = "REAL PRODUCT UI", eager = false, dither = false } = Astro.props;
 ---
-<figure class="product-figure"><figcaption><span>{label}</span><span>{detail}</span></figcaption><img {src} {alt} loading={eager ? "eager" : "lazy"} /></figure>
-<style>.product-figure{overflow:hidden;margin:0;border:1px solid var(--app-border);border-radius:.75rem;background:var(--app-surface)}figcaption{display:flex;justify-content:space-between;padding:.7rem .85rem;border-bottom:1px solid var(--app-border);color:var(--app-subtle);font-family:var(--font-mono);font-size:.66rem}img{width:100%;height:auto}</style>
+<PixelFrame {label} {detail} {dither}>
+  <img {src} {alt} decoding="async" loading={eager ? "eager" : "lazy"} fetchpriority={eager ? "high" : "auto"} />
+</PixelFrame>
+<style>img{display:block;width:100%;height:auto;background:var(--app-surface)}</style>

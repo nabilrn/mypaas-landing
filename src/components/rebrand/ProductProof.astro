@@ -2,5 +2,5 @@
 import ProductFigure from "./ProductFigure.astro";
 import shot from "../../../mypaas-dashboard-screenshots/2026-08-13T14-22-46-474Z-focused/desktop-dark-01-project-overview-metrics.png";
 ---
-<div class="proof"><ProductFigure src={shot.src} alt="MyPaaS project overview with runtime metrics" label="Project overview" eager /></div>
-<style>.proof{margin:0 auto 5rem;width:min(calc(100% - 2rem),76rem)}</style>
+<div class="proof"><div class="dither" aria-hidden="true"></div><ProductFigure src={shot.src} alt="MyPaaS project overview with runtime metrics" label="PROJECT / OVERVIEW" detail="REAL PRODUCT UI · DESKTOP DARK" eager dither /></div>
+<style>.proof{position:relative;width:min(calc(100% - 2rem),var(--page-width));margin:0 auto clamp(5rem,9vw,7.5rem)}.dither{position:absolute;z-index:-1;right:-1rem;bottom:-1rem;width:38%;height:42%;background-image:url('/patterns/dither-25.svg');opacity:.7}@media(max-width:600px){.proof{width:min(calc(100% - 1.25rem),var(--page-width));margin-bottom:4.5rem}.dither{right:-.45rem;bottom:-.45rem;width:46%;height:35%}}</style>

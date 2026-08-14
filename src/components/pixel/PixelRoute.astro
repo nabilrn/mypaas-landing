@@ -1,0 +1,23 @@
+---
+import type { Locale } from "../../lib/site";
+const { locale = "en" } = Astro.props as { locale?: Locale };
+const labels = {
+  en: { source:"Source", git:"Git repository", image:"Public OCI image", deploy:"Deploy", static:"Static / SPA", container:"Container image", runtime:"Runtime", route:"Route", publicUrl:"Public URL", aria:"MyPaaS deployment flow" },
+  id: { source:"Source", git:"Repositori Git", image:"Image OCI publik", deploy:"Deploy", static:"Static / SPA", container:"Image container", runtime:"Runtime", route:"Routing", publicUrl:"URL publik", aria:"Flow deployment MyPaaS" },
+  zh: { source:"来源", git:"Git 仓库", image:"公开 OCI 镜像", deploy:"部署", static:"静态 / SPA", container:"容器镜像", runtime:"运行时", route:"路由", publicUrl:"公开 URL", aria:"MyPaaS 部署流程" },
+} as const;
+const text = labels[locale];
+---
+<div class="route" aria-label={text.aria}>
+  <div class="route-col"><span>{text.source}</span><strong>{text.git}</strong><strong>{text.image}</strong></div>
+  <div class="connector" aria-hidden="true"><i></i></div>
+  <div class="route-col route-col--wide"><span>{text.deploy}</span><strong>Dockerfile</strong><strong>Docker Compose</strong><strong>{text.static}</strong><strong>{text.container}</strong></div>
+  <div class="connector" aria-hidden="true"><i></i></div>
+  <div class="route-col"><span>{text.runtime}</span><strong>Docker Engine</strong><strong>Rootful Podman</strong></div>
+  <div class="connector" aria-hidden="true"><i></i></div>
+  <div class="route-col"><span>{text.route}</span><strong>Caddy</strong><strong>Cloudflare Tunnel</strong><em>{text.publicUrl}</em></div>
+</div>
+<style>
+.route{display:grid;grid-template-columns:minmax(0,1fr) 3rem minmax(0,1.25fr) 3rem minmax(0,1fr) 3rem minmax(0,1fr);align-items:stretch;border-block:1px solid var(--app-border-strong)}.route-col{display:grid;align-content:start;min-width:0;padding:1.25rem 0}.route-col span{margin-bottom:.9rem;color:var(--app-subtle);font-family:var(--font-mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase}.route-col strong,.route-col em{padding:.6rem 0;border-top:1px solid var(--app-border);color:var(--app-ink);font-size:.88rem;font-style:normal;font-weight:560}.route-col em{color:var(--app-muted);font-family:var(--font-mono);font-size:.7rem}.connector{position:relative}.connector::before{position:absolute;top:50%;left:.5rem;right:.5rem;height:1px;background:var(--app-border-strong);content:""}.connector i{position:absolute;top:calc(50% - 4px);left:calc(50% - 4px);width:8px;height:8px;background:var(--app-ink)}
+@media(max-width:820px){.route{grid-template-columns:1fr;border-block:0}.route-col{padding:1rem 0;border-top:1px solid var(--app-border-strong)}.route-col:last-child{border-bottom:1px solid var(--app-border-strong)}.connector{height:2rem}.connector::before{top:.25rem;bottom:.25rem;left:1rem;width:1px;height:auto}.connector i{top:calc(50% - 4px);left:calc(1rem - 3px)}}
+</style>

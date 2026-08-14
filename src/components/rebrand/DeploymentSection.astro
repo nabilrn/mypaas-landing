@@ -1,10 +1,13 @@
 ---
-const { copy } = Astro.props;
+import PixelRoute from "../pixel/PixelRoute.astro";
+import TechLabel from "../pixel/TechLabel.astro";
+const { copy, locale = "en" } = Astro.props;
 ---
-<section id="deployment">
-<p class="label">{copy.deployLabel}</p><h2>{copy.deployTitle}</h2><p>{copy.deployBody}</p>
-<div class="items">{copy.deployGroups.map((group) => <article><strong>{group[0]}</strong><span>{group[1].join(" · ")}</span></article>)}</div>
+<section id="deploy" class="section-shell">
+  <div class="section-intro"><TechLabel label={copy.deployLabel} index="01" /><h2>{copy.deployTitle}</h2><p>{copy.deployBody}</p></div>
+  <PixelRoute {locale} />
 </section>
 <style>
-section{padding:5rem 1rem;border-top:1px solid var(--app-border)}section>*{max-width:76rem;margin-left:auto;margin-right:auto}.label,strong{font-family:var(--font-mono);color:var(--app-subtle)}h2{font-size:3rem;letter-spacing:-.05em}p{color:var(--app-muted)}.items{display:grid;grid-template-columns:1fr 1fr}.items article{display:grid;gap:.5rem;padding:1rem;border-top:1px solid var(--app-border)}span{color:var(--app-muted)}
+.section-shell{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(5rem,9vw,7rem) 0}.section-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,32rem);column-gap:4rem;align-items:end;margin-bottom:2.5rem}.section-intro :global(.tech-label){grid-column:1/-1;margin-bottom:1.2rem}.section-intro h2{max-width:12ch;margin:0;color:var(--app-ink);font-size:clamp(2.25rem,4vw,3.55rem);font-weight:620;letter-spacing:-.035em;line-height:1.02}.section-intro p{margin:0;color:var(--app-muted);font-size:.98rem;line-height:1.65}
+@media(max-width:760px){.section-shell{width:min(calc(100% - 1.25rem),var(--page-width));padding:4.5rem 0}.section-intro{grid-template-columns:1fr;gap:1rem}.section-intro h2{font-size:clamp(2.15rem,10vw,3rem)}.section-intro p{max-width:36rem}}
 </style>
