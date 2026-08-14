@@ -4,6 +4,7 @@ import CopyCommand from "./CopyCommand.astro";
 import LandingHeader from "./LandingHeader.astro";
 import ArchitectureBlueprint from "./compact/ArchitectureBlueprint.astro";
 import TechRail from "./compact/TechRail.astro";
+import { siCloudflare, siGithub, siLinux, siUbuntu } from "simple-icons";
 import { installCommand, repositoryUrl, type Locale } from "../lib/site";
 
 interface Props { locale?: Locale }
@@ -13,65 +14,133 @@ const path = locale === "en" ? "/" : `/${locale}/`;
 const copy = {
   en: {
     title: "MyPaaS — Deploy to your own Linux server",
-    description: "Self-hosted deployment control plane for Git repositories and public OCI images on one Linux host.",
-    eyebrow: "OPEN SOURCE / SINGLE HOST / MIT",
-    h1: "Deploy apps on your own server.",
-    intro: "MyPaaS turns Git repositories or public OCI images into routed deployments, then gives you logs, metrics, lifecycle controls, recovery, databases, and automation from one control plane.",
+    description: "Install MyPaaS on one Ubuntu or Debian-based Linux host, deploy from GitHub or public OCI images, and publish through Cloudflare and Caddy.",
+    eyebrow: "SELF-HOSTED / UBUNTU + LINUX / MIT",
+    h1: "Deploy to your Linux server.",
+    intro: "Install MyPaaS on one Ubuntu or Debian-based Linux host. Deploy from GitHub or public OCI images, publish through Cloudflare + Caddy, and operate apps from one control plane.",
+    installLabel: "INSTALL / UBUNTU + DEBIAN",
+    installHint: "Docker default · rootful Podman optional",
     docs: "Read docs",
     github: "GitHub",
-    facts: [["SOURCE","Git / public OCI"],["DEPLOY","Dockerfile / Compose / Static"],["RUNTIME","Docker / rootful Podman"],["ROUTE","Caddy / Cloudflare Tunnel"]],
+    supportTitle: "RUNS ON",
+    support: ["Ubuntu", "Debian-based Linux", "Single VM / bare metal"],
+    integrationTitle: "FIRST-CLASS INTEGRATIONS",
+    githubRole: "Source · OAuth · webhooks",
+    cloudflareRole: "Tunnel · TLS · public edge",
     deployTitle: "Deploy",
     deploy: ["Git repository", "Public OCI image", "Dockerfile", "Docker Compose", "Static / SPA"],
     operateTitle: "Operate",
     operate: ["Logs + metrics", "Environment variables", "Lifecycle controls", "Release recovery", "Database backups", "CLI / API / MCP"],
     scopeTitle: "Scope",
-    scope: ["One Linux VM or host", "No Kubernetes or multi-node scheduler", "No multi-region HA or autoscaling", "Public registry images only"],
-    installTitle: "Install",
-    installBody: "Bootstrap on Ubuntu or Debian. Docker is the default path; rootful Podman uses the same Docker-compatible contract.",
-    installGuide: "Installation guide",
+    scope: ["One Linux VM or host", "Docker Engine or rootful Podman", "No Kubernetes or multi-node scheduler", "Public registry images only"],
+    whyEyebrow: "WHY MYPAAS",
+    whyTitle: "Smaller than a cluster. More control than hosted PaaS.",
+    whyIntro: "MyPaaS is built around one server, standard container tooling, and direct GitHub + Cloudflare integration.",
+    compareHeaders: ["MyPaaS", "Typical hosted PaaS", "Cluster platform"],
+    compareRows: [
+      ["Infrastructure", "Your Linux host", "Provider-managed", "Your cluster"],
+      ["Best fit", "Single-host deploy + operate", "Managed app hosting", "Multi-node orchestration"],
+      ["GitHub + Cloudflare", "Built into the workflow", "Provider-dependent", "Assemble integrations"],
+      ["Runtime", "Docker / Podman + Caddy", "Provider runtime", "Cluster primitives"],
+    ],
+    howEyebrow: "HOW IT WORKS",
+    howTitle: "Use MyPaaS in three steps.",
+    howSteps: [
+      ["01", "Connect GitHub", "OAuth, repository inspection, and deployment webhooks.", "GitHub connection screenshot"],
+      ["02", "Create and deploy", "Choose Dockerfile, Compose, Static / SPA, or a public OCI image.", "Create project screenshot"],
+      ["03", "Publish and operate", "Route through Cloudflare + Caddy, then use logs, metrics, lifecycle, and recovery.", "Project operations screenshot"],
+    ],
+    placeholder: "Screenshot placeholder",
     footer: "Self-hosted deployment control plane for one Linux host.",
   },
   id: {
     title: "MyPaaS — Deploy ke server Linux milik sendiri",
-    description: "Control plane deployment self-hosted untuk repositori Git dan public OCI image pada satu host Linux.",
-    eyebrow: "OPEN SOURCE / SINGLE HOST / MIT",
-    h1: "Deploy aplikasi di server milikmu.",
-    intro: "MyPaaS mengubah repositori Git atau public OCI image menjadi deployment yang sudah dirouting, lalu menyediakan log, metrik, lifecycle control, recovery, database, dan automation dari satu control plane.",
+    description: "Instal MyPaaS pada satu host Linux Ubuntu atau berbasis Debian, deploy dari GitHub atau public OCI image, lalu publish melalui Cloudflare dan Caddy.",
+    eyebrow: "SELF-HOSTED / UBUNTU + LINUX / MIT",
+    h1: "Deploy ke server Linux milikmu.",
+    intro: "Instal MyPaaS pada satu host Linux Ubuntu atau berbasis Debian. Deploy dari GitHub atau public OCI image, publish lewat Cloudflare + Caddy, lalu operasikan aplikasi dari satu control plane.",
+    installLabel: "INSTALL / UBUNTU + DEBIAN",
+    installHint: "Docker default · rootful Podman opsional",
     docs: "Baca dokumentasi",
     github: "GitHub",
-    facts: [["SOURCE","Git / public OCI"],["DEPLOY","Dockerfile / Compose / Static"],["RUNTIME","Docker / rootful Podman"],["ROUTE","Caddy / Cloudflare Tunnel"]],
+    supportTitle: "BERJALAN DI",
+    support: ["Ubuntu", "Linux berbasis Debian", "Satu VM / bare metal"],
+    integrationTitle: "INTEGRASI UTAMA",
+    githubRole: "Source · OAuth · webhooks",
+    cloudflareRole: "Tunnel · TLS · public edge",
     deployTitle: "Deploy",
     deploy: ["Repositori Git", "Public OCI image", "Dockerfile", "Docker Compose", "Static / SPA"],
     operateTitle: "Operasikan",
     operate: ["Log + metrik", "Environment variables", "Lifecycle controls", "Release recovery", "Database backups", "CLI / API / MCP"],
     scopeTitle: "Batasan",
-    scope: ["Satu VM atau host Linux", "Bukan Kubernetes atau scheduler multi-node", "Tidak ada multi-region HA atau autoscaling", "Registry image publik saja"],
-    installTitle: "Instalasi",
-    installBody: "Bootstrap di Ubuntu atau Debian. Docker adalah jalur default; rootful Podman memakai kontrak kompatibel Docker yang sama.",
-    installGuide: "Panduan instalasi",
+    scope: ["Satu VM atau host Linux", "Docker Engine atau rootful Podman", "Bukan Kubernetes atau scheduler multi-node", "Registry image publik saja"],
+    whyEyebrow: "KENAPA MYPAAS",
+    whyTitle: "Lebih ringan dari cluster. Lebih terkendali dari hosted PaaS.",
+    whyIntro: "MyPaaS fokus pada satu server, container tooling standar, serta integrasi langsung GitHub + Cloudflare.",
+    compareHeaders: ["MyPaaS", "Hosted PaaS umum", "Platform cluster"],
+    compareRows: [
+      ["Infrastruktur", "Host Linux milikmu", "Dikelola provider", "Cluster milikmu"],
+      ["Fokus", "Deploy + operasi single-host", "Managed app hosting", "Orkestrasi multi-node"],
+      ["GitHub + Cloudflare", "Ada di alur utama", "Tergantung provider", "Rakit integrasi sendiri"],
+      ["Runtime", "Docker / Podman + Caddy", "Runtime provider", "Primitive cluster"],
+    ],
+    howEyebrow: "CARA PAKAI",
+    howTitle: "Gunakan MyPaaS dalam tiga langkah.",
+    howSteps: [
+      ["01", "Hubungkan GitHub", "OAuth, inspeksi repositori, dan deployment webhooks.", "Screenshot koneksi GitHub"],
+      ["02", "Buat project dan deploy", "Pilih Dockerfile, Compose, Static / SPA, atau public OCI image.", "Screenshot create project"],
+      ["03", "Publish dan operasikan", "Route lewat Cloudflare + Caddy, lalu gunakan log, metrik, lifecycle, dan recovery.", "Screenshot operasi project"],
+    ],
+    placeholder: "Placeholder screenshot",
     footer: "Control plane deployment self-hosted untuk satu host Linux.",
   },
   zh: {
     title: "MyPaaS — 部署到你自己的 Linux 服务器",
-    description: "面向单台 Linux 主机的自托管部署控制平面，支持 Git 仓库和公共 OCI 镜像。",
-    eyebrow: "OPEN SOURCE / SINGLE HOST / MIT",
-    h1: "把应用部署到自己的服务器。",
-    intro: "MyPaaS 将 Git 仓库或公共 OCI 镜像转换为可路由部署，并在一个控制平面中提供日志、指标、生命周期控制、恢复、数据库和自动化能力。",
+    description: "在一台 Ubuntu 或 Debian 系 Linux 主机上安装 MyPaaS，从 GitHub 或公共 OCI 镜像部署，并通过 Cloudflare 与 Caddy 发布。",
+    eyebrow: "SELF-HOSTED / UBUNTU + LINUX / MIT",
+    h1: "部署到你自己的 Linux 服务器。",
+    intro: "在一台 Ubuntu 或 Debian 系 Linux 主机上安装 MyPaaS。从 GitHub 或公共 OCI 镜像部署，通过 Cloudflare + Caddy 发布，并在一个控制平面中运维应用。",
+    installLabel: "INSTALL / UBUNTU + DEBIAN",
+    installHint: "默认 Docker · 可选 rootful Podman",
     docs: "阅读文档",
     github: "GitHub",
-    facts: [["SOURCE","Git / public OCI"],["DEPLOY","Dockerfile / Compose / Static"],["RUNTIME","Docker / rootful Podman"],["ROUTE","Caddy / Cloudflare Tunnel"]],
+    supportTitle: "运行环境",
+    support: ["Ubuntu", "Debian 系 Linux", "单台 VM / 裸机"],
+    integrationTitle: "核心集成",
+    githubRole: "Source · OAuth · webhooks",
+    cloudflareRole: "Tunnel · TLS · public edge",
     deployTitle: "部署",
     deploy: ["Git 仓库", "公共 OCI 镜像", "Dockerfile", "Docker Compose", "Static / SPA"],
     operateTitle: "运维",
     operate: ["日志 + 指标", "环境变量", "生命周期控制", "发布恢复", "数据库备份", "CLI / API / MCP"],
     scopeTitle: "边界",
-    scope: ["一台 Linux VM 或主机", "不是 Kubernetes 或多节点调度器", "不提供多区域 HA 或自动扩缩容", "仅支持公共镜像仓库"],
-    installTitle: "安装",
-    installBody: "在 Ubuntu 或 Debian 上引导安装。Docker 是默认路径；rootful Podman 使用相同的 Docker 兼容契约。",
-    installGuide: "安装指南",
+    scope: ["一台 Linux VM 或主机", "Docker Engine 或 rootful Podman", "不是 Kubernetes 或多节点调度器", "仅支持公共镜像仓库"],
+    whyEyebrow: "为什么选择 MYPAAS",
+    whyTitle: "比集群更轻。比托管 PaaS 更可控。",
+    whyIntro: "MyPaaS 聚焦单台服务器、标准容器工具，以及直接的 GitHub + Cloudflare 集成。",
+    compareHeaders: ["MyPaaS", "典型托管 PaaS", "集群平台"],
+    compareRows: [
+      ["基础设施", "你的 Linux 主机", "服务商管理", "你的集群"],
+      ["适用场景", "单机部署 + 运维", "托管应用", "多节点编排"],
+      ["GitHub + Cloudflare", "内置于工作流", "取决于服务商", "自行组装集成"],
+      ["运行时", "Docker / Podman + Caddy", "服务商运行时", "集群原语"],
+    ],
+    howEyebrow: "如何使用",
+    howTitle: "三步使用 MyPaaS。",
+    howSteps: [
+      ["01", "连接 GitHub", "OAuth、仓库检查与部署 webhook。", "GitHub 连接截图"],
+      ["02", "创建并部署", "选择 Dockerfile、Compose、Static / SPA 或公共 OCI 镜像。", "创建项目截图"],
+      ["03", "发布并运维", "通过 Cloudflare + Caddy 路由，并使用日志、指标、生命周期与恢复。", "项目运维截图"],
+    ],
+    placeholder: "截图占位符",
     footer: "面向单台 Linux 主机的自托管部署控制平面。",
   },
 }[locale];
+
+const supports = [
+  [copy.support[0], siUbuntu],
+  [copy.support[1], siLinux],
+] as const;
 ---
 <BaseLayout title={copy.title} description={copy.description} locale={locale} path={path} localizedAlternates>
   <LandingHeader {locale} />
@@ -81,9 +150,27 @@ const copy = {
         <p class="eyebrow">{copy.eyebrow}</p>
         <h1>{copy.h1}</h1>
         <p class="intro">{copy.intro}</p>
+
+        <div class="hero-install">
+          <div class="install-head"><span>{copy.installLabel}</span><small>{copy.installHint}</small></div>
+          <CopyCommand command={installCommand} label="bootstrap.sh" />
+        </div>
+
         <div class="actions"><a class="primary" href="/docs/">{copy.docs}</a><a href={repositoryUrl} target="_blank" rel="noreferrer">{copy.github} ↗</a></div>
       </div>
-      <dl class="facts">{copy.facts.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
+
+      <aside class="hero-proof">
+        <div class="proof-block support-block">
+          <p class="proof-title">{copy.supportTitle}</p>
+          {supports.map(([label, icon]) => <div class="proof-row" style={`--brand:#${icon.hex}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg><strong>{label}</strong></div>)}
+          <div class="proof-row neutral"><span class="pixel-mark" aria-hidden="true"></span><strong>{copy.support[2]}</strong></div>
+        </div>
+        <div class="proof-block integration-block">
+          <p class="proof-title">{copy.integrationTitle}</p>
+          <div class="integration-row" style={`--brand:#${siGithub.hex}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path} /></svg><div><strong>GitHub</strong><small>{copy.githubRole}</small></div></div>
+          <div class="integration-row" style={`--brand:#${siCloudflare.hex}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siCloudflare.path} /></svg><div><strong>Cloudflare</strong><small>{copy.cloudflareRole}</small></div></div>
+        </div>
+      </aside>
     </section>
 
     <ArchitectureBlueprint />
@@ -94,15 +181,40 @@ const copy = {
       <article><p class="section-id">01 / {copy.deployTitle}</p><h2>{copy.deployTitle}</h2><ul>{copy.deploy.map((item)=><li>{item}</li>)}</ul></article>
       <article><p class="section-id">02 / {copy.operateTitle}</p><h2>{copy.operateTitle}</h2><ul>{copy.operate.map((item)=><li>{item}</li>)}</ul></article>
       <article><p class="section-id">03 / {copy.scopeTitle}</p><h2>{copy.scopeTitle}</h2><ul>{copy.scope.map((item)=><li>{item}</li>)}</ul></article>
-      <article id="install" class="install-card"><p class="section-id">04 / {copy.installTitle}</p><h2>{copy.installTitle}</h2><p class="install-copy">{copy.installBody}</p><CopyCommand command={installCommand} label="bootstrap.sh" /><a class="guide" href="/docs/installation/">{copy.installGuide} →</a></article>
+    </section>
+
+    <section class="why-section">
+      <header><p class="section-id">04 / {copy.whyEyebrow}</p><h2>{copy.whyTitle}</h2><p>{copy.whyIntro}</p></header>
+      <div class="comparison" role="table" aria-label="MyPaaS compared with common deployment platform categories">
+        <div class="compare-row compare-head" role="row"><span role="columnheader"></span>{copy.compareHeaders.map((item)=><strong role="columnheader">{item}</strong>)}</div>
+        {copy.compareRows.map((row)=><div class="compare-row" role="row"><strong role="rowheader">{row[0]}</strong><span role="cell" class="mypaas-cell">{row[1]}</span><span role="cell">{row[2]}</span><span role="cell">{row[3]}</span></div>)}
+      </div>
+    </section>
+
+    <section class="how-section">
+      <header><p class="section-id">05 / {copy.howEyebrow}</p><h2>{copy.howTitle}</h2></header>
+      <div class="steps-grid">
+        {copy.howSteps.map(([index,title,body,placeholder]) => (
+          <article class="step-card">
+            <div class="shot-placeholder" role="img" aria-label={placeholder}>
+              <span>{copy.placeholder}</span><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="step-copy"><span>{index}</span><strong>{title}</strong><p>{body}</p></div>
+          </article>
+        ))}
+      </div>
     </section>
   </main>
   <footer><span>MyPaaS</span><span>{copy.footer}</span><nav><a href="/docs/">Docs</a><a href={repositoryUrl}>GitHub</a><span>MIT</span></nav></footer>
 </BaseLayout>
 
 <style>
-.hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(18rem,.55fr);gap:clamp(2rem,7vw,7rem);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(4rem,8vw,7rem) 0 2.75rem}.eyebrow,.section-id,dt{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--app-subtle)}h1{max-width:12ch;margin:.7rem 0 1rem;font-size:clamp(3rem,6.4vw,5.7rem);font-weight:620;line-height:.94;letter-spacing:-.045em}.intro{max-width:47rem;margin:0;color:var(--app-muted);font-size:clamp(.92rem,1.3vw,1.05rem);line-height:1.58}.actions{display:flex;gap:.7rem;margin-top:1.5rem}.actions a{display:inline-flex;align-items:center;min-height:2.35rem;padding:.52rem .78rem;border:1px solid var(--app-border-strong);color:var(--app-ink);font-size:.72rem;font-weight:620;text-decoration:none}.actions a.primary{background:var(--app-ink);color:var(--app-bg)}.facts{align-self:end;margin:0;border-top:1px solid var(--app-border-strong)}.facts div{display:grid;grid-template-columns:5rem 1fr;gap:.75rem;padding:.68rem 0;border-bottom:1px solid var(--app-border)}.facts dd{margin:0;color:var(--app-ink);font-size:.72rem;font-weight:560}
-.tech-shell{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding-top:.5rem}.dense-grid{display:grid;grid-template-columns:repeat(4,1fr);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:2rem 0 2.5rem;border-bottom:1px solid var(--app-border-strong)}.dense-grid article{min-width:0;padding:0 1.1rem 0 0;border-right:1px solid var(--app-border)}.dense-grid article+article{padding-left:1.1rem}.dense-grid article:last-child{padding-right:0;border-right:0}.dense-grid h2{margin:.45rem 0 .7rem;font-size:1.25rem;letter-spacing:-.025em}.dense-grid ul{margin:0;padding:0;list-style:none}.dense-grid li{padding:.38rem 0;border-top:1px solid var(--app-border);color:var(--app-muted);font-size:.7rem;line-height:1.4}.dense-grid li:last-child{border-bottom:1px solid var(--app-border)}.install-copy{margin:0 0 .75rem;color:var(--app-muted);font-size:.7rem;line-height:1.45}.guide{display:inline-block;margin-top:.6rem;color:var(--app-ink);font-size:.68rem;font-weight:620;text-decoration:none}.guide:hover{text-decoration:underline;text-underline-offset:.2em}footer{display:flex;align-items:flex-start;gap:1rem;width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:1.4rem 0 2.25rem;color:var(--app-subtle);font-size:.62rem}footer>span:first-child{color:var(--app-ink);font-weight:700}footer>span:nth-child(2){margin-right:auto}footer nav{display:flex;gap:.8rem}footer a{color:var(--app-muted);text-decoration:none}
-@media(max-width:900px){.hero{grid-template-columns:1fr;gap:2rem}.facts{display:grid;grid-template-columns:1fr 1fr}.facts div{grid-template-columns:4.5rem 1fr}.dense-grid{grid-template-columns:1fr 1fr;gap:0}.dense-grid article{padding:0 1rem 1.5rem 0;border-right:1px solid var(--app-border);border-bottom:1px solid var(--app-border-strong)}.dense-grid article:nth-child(even){padding-left:1rem;padding-right:0;border-right:0}.dense-grid article:nth-last-child(-n+2){padding-top:1.5rem;padding-bottom:0;border-bottom:0}}
-@media(max-width:560px){.hero,.tech-shell,.dense-grid,footer{width:min(calc(100% - 1.25rem),var(--page-width))}.hero{padding:3.4rem 0 2rem}.facts{grid-template-columns:1fr}.dense-grid{grid-template-columns:1fr}.dense-grid article,.dense-grid article:nth-child(even),.dense-grid article:nth-last-child(-n+2){padding:1.3rem 0;border-right:0;border-bottom:1px solid var(--app-border-strong)}.dense-grid article:first-child{padding-top:0}.dense-grid article:last-child{border-bottom:0}.actions{flex-wrap:wrap}footer{flex-wrap:wrap}footer>span:nth-child(2){width:100%;order:3}}
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(18rem,.55fr);gap:clamp(2rem,6vw,6rem);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(3.5rem,7vw,6rem) 0 2.5rem}.eyebrow,.section-id,.proof-title,.install-head span{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--app-subtle)}h1{max-width:11ch;margin:.65rem 0 .9rem;font-size:clamp(3rem,6vw,5.45rem);font-weight:620;line-height:.94;letter-spacing:-.042em}.intro{max-width:45rem;margin:0;color:var(--app-muted);font-size:clamp(.92rem,1.25vw,1.04rem);line-height:1.58}.hero-install{position:relative;max-width:50rem;margin-top:1.45rem;padding:.7rem;border:1px solid var(--app-border-strong);background:var(--app-surface);box-shadow:inset 4px 0 #f48120}.hero-install::before{position:absolute;top:-1px;right:7px;width:5px;height:5px;background:#2496ed;box-shadow:8px 0 #f48120,16px 0 #e95420;content:""}.install-head{display:flex;justify-content:space-between;gap:1rem;padding:.05rem .1rem .55rem}.install-head small{color:var(--app-muted);font-family:var(--font-mono);font-size:.58rem}.hero-install :global(.command-box){border-color:var(--app-border-strong)}.actions{display:flex;gap:.7rem;margin-top:1rem}.actions a{display:inline-flex;align-items:center;min-height:2.35rem;padding:.52rem .78rem;border:1px solid var(--app-border-strong);color:var(--app-ink);font-size:.72rem;font-weight:620;text-decoration:none}.actions a.primary{background:var(--app-ink);color:var(--app-bg)}
+.hero-proof{align-self:end;display:grid;gap:.8rem}.proof-block{border:1px solid var(--app-border-strong);background:var(--app-surface)}.proof-title{margin:0;padding:.65rem .75rem;border-bottom:1px solid var(--app-border)}.proof-row,.integration-row{position:relative;display:flex;align-items:center;gap:.65rem;padding:.7rem .75rem;border-bottom:1px solid var(--app-border)}.proof-row:last-child,.integration-row:last-child{border-bottom:0}.proof-row::before,.integration-row::before{position:absolute;left:-1px;top:calc(50% - 3px);width:6px;height:6px;background:var(--brand,var(--app-ink));content:""}.proof-row svg,.integration-row svg{width:1.1rem;height:1.1rem;fill:var(--brand);flex:0 0 auto}.proof-row strong,.integration-row strong{font-size:.74rem}.integration-row>div{display:grid;gap:.08rem}.integration-row small{color:var(--app-muted);font-size:.62rem}.pixel-mark{width:10px;height:10px;border:1px solid var(--app-ink);box-shadow:3px 3px 0 var(--app-border-strong)}
+.tech-shell{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding-top:.5rem}.dense-grid{display:grid;grid-template-columns:repeat(3,1fr);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:1.8rem 0 2rem;border-bottom:1px solid var(--app-border-strong)}.dense-grid article{min-width:0;padding:0 1.25rem 0 0;border-right:1px solid var(--app-border)}.dense-grid article+article{padding-left:1.25rem}.dense-grid article:last-child{padding-right:0;border-right:0}.dense-grid h2{margin:.45rem 0 .7rem;font-size:1.25rem;letter-spacing:-.025em}.dense-grid ul{margin:0;padding:0;list-style:none}.dense-grid li{padding:.38rem 0;border-top:1px solid var(--app-border);color:var(--app-muted);font-size:.7rem;line-height:1.4}.dense-grid li:last-child{border-bottom:1px solid var(--app-border)}
+.why-section,.how-section{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:2.2rem 0;border-bottom:1px solid var(--app-border-strong)}.why-section>header,.how-section>header{display:grid;grid-template-columns:minmax(0,.9fr) minmax(16rem,.65fr);column-gap:3rem;align-items:end;margin-bottom:1.25rem}.why-section>header .section-id,.how-section>header .section-id{grid-column:1/-1;margin:0 0 .45rem}.why-section h2,.how-section h2{max-width:18ch;margin:0;font-size:clamp(1.7rem,3vw,2.6rem);line-height:1.02;letter-spacing:-.032em}.why-section>header>p:last-child{margin:0;color:var(--app-muted);font-size:.78rem;line-height:1.5}.comparison{border:1px solid var(--app-border-strong);background:var(--app-surface)}.compare-row{display:grid;grid-template-columns:minmax(8rem,.7fr) repeat(3,minmax(0,1fr));border-bottom:1px solid var(--app-border)}.compare-row:last-child{border-bottom:0}.compare-row>*{min-width:0;padding:.62rem .7rem;border-right:1px solid var(--app-border);font-size:.66rem;line-height:1.4}.compare-row>*:last-child{border-right:0}.compare-head>*{color:var(--app-subtle);font-family:var(--font-mono);font-size:.57rem;letter-spacing:.05em;text-transform:uppercase}.compare-row>strong:first-child{color:var(--app-ink)}.compare-row>span{color:var(--app-muted)}.mypaas-cell{position:relative;background:color-mix(in srgb,#2496ed 5%,var(--app-surface));color:var(--app-ink)!important;font-weight:600}.mypaas-cell::before{position:absolute;top:0;left:0;width:4px;height:4px;background:#2496ed;content:""}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--app-border-strong);background:var(--app-border-strong)}.step-card{min-width:0;background:var(--app-surface)}.shot-placeholder{position:relative;display:grid;min-height:8.5rem;place-items:center;overflow:hidden;border-bottom:1px solid var(--app-border);background-color:var(--app-bg);background-image:linear-gradient(var(--app-border) 1px,transparent 1px),linear-gradient(90deg,var(--app-border) 1px,transparent 1px);background-size:16px 16px}.shot-placeholder span{z-index:1;padding:.28rem .45rem;border:1px solid var(--app-border-strong);background:var(--app-surface);color:var(--app-subtle);font-family:var(--font-mono);font-size:.56rem;text-transform:uppercase}.shot-placeholder i{position:absolute;width:6px;height:6px;background:#2496ed}.shot-placeholder i:nth-of-type(1){top:8px;left:8px}.shot-placeholder i:nth-of-type(2){top:8px;right:8px;background:#f48120}.shot-placeholder i:nth-of-type(3){bottom:8px;left:8px;background:#e95420}.shot-placeholder i:nth-of-type(4){right:8px;bottom:8px;background:#ffb000}.step-copy{display:grid;grid-template-columns:2rem 1fr;padding:.75rem}.step-copy>span{grid-row:1/3;color:var(--app-subtle);font-family:var(--font-mono);font-size:.58rem}.step-copy strong{font-size:.76rem}.step-copy p{grid-column:2;margin:.2rem 0 0;color:var(--app-muted);font-size:.66rem;line-height:1.45}
+footer{display:flex;align-items:flex-start;gap:1rem;width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:1.4rem 0 2.25rem;color:var(--app-subtle);font-size:.62rem}footer>span:first-child{color:var(--app-ink);font-weight:700}footer>span:nth-child(2){margin-right:auto}footer nav{display:flex;gap:.8rem}footer a{color:var(--app-muted);text-decoration:none}
+@media(max-width:900px){.hero{grid-template-columns:1fr;gap:1.5rem}.hero-proof{grid-template-columns:1fr 1fr}.dense-grid{grid-template-columns:1fr 1fr}.dense-grid article{padding:0 1rem 1.5rem 0;border-right:1px solid var(--app-border);border-bottom:1px solid var(--app-border-strong)}.dense-grid article:nth-child(even){padding-left:1rem;padding-right:0;border-right:0}.dense-grid article:last-child{grid-column:1/-1;padding:1.5rem 0 0;border-bottom:0}.why-section>header,.how-section>header{grid-template-columns:1fr;gap:.7rem}.compare-row{grid-template-columns:8rem repeat(3,minmax(9rem,1fr))}.comparison{overflow-x:auto}.steps-grid{grid-template-columns:1fr 1fr}.step-card:last-child{grid-column:1/-1}}
+@media(max-width:560px){.hero,.tech-shell,.dense-grid,.why-section,.how-section,footer{width:min(calc(100% - 1.25rem),var(--page-width))}.hero{padding:3rem 0 2rem}.hero-proof{grid-template-columns:1fr}.install-head{display:grid;gap:.2rem}.dense-grid{grid-template-columns:1fr}.dense-grid article,.dense-grid article:nth-child(even),.dense-grid article:last-child{grid-column:auto;padding:1.2rem 0;border-right:0;border-bottom:1px solid var(--app-border-strong)}.dense-grid article:first-child{padding-top:0}.dense-grid article:last-child{border-bottom:0}.actions{flex-wrap:wrap}.steps-grid{grid-template-columns:1fr}.step-card:last-child{grid-column:auto}.why-section,.how-section{padding:1.8rem 0}.compare-row{grid-template-columns:7.5rem repeat(3,minmax(8.5rem,1fr))}footer{flex-wrap:wrap}footer>span:nth-child(2){width:100%;order:3}}
 </style>
