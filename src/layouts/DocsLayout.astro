@@ -10,7 +10,7 @@ const navGroups=[
   { label:"Integrations", items:[["GitHub OAuth","/docs/github-oauth/"],["Cloudflare Tunnel","/docs/cloudflare-tunnel/"],["Domains & webhooks","/docs/routing-webhooks/"]] },
   { label:"Deploy & configure", items:[["Deployment models","/docs/deployment-models/"],["Environment variables","/docs/environment-variables/"],["Configuration","/docs/configuration/"]] },
   { label:"Operate", items:[["Operations","/docs/operations/"],["Observability","/docs/observability/"],["Databases","/docs/databases/"],["Backups & recovery","/docs/backups-recovery/"],["Migration","/docs/migration/"],["Troubleshooting","/docs/troubleshooting/"]] },
-  { label:"Automation & trust", items:[["Automation & agents","/docs/automation/"],["Security","/docs/security/"],["Limitations","/docs/limitations/"]] },
+  { label:"Automation & agents", items:[["CLI, API & MCP","/docs/automation/"],["Security","/docs/security/"],["Limitations","/docs/limitations/"]] },
 ];
 const active=(href:string)=>href==="/docs/"?path===href:path.startsWith(href);
 const groupActive=(items:string[][])=>items.some(([,href])=>active(href));
@@ -19,4 +19,4 @@ const groupActive=(items:string[][])=>items.some(([,href])=>active(href));
 <LandingHeader />
 <div class="docs-page"><div class="docs-shell"><aside class="docs-sidebar"><p class="docs-nav-title">Documentation</p><nav>{navGroups.map((group,index)=><details class="docs-nav-group" open={groupActive(group.items)}><summary><span>{String(index+1).padStart(2,"0")}</span>{group.label}</summary><div>{group.items.map(([label,href])=><a class:list={{active:active(href)}} href={href} aria-current={active(href)?"page":undefined}>{label}</a>)}</div></details>)}</nav></aside><main class="docs-main"><header class="docs-header"><p>MyPaaS documentation</p><h1>{title}</h1><div>{description}</div><small>Current public docs · verified 13 Aug 2026 · <a href={`https://github.com/nabilrn/MyPaas/commit/${verifiedCommit}`}>MyPaaS {verifiedCommit.slice(0,8)}</a></small></header><article class="docs-content"><slot /></article><footer class="docs-footer"><span>MyPaaS documentation</span><nav><a href="/">Landing page</a><a href="https://github.com/nabilrn/MyPaas/issues">Report an issue</a></nav></footer></main></div></div>
 </BaseLayout>
-<style>small{display:block;margin-top:1rem;color:var(--app-subtle);font-family:var(--font-mono);font-size:.65rem}small a{color:inherit;text-underline-offset:.18em}</style>
+<style>small{display:block;margin-top:1rem;color:var(--app-subtle);font-family:var(--font-mono);font-size:.7rem}small a{color:inherit;text-underline-offset:.18em}</style>
