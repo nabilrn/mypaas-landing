@@ -2,10 +2,11 @@
 interface Props { command: string; label?: string; copyLabel?: string; copiedLabel?: string; failedLabel?: string }
 const { command, label = "Shell", copyLabel = "Copy", copiedLabel = "Copied", failedLabel = "Copy failed" } = Astro.props;
 const hero = label === "bootstrap.sh";
+const displayCommand = hero ? command.replace("https://raw.githubusercontent.com/", "https://raw.githubusercontent.com/\n") : command;
 ---
 <div class:list={["command-box", { hero }]} data-command-box data-command={command} data-copy-default={copyLabel} data-copy-success={copiedLabel} data-copy-failed={failedLabel}>
   <div class="command-meta"><span>{label}</span><button type="button" data-copy-button aria-label={copyLabel}><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="10" height="10" rx="1"></rect><path d="M6 15H5a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2h8a1 1 0 0 1 1 1v1"></path></svg><span data-copy-label>{copyLabel}</span></button></div>
-  <pre><code>{command}</code></pre>
+  <pre><code>{displayCommand}</code></pre>
   <p role="status" aria-live="polite" data-copy-feedback></p>
 </div>
 <script>
@@ -20,22 +21,21 @@ button:hover{border-color:var(--app-ink)}
 pre{margin:0;overflow:auto;padding:1rem;color:var(--app-ink);font-size:.76rem;line-height:1.55;white-space:pre}
 p{min-height:.8rem;margin:.2rem .75rem .45rem;color:var(--app-subtle);font-family:var(--font-mono);font-size:.58rem}
 
-.command-box.hero{min-height:4.85rem;border-color:#545454;background:linear-gradient(180deg,#111317,#090a0c);clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);box-shadow:inset 0 0 0 1px rgb(255 255 255 / .025)}
+.command-box.hero{min-height:5rem;border-color:#545454;background:linear-gradient(180deg,#111317,#090a0c);clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);box-shadow:inset 0 0 0 1px rgb(255 255 255 / .025)}
 .command-box.hero::before{position:absolute;z-index:2;top:50%;left:1rem;transform:translateY(-50%);color:#fff;content:">_";font-family:var(--font-mono);font-size:1.02rem;font-weight:600}
 .hero .command-meta{position:absolute;z-index:4;inset:0 0 auto auto;padding:.75rem;border:0}
 .hero .command-meta>span{display:none}
 .hero button{width:2.25rem;height:2.25rem;padding:0;border-color:#3a414b;border-radius:.4rem;background:#12151a;place-content:center}
 .hero button svg{width:1rem;height:1rem}
 .hero button [data-copy-label]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.hero pre{height:4.75rem;margin:0;overflow-x:auto;overflow-y:hidden;padding:1.62rem 4rem 1.25rem 3.3rem;color:#f5f5f5;font-size:.78rem;line-height:1.45;white-space:nowrap;scrollbar-width:none}
-.hero pre::-webkit-scrollbar{display:none}
+.hero pre{min-height:5rem;margin:0;overflow:hidden;padding:1.22rem 4rem 1rem 3.3rem;color:#f5f5f5;font-size:.76rem;line-height:1.55;white-space:pre-wrap;overflow-wrap:normal;word-break:normal}
 .hero code{white-space:inherit}
 .hero p{position:absolute;left:3.3rem;bottom:.08rem;margin:0;color:#8f8f8f}
 
 @media(max-width:700px){
   pre{font-size:.7rem}
   .command-box.hero{min-height:5.5rem}
-  .hero pre{height:auto;min-height:5.4rem;padding:1.35rem 3.6rem 1.25rem 2.9rem;font-size:.71rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+  .hero pre{min-height:5.4rem;padding:1.25rem 3.6rem 1.2rem 2.9rem;font-size:.7rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal}
   .command-box.hero::before{left:.8rem;font-size:.88rem}
   .hero .command-meta{padding:.7rem}
   .hero button{width:2rem;height:2rem}
