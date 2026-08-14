@@ -1,0 +1,99 @@
+---
+interface Props {
+  kind: "connect" | "inspect" | "deploy" | "operate";
+}
+
+const { kind } = Astro.props;
+---
+<div class="step-illustration" data-animate-illustration>
+  <svg viewBox="0 0 320 170" role="img" aria-hidden="true">
+    <rect class="frame" x="1" y="1" width="318" height="168" rx="14" />
+
+    {kind === "connect" && (
+      <>
+        <g class="object object-a">
+          <rect x="38" y="45" width="82" height="72" rx="10" />
+          <circle cx="62" cy="67" r="8" />
+          <path d="M53 92h50M53 102h34" />
+        </g>
+        <g class="object object-b">
+          <path d="m231 44 34 18v44l-34 18-34-18V62l34-18Z" />
+          <path d="M231 44v40m34-22-34 22-34-22m34 22v40" />
+        </g>
+        <path class="flow" d="M121 81h64" />
+        <path class="flow-arrow" d="m178 74 9 7-9 7" />
+        <g class="accent object-c">
+          <rect x="143" y="66" width="24" height="30" rx="7" />
+          <path d="M149 66v-7a6 6 0 0 1 12 0v7" />
+        </g>
+      </>
+    )}
+
+    {kind === "inspect" && (
+      <>
+        <g class="object object-a">
+          <rect x="38" y="34" width="244" height="102" rx="12" />
+          <path d="M38 60h244" />
+          <circle cx="54" cy="47" r="3" /><circle cx="64" cy="47" r="3" /><circle cx="74" cy="47" r="3" />
+        </g>
+        <g class="object object-b">
+          <path d="M67 83h84M67 104h84" />
+          <circle cx="108" cy="83" r="6" /><circle cx="91" cy="104" r="6" />
+          <path d="M181 81h65M181 103h44" />
+        </g>
+        <g class="accent object-c">
+          <rect x="181" y="70" width="68" height="18" rx="9" />
+          <path d="M194 79h42" />
+        </g>
+      </>
+    )}
+
+    {kind === "deploy" && (
+      <>
+        <g class="object object-a">
+          <rect x="28" y="57" width="62" height="54" rx="9" />
+          <path d="m44 74 8 8-8 8m17 0h14" />
+        </g>
+        <path class="flow" d="M91 84h48M181 84h49" />
+        <path class="flow-arrow" d="m132 77 9 7-9 7M223 77l9 7-9 7" />
+        <g class="accent object-b">
+          <path d="m160 51 33 18-33 18-33-18 33-18Z" />
+          <path d="m127 69 33 18 33-18v36l-33 18-33-18V69Z" />
+          <path d="M160 87v36" />
+        </g>
+        <g class="object object-c">
+          <rect x="230" y="48" width="62" height="72" rx="9" />
+          <path d="M243 67h36M243 78h36M243 99h22" />
+          <circle cx="279" cy="99" r="3" />
+        </g>
+      </>
+    )}
+
+    {kind === "operate" && (
+      <>
+        <g class="object object-a">
+          <rect x="34" y="42" width="72" height="84" rx="10" />
+          <path d="M49 63h42M49 77h42M49 91h29" />
+          <circle cx="88" cy="108" r="4" />
+        </g>
+        <g class="object object-b">
+          <rect x="132" y="47" width="154" height="74" rx="10" />
+          <path d="M146 65h60M146 78h83M146 91h51" />
+        </g>
+        <g class="accent object-c">
+          <path d="M228 105V83m14 22V70m14 35V91m14 14V62" />
+          <path d="M220 106h58" />
+        </g>
+      </>
+    )}
+  </svg>
+</div>
+
+<script>
+  import "../../scripts/landing-motion";
+</script>
+
+<style>
+.step-illustration{display:grid;width:100%;min-height:118px;place-items:center;overflow:hidden;border:1px solid #e2e2e2;border-radius:10px;background:linear-gradient(180deg,#fff,#fcfcfc)}
+.step-illustration svg{width:100%;height:auto;color:#171717}.step-illustration svg *{vector-effect:non-scaling-stroke}.frame{fill:#fff;stroke:#ececec;stroke-width:1}.object,.flow,.flow-arrow,.accent{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:opacity .45s ease,transform .55s cubic-bezier(.2,.75,.2,1)}.accent{stroke:#4b4b4b}.flow{stroke-dasharray:5 5}.object-a,.object-b,.object-c{opacity:0;transform:translateY(7px)}.flow,.flow-arrow{opacity:0}.step-illustration[data-in-view="true"] .object-a,.step-illustration[data-in-view="true"] .object-b,.step-illustration[data-in-view="true"] .object-c{opacity:1;transform:translateY(0)}.step-illustration[data-in-view="true"] .object-b{transition-delay:.08s}.step-illustration[data-in-view="true"] .object-c{transition-delay:.16s}.step-illustration[data-in-view="true"] .flow,.step-illustration[data-in-view="true"] .flow-arrow{opacity:1;transition-delay:.2s}@media(prefers-reduced-motion:reduce){.step-illustration svg *{transition:none!important}.object-a,.object-b,.object-c,.flow,.flow-arrow{opacity:1!important;transform:none!important}}
+</style>

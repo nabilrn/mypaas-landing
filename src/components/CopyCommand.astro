@@ -1,98 +1,58 @@
 ---
 interface Props { command: string; label?: string; copyLabel?: string; copiedLabel?: string; failedLabel?: string }
-const { command, label = "Shell", copyLabel = "Copy", copiedLabel = "Copied", failedLabel = "Copy failed" } = Astro.props;
+const { command, label = "Shell", copyLabel = "Copy", copiedLabel = "Command copied", failedLabel = "Copy failed" } = Astro.props;
 const hero = label === "bootstrap.sh";
 const effectiveCommand = hero ? command.replace(" | env USE_PODMAN=true bash", " | bash") : command;
 const displayCommand = hero ? effectiveCommand.replace("https://raw.githubusercontent.com/", "https://raw.githubusercontent.com/\n") : effectiveCommand;
 ---
-<div class:list={["command-box", { hero }]} data-command-box data-command={effectiveCommand} data-copy-default={copyLabel} data-copy-success={copiedLabel} data-copy-failed={failedLabel}>
-  <div class="command-meta">
-    <span>{label}</span>
-    <button type="button" data-copy-button data-copy-state="idle" aria-label={copyLabel}>
-      <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="10" height="10" rx="1"></rect><path d="M6 15H5a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2h8a1 1 0 0 1 1 1v1"></path></svg>
-      <svg class="check-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.2L19 7"></path></svg>
-      <span data-copy-label>{copyLabel}</span>
-    </button>
+<div class:list={["copy-command-root", { hero }]} data-copy-command-root>
+  <div class:list={["command-box", { hero }]} data-command-box data-command={effectiveCommand} data-copy-default={copyLabel} data-copy-success={copiedLabel} data-copy-failed={failedLabel}>
+    <span class="command-border-light" aria-hidden="true"></span>
+    <div class="command-meta">
+      <span>{label}</span>
+      <button type="button" data-copy-button data-copy-state="idle" aria-label={copyLabel}>
+        <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="10" height="10" rx="1"></rect><path d="M6 15H5a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2h8a1 1 0 0 1 1 1v1"></path></svg>
+        <svg class="check-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.2L19 7"></path></svg>
+        <span data-copy-label>{copyLabel}</span>
+      </button>
+    </div>
+    <pre><code>{displayCommand}</code></pre>
+    <p role="status" aria-live="polite" data-copy-feedback></p>
   </div>
-  <pre><code>{displayCommand}</code></pre>
-  <p role="status" aria-live="polite" data-copy-feedback></p>
-</div>
-<script>
-  const copyText = async (text:string) => {
-    if (navigator.clipboard?.writeText) {
-      try { await navigator.clipboard.writeText(text); return; } catch {}
-    }
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.setAttribute("readonly", "");
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-    document.body.appendChild(textarea);
-    textarea.select();
-    const copied = document.execCommand("copy");
-    textarea.remove();
-    if (!copied) throw new Error("copy failed");
-  };
 
-  document.querySelectorAll<HTMLElement>("[data-command-box]:not([data-copy-ready])").forEach((box)=>{
-    box.dataset.copyReady="true";
-    const button=box.querySelector<HTMLButtonElement>("[data-copy-button]");
-    const label=box.querySelector<HTMLElement>("[data-copy-label]");
-    const feedback=box.querySelector<HTMLElement>("[data-copy-feedback]");
-    let timer:number|undefined;
-    const reset=()=>{
-      if(!button)return;
-      button.dataset.copyState="idle";
-      button.setAttribute("aria-label",box.dataset.copyDefault||"Copy");
-      if(label)label.textContent=box.dataset.copyDefault||"Copy";
-      if(feedback)feedback.textContent="";
-    };
-    button?.addEventListener("click",async()=>{
-      clearTimeout(timer);
-      try{
-        await copyText(box.dataset.command??"");
-        button.dataset.copyState="copied";
-        button.setAttribute("aria-label",box.dataset.copySuccess||"Copied");
-        if(label)label.textContent=box.dataset.copySuccess||"Copied";
-        if(feedback)feedback.textContent=box.dataset.copySuccess||"Copied";
-        timer=window.setTimeout(reset,1600);
-      }catch{
-        button.dataset.copyState="failed";
-        button.setAttribute("aria-label",box.dataset.copyFailed||"Copy failed");
-        if(label)label.textContent=box.dataset.copyFailed||"Copy failed";
-        if(feedback)feedback.textContent=box.dataset.copyFailed||"Copy failed";
-        timer=window.setTimeout(reset,2200);
-      }
-    });
-  });
+  <div class="copy-toast" data-copy-toast data-visible="false" hidden>
+    <svg class="toast-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.2L19 7"></path></svg>
+    <svg class="toast-error" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v6m0 4h.01"></path><circle cx="12" cy="12" r="9"></circle></svg>
+    <span data-copy-toast-text></span>
+  </div>
+</div>
+
+<script>
+  import "../scripts/copy-command";
 </script>
+
 <style>
+.copy-command-root{position:relative}
 .command-box{position:relative;overflow:hidden;border:1px solid var(--app-border-strong);background:var(--app-surface);clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
 .command-meta{display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;border-bottom:1px solid var(--app-border);color:var(--app-subtle);font-family:var(--font-mono);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase}
 button{display:flex;align-items:center;gap:.35rem;padding:.3rem .5rem;border:1px solid var(--app-border);background:var(--app-bg);color:var(--app-ink);font-family:var(--font-mono);font-size:.62rem;cursor:pointer}
-button svg{width:.9rem;height:.9rem;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.check-icon{display:none}button[data-copy-state="copied"] .copy-icon{display:none}button[data-copy-state="copied"] .check-icon{display:block}button[data-copy-state="copied"]{border-color:currentColor}button[data-copy-state="failed"]{opacity:.65}
+button svg{width:.9rem;height:.9rem;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.check-icon{display:none}button[data-copy-state="copied"] .copy-icon{display:none}button[data-copy-state="copied"] .check-icon{display:block}button[data-copy-state="copied"]{border-color:currentColor}button[data-copy-state="failed"]{opacity:.72}
 button:hover{border-color:var(--app-ink)}
 pre{margin:0;overflow:auto;padding:1rem;color:var(--app-ink);font-size:.76rem;line-height:1.55;white-space:pre}
 p{min-height:.8rem;margin:.2rem .75rem .45rem;color:var(--app-subtle);font-family:var(--font-mono);font-size:.58rem}
+.command-border-light{display:none}
+.copy-toast{position:absolute;z-index:40;top:calc(100% + 10px);right:0;display:flex;min-height:36px;align-items:center;gap:8px;padding:8px 11px;border:1px solid #d8d8d8;border-radius:8px;background:#fff;color:#111;font-family:var(--font-sans);font-size:12px;font-weight:600;line-height:1;box-shadow:0 8px 24px rgb(0 0 0 / .12);opacity:0;transform:translateY(-5px);transition:opacity .16s ease,transform .16s ease;pointer-events:none}
+.copy-toast[data-visible="true"]{opacity:1;transform:translateY(0)}.copy-toast svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.copy-toast .toast-error{display:none}.copy-toast[data-kind="failed"] .toast-check{display:none}.copy-toast[data-kind="failed"] .toast-error{display:block}
 
 .command-box.hero{min-height:5rem;border-color:#545454;background:linear-gradient(180deg,#111317,#090a0c);clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);box-shadow:inset 0 0 0 1px rgb(255 255 255 / .025)}
-.command-box.hero::before{position:absolute;z-index:2;top:50%;left:1rem;transform:translateY(-50%);color:#fff;content:">_";font-family:var(--font-mono);font-size:1.02rem;font-weight:600}
-.hero .command-meta{position:absolute;z-index:4;inset:0 0 auto auto;padding:.75rem;border:0}
-.hero .command-meta>span{display:none}
-.hero button{width:2.25rem;height:2.25rem;padding:0;border-color:#3a414b;border-radius:.4rem;background:#12151a;place-content:center}
-.hero button svg{width:1rem;height:1rem}
-.hero button [data-copy-label]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.hero pre{min-height:5rem;margin:0;overflow:hidden;padding:1.22rem 4rem 1rem 3.3rem;color:#f5f5f5;font-size:.76rem;line-height:1.55;white-space:pre-wrap;overflow-wrap:normal;word-break:normal}
-.hero code{white-space:inherit}
-.hero p{position:absolute;left:3.3rem;bottom:.08rem;margin:0;color:#8f8f8f}
+.command-box.hero::before{position:absolute;z-index:4;top:50%;left:1rem;transform:translateY(-50%);color:#fff;content:">_";font-family:var(--font-mono);font-size:1.02rem;font-weight:600}
+.hero .command-meta{position:absolute;z-index:8;inset:0 0 auto auto;padding:.75rem;border:0}.hero .command-meta>span{display:none}
+.hero button{width:2.25rem;height:2.25rem;padding:0;border-color:#3a414b;border-radius:.4rem;background:#12151a;place-content:center}.hero button svg{width:1rem;height:1rem}.hero button [data-copy-label]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero pre{min-height:5rem;margin:0;overflow:hidden;padding:1.22rem 4rem 1rem 3.3rem;color:#f5f5f5;font-size:.76rem;line-height:1.55;white-space:pre-wrap;overflow-wrap:normal;word-break:normal}.hero code{white-space:inherit}.hero p{position:absolute;left:3.3rem;bottom:.08rem;margin:0;color:#8f8f8f}
+.hero .command-border-light{display:block;position:absolute;z-index:6;inset:-1px;padding:1px;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);background:conic-gradient(from var(--command-angle),transparent 0 78%,rgb(255 255 255 / .15) 84%,rgb(255 255 255 / .95) 89%,#fff 90%,rgb(255 255 255 / .18) 95%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:command-perimeter 4.2s linear infinite;pointer-events:none}
+@property --command-angle{syntax:"<angle>";inherits:false;initial-value:0deg}@keyframes command-perimeter{to{--command-angle:360deg}}
+.copy-command-root.hero .copy-toast{top:calc(100% + 9px);right:8px;background:#111216;color:#fff;border-color:#3f4148;box-shadow:0 10px 28px rgb(0 0 0 / .28)}
 
-@media(max-width:700px){
-  pre{font-size:.7rem}
-  .command-box.hero{min-height:5.5rem}
-  .hero pre{min-height:5.4rem;padding:1.25rem 3.6rem 1.2rem 2.9rem;font-size:.7rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal}
-  .command-box.hero::before{left:.8rem;font-size:.88rem}
-  .hero .command-meta{padding:.7rem}
-  .hero button{width:2rem;height:2rem}
-  .hero p{left:2.9rem}
-}
+@media(max-width:700px){pre{font-size:.7rem}.command-box.hero{min-height:5.5rem}.hero pre{min-height:5.4rem;padding:1.25rem 3.6rem 1.2rem 2.9rem;font-size:.7rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal}.command-box.hero::before{left:.8rem;font-size:.88rem}.hero .command-meta{padding:.7rem}.hero button{width:2rem;height:2rem}.hero p{left:2.9rem}.copy-toast{right:4px}}
+@media(prefers-reduced-motion:reduce){.hero .command-border-light{animation:none;background:linear-gradient(90deg,transparent,rgb(255 255 255 / .35),transparent);opacity:.35}.copy-toast{transition:none}}
 </style>
