@@ -6,18 +6,71 @@ const effectiveCommand = hero ? command.replace(" | env USE_PODMAN=true bash", "
 const displayCommand = hero ? effectiveCommand.replace("https://raw.githubusercontent.com/", "https://raw.githubusercontent.com/\n") : effectiveCommand;
 ---
 <div class:list={["command-box", { hero }]} data-command-box data-command={effectiveCommand} data-copy-default={copyLabel} data-copy-success={copiedLabel} data-copy-failed={failedLabel}>
-  <div class="command-meta"><span>{label}</span><button type="button" data-copy-button aria-label={copyLabel}><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="10" height="10" rx="1"></rect><path d="M6 15H5a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2h8a1 1 0 0 1 1 1v1"></path></svg><span data-copy-label>{copyLabel}</span></button></div>
+  <div class="command-meta">
+    <span>{label}</span>
+    <button type="button" data-copy-button data-copy-state="idle" aria-label={copyLabel}>
+      <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="10" height="10" rx="1"></rect><path d="M6 15H5a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2h8a1 1 0 0 1 1 1v1"></path></svg>
+      <svg class="check-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.2L19 7"></path></svg>
+      <span data-copy-label>{copyLabel}</span>
+    </button>
+  </div>
   <pre><code>{displayCommand}</code></pre>
   <p role="status" aria-live="polite" data-copy-feedback></p>
 </div>
 <script>
-  document.querySelectorAll<HTMLElement>("[data-command-box]:not([data-copy-ready])").forEach((box)=>{box.dataset.copyReady="true";const button=box.querySelector<HTMLButtonElement>("[data-copy-button]");const label=box.querySelector<HTMLElement>("[data-copy-label]");const feedback=box.querySelector<HTMLElement>("[data-copy-feedback]");let timer:number|undefined;button?.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(box.dataset.command??"");if(label)label.textContent=box.dataset.copySuccess||"Copied";if(feedback)feedback.textContent=box.dataset.copySuccess||"Copied";clearTimeout(timer);timer=window.setTimeout(()=>{if(label)label.textContent=box.dataset.copyDefault||"Copy";if(feedback)feedback.textContent=""},1800)}catch{if(label)label.textContent=box.dataset.copyFailed||"Copy failed";if(feedback)feedback.textContent=box.dataset.copyFailed||"Copy failed"}})})
+  const copyText = async (text:string) => {
+    if (navigator.clipboard?.writeText) {
+      try { await navigator.clipboard.writeText(text); return; } catch {}
+    }
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    const copied = document.execCommand("copy");
+    textarea.remove();
+    if (!copied) throw new Error("copy failed");
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-command-box]:not([data-copy-ready])").forEach((box)=>{
+    box.dataset.copyReady="true";
+    const button=box.querySelector<HTMLButtonElement>("[data-copy-button]");
+    const label=box.querySelector<HTMLElement>("[data-copy-label]");
+    const feedback=box.querySelector<HTMLElement>("[data-copy-feedback]");
+    let timer:number|undefined;
+    const reset=()=>{
+      if(!button)return;
+      button.dataset.copyState="idle";
+      button.setAttribute("aria-label",box.dataset.copyDefault||"Copy");
+      if(label)label.textContent=box.dataset.copyDefault||"Copy";
+      if(feedback)feedback.textContent="";
+    };
+    button?.addEventListener("click",async()=>{
+      clearTimeout(timer);
+      try{
+        await copyText(box.dataset.command??"");
+        button.dataset.copyState="copied";
+        button.setAttribute("aria-label",box.dataset.copySuccess||"Copied");
+        if(label)label.textContent=box.dataset.copySuccess||"Copied";
+        if(feedback)feedback.textContent=box.dataset.copySuccess||"Copied";
+        timer=window.setTimeout(reset,1600);
+      }catch{
+        button.dataset.copyState="failed";
+        button.setAttribute("aria-label",box.dataset.copyFailed||"Copy failed");
+        if(label)label.textContent=box.dataset.copyFailed||"Copy failed";
+        if(feedback)feedback.textContent=box.dataset.copyFailed||"Copy failed";
+        timer=window.setTimeout(reset,2200);
+      }
+    });
+  });
 </script>
 <style>
 .command-box{position:relative;overflow:hidden;border:1px solid var(--app-border-strong);background:var(--app-surface);clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
 .command-meta{display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;border-bottom:1px solid var(--app-border);color:var(--app-subtle);font-family:var(--font-mono);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase}
 button{display:flex;align-items:center;gap:.35rem;padding:.3rem .5rem;border:1px solid var(--app-border);background:var(--app-bg);color:var(--app-ink);font-family:var(--font-mono);font-size:.62rem;cursor:pointer}
-button svg{width:.9rem;height:.9rem;fill:none;stroke:currentColor;stroke-width:1.7}
+button svg{width:.9rem;height:.9rem;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.check-icon{display:none}button[data-copy-state="copied"] .copy-icon{display:none}button[data-copy-state="copied"] .check-icon{display:block}button[data-copy-state="copied"]{border-color:currentColor}button[data-copy-state="failed"]{opacity:.65}
 button:hover{border-color:var(--app-ink)}
 pre{margin:0;overflow:auto;padding:1rem;color:var(--app-ink);font-size:.76rem;line-height:1.55;white-space:pre}
 p{min-height:.8rem;margin:.2rem .75rem .45rem;color:var(--app-subtle);font-family:var(--font-mono);font-size:.58rem}
