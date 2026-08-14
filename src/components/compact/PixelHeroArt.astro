@@ -1,10 +1,30 @@
+---
+import { siDebian, siLinux } from "simple-icons";
+---
 <div class="hero-art" aria-hidden="true">
   <img class="hero-grid" src="/brand/hero/hero-grid.svg" alt="" />
   <img class="hero-logo" src="/brand/logoonly_white.png" alt="" />
 </div>
 
+<template id="hero-distro-badge-template">
+  <span class="distro-stack" aria-hidden="true">
+    <span class="distro-dot debian-dot"><svg viewBox="0 0 24 24"><path d={siDebian.path}/></svg></span>
+    <span class="distro-dot linux-dot"><svg viewBox="0 0 24 24"><path d={siLinux.path}/></svg></span>
+  </span>
+  <span class="distro-label">Debian Linux</span>
+</template>
+
+<script>
+  const distroTemplate = document.querySelector<HTMLTemplateElement>("#hero-distro-badge-template");
+  const distroBadge = document.querySelector<HTMLElement>(".hero .runtime-badges > span:first-child");
+  if (distroTemplate && distroBadge && !distroBadge.dataset.distroReady) {
+    distroBadge.dataset.distroReady = "true";
+    distroBadge.replaceChildren(distroTemplate.content.cloneNode(true));
+  }
+</script>
+
 <style>
-/* Figma-derived desktop hero, tightened so the ecosystem rail is visible in the first viewport. */
+/* Final hero polish: preserve the Figma-derived composition and only refine install affordances. */
 :global(.hero-shell){
   background:#000002!important;
   color:#fff!important;
@@ -70,7 +90,7 @@
 :global(.hero .install-head),
 :global(.hero .actions){display:none!important}
 
-/* Compact terminal card: one prompt, two deliberate command lines, quiet copy affordance. */
+/* Compact terminal card with a visible copy control and a restrained running-light border. */
 :global(.hero-install .command-box.hero){
   width:594.5px!important;
   max-width:100%!important;
@@ -96,13 +116,29 @@
   font-weight:500!important;
   line-height:22px!important;
 }
+:global(.hero-install .command-box.hero)::after{
+  position:absolute!important;
+  z-index:5!important;
+  inset:0!important;
+  padding:1px!important;
+  clip-path:polygon(8px 0,calc(100% - 8px) 0,calc(100% - 8px) 8px,100% 8px,100% calc(100% - 8px),calc(100% - 8px) calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,8px calc(100% - 8px),0 calc(100% - 8px),0 8px,8px 8px)!important;
+  background:linear-gradient(115deg,transparent 20%,rgb(255 255 255 / .04) 38%,rgb(255 255 255 / .92) 49%,#fff 50%,rgb(255 255 255 / .16) 55%,transparent 72%)!important;
+  background-size:280% 280%!important;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;
+  mask-composite:exclude!important;
+  animation:command-border-run 4.6s linear infinite!important;
+  content:""!important;
+  pointer-events:none!important;
+}
 :global(.hero-install .command-meta){
   display:block!important;
   position:absolute!important;
-  z-index:6!important;
+  z-index:8!important;
   top:50%!important;
   right:12px!important;
-  inset:auto 12px auto auto!important;
+  bottom:auto!important;
+  left:auto!important;
   transform:translateY(-50%)!important;
   padding:0!important;
   border:0!important;
@@ -115,20 +151,23 @@
   width:32px!important;
   height:32px!important;
   padding:0!important;
-  border:1px solid #323238!important;
+  border:1px solid #3b3b42!important;
   border-radius:6px!important;
   background:#0d0d10!important;
-  color:#bdbdc3!important;
+  color:#d7d7dc!important;
+  box-shadow:0 2px 10px rgb(0 0 0 / .28)!important;
   place-items:center!important;
 }
-:global(.hero-install .command-meta button:hover){border-color:#65656d!important;color:#fff!important;background:#141419!important}
+:global(.hero-install .command-meta button:hover){border-color:#777780!important;color:#fff!important;background:#17171c!important}
 :global(.hero-install .command-meta button svg){width:16px!important;height:16px!important;stroke-width:1.65!important}
 :global(.hero-install .command-box.hero pre){
+  position:relative!important;
+  z-index:3!important;
   width:100%!important;
   min-height:76px!important;
   margin:0!important;
   overflow:hidden!important;
-  padding:12px 54px 10px 54px!important;
+  padding:12px 58px 10px 54px!important;
   color:#f7f7f7!important;
   font-family:"Inconsolata","IBM Plex Mono",ui-monospace,monospace!important;
   font-size:15px!important;
@@ -137,15 +176,19 @@
   letter-spacing:0!important;
   white-space:pre-wrap!important;
 }
+@keyframes command-border-run{
+  0%{background-position:115% 115%}
+  100%{background-position:-115% -115%}
+}
 
-/* Restore the three runtime chips shown in the visual reference. */
+/* Runtime chips: compact Debian+Linux distro stack, Docker, then Podman with a white icon plate. */
 :global(.hero .runtime-badges){
   display:flex!important;
   flex-wrap:wrap!important;
   gap:10px!important;
   margin-top:12px!important;
 }
-:global(.hero .runtime-badges span){
+:global(.hero .runtime-badges > span){
   display:flex!important;
   min-height:34px!important;
   align-items:center!important;
@@ -161,15 +204,46 @@
   line-height:18px!important;
   white-space:nowrap!important;
 }
-:global(.hero .runtime-badges span:nth-child(1)){order:1}
-:global(.hero .runtime-badges span:nth-child(2)){order:3}
-:global(.hero .runtime-badges span:nth-child(3)){order:2}
-:global(.hero .runtime-badges svg){
+:global(.hero .runtime-badges > span:nth-child(1)){order:1;padding-left:7px!important}
+:global(.hero .runtime-badges > span:nth-child(2)){order:3}
+:global(.hero .runtime-badges > span:nth-child(3)){order:2}
+:global(.hero .runtime-badges > span > svg){
   width:17px!important;
   height:17px!important;
   flex:none!important;
   fill:var(--brand)!important;
 }
+:global(.hero .runtime-badges > span:nth-child(2) > svg){
+  width:21px!important;
+  height:21px!important;
+  padding:2px!important;
+  border-radius:999px!important;
+  background:#fff!important;
+}
+:global(.distro-stack){
+  position:relative!important;
+  display:block!important;
+  width:31px!important;
+  height:22px!important;
+  flex:none!important;
+}
+:global(.distro-dot){
+  position:absolute!important;
+  top:1px!important;
+  display:grid!important;
+  width:20px!important;
+  height:20px!important;
+  padding:3px!important;
+  border:1px solid #34343a!important;
+  border-radius:999px!important;
+  place-items:center!important;
+}
+:global(.distro-dot svg){width:13px!important;height:13px!important}
+:global(.debian-dot){left:0!important;z-index:2!important;background:#fff!important}
+:global(.debian-dot svg){fill:#a81d33!important}
+:global(.linux-dot){left:11px!important;z-index:3!important;background:#111114!important}
+:global(.linux-dot svg){fill:#f5f5f5!important}
+:global(.distro-label){font-size:12px!important;line-height:18px!important}
 
 .hero-art{
   position:absolute;
@@ -227,7 +301,8 @@
   :global(.hero-install .command-box.hero){width:520px!important}
   :global(.hero-install .command-box.hero pre){font-size:14px!important;line-height:23px!important}
   :global(.hero .runtime-badges){gap:7px!important}
-  :global(.hero .runtime-badges span){padding-inline:9px!important;font-size:11px!important}
+  :global(.hero .runtime-badges > span){padding-inline:9px!important;font-size:11px!important}
+  :global(.distro-label){font-size:11px!important}
   .hero-logo{left:69%;width:22.5%}
 }
 
@@ -253,13 +328,18 @@
   :global(.hero .intro){font-size:15px!important;line-height:23px!important;letter-spacing:-.02em!important}
   :global(.hero-install){width:100%!important;margin-top:20px!important}
   :global(.hero-install .command-box.hero){width:100%!important;height:90px!important;min-height:90px!important}
-  :global(.hero-install .command-box.hero pre){min-height:90px!important;padding:10px 46px 10px 44px!important;font-size:12.5px!important;line-height:21px!important;overflow-wrap:anywhere!important}
+  :global(.hero-install .command-box.hero pre){min-height:90px!important;padding:10px 48px 10px 44px!important;font-size:12.5px!important;line-height:21px!important;overflow-wrap:anywhere!important}
   :global(.hero-install .command-box.hero)::before{top:11px!important;left:13px!important;font-size:13px!important}
   :global(.hero-install .command-meta){right:8px!important}
   :global(.hero-install .command-meta button){width:29px!important;height:29px!important}
   :global(.hero .runtime-badges){gap:7px!important;margin-top:10px!important}
-  :global(.hero .runtime-badges span){min-height:31px!important;padding:5px 8px!important;font-size:10.5px!important}
-  :global(.hero .runtime-badges svg){width:15px!important;height:15px!important}
+  :global(.hero .runtime-badges > span){min-height:31px!important;padding:5px 8px!important;font-size:10.5px!important}
+  :global(.hero .runtime-badges > span:nth-child(2) > svg){width:19px!important;height:19px!important}
+  :global(.distro-stack){width:28px!important;height:20px!important}
+  :global(.distro-dot){width:18px!important;height:18px!important;padding:3px!important}
+  :global(.distro-dot svg){width:11px!important;height:11px!important}
+  :global(.linux-dot){left:10px!important}
+  :global(.distro-label){font-size:10.5px!important}
   .hero-grid{object-position:71% center;opacity:.72}
   .hero-logo{top:64%;left:55%;width:min(45%,220px)}
 }
