@@ -3,10 +3,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import CopyCommand from "./CopyCommand.astro";
 import LandingHeader from "./LandingHeader.astro";
 import ArchitectureBlueprint from "./compact/ArchitectureBlueprint.astro";
+import DistroStack from "./compact/DistroStack.astro";
 import PixelHeroArt from "./compact/PixelHeroArt.astro";
 import ReferenceBodySections from "./compact/ReferenceBodySections.astro";
 import TechRail from "./compact/TechRail.astro";
-import { siDocker, siPodman, siUbuntu } from "simple-icons";
+import { siDocker, siPodman } from "simple-icons";
 import { podmanInstallCommand, repositoryUrl, type Locale } from "../lib/site";
 
 interface Props { locale?: Locale }
@@ -52,7 +53,7 @@ const copy = {
   },
 }[locale];
 
-const badgeIcons = [siUbuntu, siPodman, siDocker];
+const badgeIcons = [null, siPodman, siDocker] as const;
 ---
 <BaseLayout title={copy.title} description={copy.description} locale={locale} path={path} localizedAlternates>
   <LandingHeader {locale} />
@@ -72,7 +73,9 @@ const badgeIcons = [siUbuntu, siPodman, siDocker];
 
           <div class="runtime-badges">
             {copy.badges.map((label,index) => {
+              if (index === 0) return <span class="distro-badge"><DistroStack /><span>{label}</span></span>;
               const icon = badgeIcons[index];
+              if (!icon) return null;
               return <span style={`--brand:#${icon.hex}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path}/></svg>{label}</span>;
             })}
           </div>
@@ -94,9 +97,9 @@ const badgeIcons = [siUbuntu, siPodman, siDocker];
 </BaseLayout>
 
 <style>
-:global(main){background:#fff}.hero-shell{background:#080808;color:#f5f5f5}.hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(23rem,.92fr);width:min(100%,var(--page-width));margin:0 auto}.hero-copy{padding:clamp(3.5rem,7vw,6rem) clamp(1rem,3vw,2.4rem) 3.2rem}.eyebrow,.install-head span{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}.hero .eyebrow{margin:0;color:#bdbdbd}.hero h1{max-width:12ch;margin:.85rem 0 1rem;color:#fff;font-family:var(--font-display);font-size:clamp(3.25rem,6vw,5.8rem);font-weight:680;line-height:.96;letter-spacing:-.048em;text-wrap:balance}.intro{max-width:43rem;margin:0;color:#c0c0c0;font-size:clamp(1.03rem,1.35vw,1.17rem);line-height:1.62}.hero-install{max-width:49rem;margin-top:1.45rem;padding:.8rem;border:1px solid #555;background:#0f0f0f}.install-head{display:flex;justify-content:space-between;gap:1rem;padding:.05rem .08rem .62rem;color:#aaa}.install-head small{color:#858585;font-family:var(--font-mono);font-size:.68rem}.hero-install :global(.command-box){border-color:#4d4d4d!important;background:#0b0b0b!important;color:#f5f5f5!important}.runtime-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.85rem}.runtime-badges span{display:flex;align-items:center;gap:.4rem;padding:.38rem .55rem;border:1px solid #3a3a3a;background:#0e0e0e;color:#c6c6c6;font-size:.76rem}.runtime-badges svg{width:1rem;height:1rem;fill:var(--brand)}.actions{display:flex;gap:.65rem;margin-top:1rem}.actions a{display:inline-flex;align-items:center;min-height:2.55rem;padding:.62rem .85rem;border:1px solid #555;color:#f5f5f5;font-size:.84rem;font-weight:640;text-decoration:none}.actions a.primary{background:#f5f5f5;color:#080808}.ecosystem-rail{position:relative;z-index:15;width:100%;height:104px;background:#fff}
-@media(max-width:1100px){.ecosystem-rail{height:172px}}
+:global(main){background:#fff}.hero-shell{background:#080808;color:#f5f5f5}.hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(23rem,.92fr);width:min(100%,var(--page-width));margin:0 auto}.hero-copy{padding:clamp(3.5rem,7vw,6rem) clamp(1rem,3vw,2.4rem) 3.2rem}.eyebrow,.install-head span{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}.hero .eyebrow{margin:0;color:#bdbdbd}.hero h1{max-width:12ch;margin:.85rem 0 1rem;color:#fff;font-family:var(--font-display);font-size:clamp(3.25rem,6vw,5.8rem);font-weight:680;line-height:.96;letter-spacing:-.048em;text-wrap:balance}.intro{max-width:43rem;margin:0;color:#c0c0c0;font-size:clamp(1.03rem,1.35vw,1.17rem);line-height:1.62}.hero-install{max-width:49rem;margin-top:1.45rem;padding:.8rem;border:1px solid #555;background:#0f0f0f}.install-head{display:flex;justify-content:space-between;gap:1rem;padding:.05rem .08rem .62rem;color:#aaa}.install-head small{color:#858585;font-family:var(--font-mono);font-size:.68rem}.hero-install :global(.command-box){border-color:#4d4d4d!important;background:#0b0b0b!important;color:#f5f5f5!important}.runtime-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.85rem}.runtime-badges>span{display:flex;align-items:center;gap:.4rem;padding:.38rem .55rem;border:1px solid #3a3a3a;background:#0e0e0e;color:#c6c6c6;font-size:.76rem}.runtime-badges>span>svg{width:1rem;height:1rem;fill:var(--brand)}.actions{display:flex;gap:.65rem;margin-top:1rem}.actions a{display:inline-flex;align-items:center;min-height:2.55rem;padding:.62rem .85rem;border:1px solid #555;color:#f5f5f5;font-size:.84rem;font-weight:640;text-decoration:none}.actions a.primary{background:#f5f5f5;color:#080808}.ecosystem-rail{position:relative;z-index:15;width:100%;height:74px;background:#fff}
+@media(max-width:1100px){.ecosystem-rail{height:132px}}
 @media(max-width:900px){.hero{grid-template-columns:1fr}.hero-copy{padding-bottom:2rem}}
-@media(max-width:650px){.ecosystem-rail{height:170px}}
-@media(max-width:560px){.hero h1{font-size:clamp(2.8rem,13vw,4rem)}.hero-copy{padding-inline:.75rem}.install-head{display:grid;gap:.2rem}.runtime-badges{display:grid}.runtime-badges span{width:max-content;max-width:100%}.actions{flex-wrap:wrap}}
+@media(max-width:650px){.ecosystem-rail{height:126px}}
+@media(max-width:560px){.hero h1{font-size:clamp(2.8rem,13vw,4rem)}.hero-copy{padding-inline:.75rem}.install-head{display:grid;gap:.2rem}.runtime-badges{display:grid}.runtime-badges>span{width:max-content;max-width:100%}.actions{flex-wrap:wrap}}
 </style>

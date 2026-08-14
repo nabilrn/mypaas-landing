@@ -1,5 +1,7 @@
 ---
-import { siCaddy, siCloudflare, siDocker, siGithub, siLinux, siPodman, siPostgresql, siUbuntu } from "simple-icons";
+import { siCaddy, siCloudflare, siDocker, siGithub, siLinux, siPodman, siPostgresql } from "simple-icons";
+import AgentRobotIcon from "./AgentRobotIcon.astro";
+import DistroStack from "./DistroStack.astro";
 const items = [
   ["GitHub", siGithub],
   ["Cloudflare", siCloudflare],
@@ -8,7 +10,6 @@ const items = [
   ["Caddy", siCaddy],
   ["PostgreSQL", siPostgresql],
   ["Linux", siLinux],
-  ["Ubuntu", siUbuntu],
 ] as const;
 ---
 <div class="integration-strip" aria-label="MyPaaS integrations and runtime ecosystem">
@@ -16,15 +17,16 @@ const items = [
   <div class="logo-row">
     {items.map(([name, icon]) => (
       <div class="logo-tile" style={`--brand:#${icon.hex}`} title={name} aria-label={name}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg>
+        <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg>
         <span>{name}</span>
       </div>
     ))}
+    <div class="logo-tile distro-tile" title="Ubuntu and Debian" aria-label="Ubuntu and Debian">
+      <DistroStack compact />
+      <span>Ubuntu / Debian</span>
+    </div>
     <div class="logo-tile mcp" title="Model Context Protocol" aria-label="Model Context Protocol">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 3v3M9.5 3h5M6.5 8.5h11a2.5 2.5 0 0 1 2.5 2.5v7a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 18v-7a2.5 2.5 0 0 1 2.5-2.5Z"/>
-        <circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M9 17h6M2.5 12.5H4m16 0h1.5"/>
-      </svg>
+      <AgentRobotIcon size={24} strokeWidth={1.5} />
       <span>MCP</span>
     </div>
   </div>
@@ -38,14 +40,14 @@ const items = [
   grid-template-columns:minmax(15rem,.72fr) minmax(0,2.65fr);
   gap:1rem;
   width:min(calc(100vw - 56px),86.5rem);
-  margin:-36px 0 0 50%;
+  margin:-49px 0 0 50%;
   padding:.82rem 1rem;
   transform:translateX(-50%);
   align-items:center;
   border:1px solid #d6d6d6;
   border-radius:16px;
   background:#fff;
-  box-shadow:0 12px 28px rgb(0 0 0 / .1);
+  box-shadow:none;
 }
 .integration-strip>p{max-width:16.5rem;margin:0;color:#262626;font-family:var(--font-sans);font-size:.86rem;line-height:1.42}
 .logo-row{display:grid;grid-template-columns:repeat(9,minmax(4.35rem,1fr));gap:.46rem}
@@ -60,19 +62,19 @@ const items = [
   border:1px solid #dedede;
   border-radius:10px;
   background:#fff;
-  box-shadow:inset 0 1px 0 rgb(255 255 255 / .8);
+  box-shadow:none;
 }
-.logo-tile svg{width:1.7rem;height:1.7rem;fill:var(--brand)}
+.logo-tile .brand-mark{width:24px;height:24px;fill:var(--brand)}
 .logo-tile span{max-width:100%;overflow:hidden;color:#111;font-family:var(--font-sans);font-size:.68rem;font-weight:650;text-overflow:ellipsis;white-space:nowrap}
-.logo-tile.mcp svg{fill:none;stroke:#181818;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+.logo-tile.mcp{color:#181818}.distro-tile span{font-size:.61rem}
 
 @media(max-width:1100px){
-  .integration-strip{grid-template-columns:1fr;width:min(calc(100vw - 36px),62rem);margin-top:-30px;padding:.8rem}
+  .integration-strip{grid-template-columns:1fr;width:min(calc(100vw - 36px),62rem);margin-top:-54px;padding:.8rem}
   .integration-strip>p{max-width:38rem}
   .logo-row{grid-template-columns:repeat(5,1fr)}
 }
 @media(max-width:650px){
-  .integration-strip{width:calc(100vw - 24px);margin-top:-22px;padding:.72rem;border-radius:14px}
+  .integration-strip{width:calc(100vw - 24px);margin-top:-46px;padding:.72rem;border-radius:14px}
   .logo-row{display:flex;overflow-x:auto;padding-bottom:.2rem;scrollbar-width:thin}
   .logo-tile{flex:0 0 5.1rem;min-height:4.3rem}
   .integration-strip>p{font-size:.82rem}
