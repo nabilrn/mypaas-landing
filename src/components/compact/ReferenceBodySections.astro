@@ -1,0 +1,115 @@
+---
+import { siGithub } from "simple-icons";
+import { repositoryUrl } from "../../lib/site";
+
+const whyItems = [
+  { title: "Self-hosted", body: ["You own the server.", "You own the data.", "No vendor lock-in."], icon: "server" },
+  { title: "Integration-first", body: ["Built to work with the", "tools you already use", "and love."], icon: "puzzle" },
+  { title: "Single-server focused", body: ["Designed for one server", "to do one thing—really", "well."], icon: "cube" },
+  { title: "Logs and metrics built in", body: ["mypaas-statd gives you", "observability out of the", "box."], icon: "bars" },
+  { title: "GitHub + Cloudflare + MCP", body: ["Integrate code, delivery,", "and agent workflows", "seamlessly."], icon: "spark" },
+  { title: "Standard deployment paths", body: ["Docker by default.", "Podman optional.", "No surprises."], icon: "terminal" },
+] as const;
+
+const steps = [
+  { n: "1", title: "Connect GitHub", body: "Link your repositories securely." },
+  { n: "2", title: "Inspect and configure", body: "Review apps and set environment, build, and domain options." },
+  { n: "3", title: "Deploy", body: "MyPaaS builds, configures, and deploys to your server." },
+  { n: "4", title: "Operate", body: "Monitor logs and metrics, manage updates, and keep shipping." },
+] as const;
+---
+
+<section class="why-section reference-panel" id="features" aria-labelledby="why-heading">
+  <header class="panel-heading">
+    <svg class="heading-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1v22M1 12h22M4.2 4.2l15.6 15.6M19.8 4.2 4.2 19.8"/></svg>
+    <h2 id="why-heading">WHY MYPAAS</h2>
+  </header>
+
+  <div class="why-grid">
+    {whyItems.map((item) => (
+      <article class="why-card">
+        <div class="why-title-row">
+          {item.icon === "server" && <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="24" height="6" rx="2"/><rect x="4" y="13" width="24" height="6" rx="2"/><rect x="4" y="21" width="24" height="6" rx="2"/><circle cx="9" cy="8" r="1"/><circle cx="9" cy="16" r="1"/><circle cx="9" cy="24" r="1"/></svg>}
+          {item.icon === "puzzle" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4h6v5a4 4 0 1 1 5 5h5v6h-5a4 4 0 1 1-5 5v3h-6v-5a4 4 0 1 1-5-5H4v-6h5a4 4 0 1 1 3-3V4Z"/></svg>}
+          {item.icon === "cube" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="m16 3 11 6v14l-11 6-11-6V9l11-6Zm0 0v13m11-7-11 7L5 9m11 7v13"/></svg>}
+          {item.icon === "bars" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 27h24M6 27V17h5v10m4 0V8h5v19m4 0V13h5v14"/></svg>}
+          {item.icon === "spark" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2v28M2 16h28M5.5 5.5l21 21M26.5 5.5l-21 21"/></svg>}
+          {item.icon === "terminal" && <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="22" rx="2"/><path d="m9 12 4 4-4 4m7 1h7"/></svg>}
+          <h3>{item.title}</h3>
+        </div>
+        <p>{item.body.map((line) => <>{line}<br /></>)}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<section class="how-section reference-panel" id="how-it-works" aria-labelledby="how-heading">
+  <header class="panel-heading">
+    <svg class="heading-bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20v-7h3v7m3 0V5h3v15m3 0v-10h3v10"/></svg>
+    <h2 id="how-heading">HOW IT WORKS</h2>
+  </header>
+
+  <div class="steps-grid">
+    {steps.map((step, index) => (
+      <article class="step-card">
+        <div class="step-head"><span>{step.n}</span><h3>{step.title}</h3></div>
+        <div class="shot-placeholder" role="img" aria-label={`${step.title} screenshot placeholder`}>
+          <svg viewBox="0 0 40 32" aria-hidden="true"><path d="M4 27h32L27 15l-6 7-6-10L4 27Zm23-18 2-3 2 3 3 2-3 2-2 3-2-3-3-2 3-2Z"/></svg>
+          <strong>Screenshot<br/>placeholder</strong>
+        </div>
+        <p>{step.body}</p>
+        {index < steps.length - 1 && <span class="step-connector" aria-hidden="true"><i></i></span>}
+      </article>
+    ))}
+  </div>
+</section>
+
+<footer class="reference-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="/brand/logowithtext_white.png" alt="MyPaaS" />
+      <p>Self-hosted Platform as a Service<br/>for Ubuntu and Linux servers.</p>
+    </div>
+
+    <nav class="footer-column" aria-label="Product links">
+      <strong>PRODUCT</strong>
+      <a href="#features">Features</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#integrations">Integrations</a>
+    </nav>
+
+    <nav class="footer-column" aria-label="Resource links">
+      <strong>RESOURCES</strong>
+      <a href="/docs/">Docs</a>
+      <a href="/docs/">Guides</a>
+      <a href={`${repositoryUrl}/releases`} target="_blank" rel="noreferrer">Changelog</a>
+    </nav>
+
+    <nav class="footer-column" aria-label="Community links">
+      <strong>COMMUNITY</strong>
+      <a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a>
+      <a href={`${repositoryUrl}/discussions`} target="_blank" rel="noreferrer">Discussions</a>
+      <a href="/docs/">MCP Registry</a>
+    </nav>
+
+    <div class="github-card">
+      <p>Open source. Community driven.</p>
+      <a href={repositoryUrl} target="_blank" rel="noreferrer">
+        <svg class="starburst" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1v22M1 12h22M4.2 4.2l15.6 15.6M19.8 4.2 4.2 19.8"/></svg>
+        <span>Star on GitHub</span>
+        <span class="github-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg> GitHub</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+:global(body){background:#f7f7f5}
+.reference-panel{width:min(calc(100% - 36px),1368px);margin:0 auto 12px;padding:25px 27px 24px;border:1px solid #deded9;border-radius:16px;background:#fbfbf9;color:#111;box-shadow:0 1px 0 rgb(0 0 0 / .02)}
+.panel-heading{display:flex;align-items:center;gap:13px;margin-bottom:18px}.panel-heading h2{margin:0;font-family:"IBM Plex Mono",var(--font-mono);font-size:16px;font-weight:700;line-height:1;letter-spacing:.08em}.panel-heading svg{width:24px;height:24px;fill:none;stroke:#101010;stroke-width:1.8;stroke-linecap:square;stroke-linejoin:miter}.panel-heading .heading-bars{width:22px;height:22px}
+.why-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:17px}.why-card{min-width:0;min-height:163px;padding:20px 19px 18px;border:1px solid #d9d9d5;border-radius:10px;background:#fdfdfc}.why-title-row{display:flex;min-height:36px;align-items:center;gap:13px}.why-title-row svg{width:32px;height:32px;flex:none;fill:none;stroke:#111;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}.why-title-row h3{margin:0;font-family:"Instrument Sans Variable",var(--font-sans);font-size:13px;font-weight:700;line-height:1.25}.why-card p{margin:19px 0 0;color:#555;font-family:"Instrument Sans Variable",var(--font-sans);font-size:13px;line-height:1.4}
+.how-section{padding-bottom:22px}.steps-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:52px}.step-card{position:relative;min-width:0;min-height:190px;padding:12px 13px 15px;border:1px dashed #cdcdc8;border-radius:10px;background:#fdfdfc}.step-head{display:flex;align-items:center;gap:9px;margin-bottom:11px}.step-head>span{display:grid;width:28px;height:28px;flex:none;border-radius:50%;background:#070707;color:#fff;font-family:"Instrument Sans Variable",var(--font-sans);font-size:14px;font-weight:700;place-items:center}.step-head h3{margin:0;font-family:"Instrument Sans Variable",var(--font-sans);font-size:16px;font-weight:700;line-height:1.1}.shot-placeholder{display:grid;width:72%;min-height:90px;margin:0 auto 10px;place-content:center;justify-items:center;border:1px dashed #8f8f8a;background:#fafaf8;color:#555;text-align:center}.shot-placeholder svg{width:35px;height:28px;margin-bottom:4px;fill:none;stroke:#8a8a85;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.shot-placeholder strong{font-family:"IBM Plex Mono",var(--font-mono);font-size:10px;font-weight:500;line-height:1.08}.step-card>p{max-width:92%;margin:0 auto;color:#555;text-align:center;font-family:"Instrument Sans Variable",var(--font-sans);font-size:12.5px;line-height:1.35}.step-connector{position:absolute;top:50%;left:calc(100% + 1px);width:52px;height:1px;border-top:1px dashed #aaa}.step-connector::after{position:absolute;top:-4px;right:0;width:7px;height:7px;border-top:1.5px solid #111;border-right:1.5px solid #111;transform:rotate(45deg);content:""}
+.reference-footer{width:100%;margin-top:0;background:#07080b;color:#fff}.footer-inner{display:grid;grid-template-columns:2fr .8fr .9fr 1fr 1.65fr;gap:48px;width:min(calc(100% - 72px),1320px);margin:0 auto;padding:27px 0 26px;align-items:start}.footer-brand img{width:136px;height:auto}.footer-brand p{margin:10px 0 0;color:#b8bac1;font-family:"Instrument Sans Variable",var(--font-sans);font-size:12.5px;line-height:1.45}.footer-column{display:grid;align-content:start;gap:4px}.footer-column strong{margin-bottom:4px;color:#fff;font-family:"Instrument Sans Variable",var(--font-sans);font-size:11px;font-weight:700}.footer-column a{color:#bcbec4;font-family:"Instrument Sans Variable",var(--font-sans);font-size:12px;line-height:1.25;text-decoration:none}.footer-column a:hover{color:#fff}.github-card{padding:15px 18px 13px;border:1px solid #3a3d45;border-radius:7px;background:#0c0d11}.github-card>p{margin:0 0 12px;color:#d7d8dc;font-family:"Instrument Sans Variable",var(--font-sans);font-size:12px}.github-card>a{display:flex;align-items:center;gap:10px;color:#fff;font-family:"Instrument Sans Variable",var(--font-sans);font-size:12px;font-weight:650;text-decoration:none}.starburst{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.5}.github-badge{display:inline-flex;margin-left:auto;align-items:center;gap:5px;padding:5px 8px;border:1px solid #343741;border-radius:6px;color:#bfc1c7;font-size:10.5px}.github-badge svg{width:12px;height:12px;fill:currentColor}
+@media(max-width:1100px){.why-grid{grid-template-columns:repeat(3,1fr)}.steps-grid{grid-template-columns:1fr 1fr;gap:16px}.step-connector{display:none}.footer-inner{grid-template-columns:1.6fr repeat(3,1fr);gap:28px}.github-card{grid-column:1/-1;max-width:360px}}
+@media(max-width:680px){.reference-panel{width:calc(100% - 20px);padding:20px 15px}.why-grid,.steps-grid{grid-template-columns:1fr}.why-card{min-height:0}.shot-placeholder{width:82%}.footer-inner{grid-template-columns:1fr 1fr;width:calc(100% - 32px);gap:24px;padding-block:24px}.footer-brand,.github-card{grid-column:1/-1}.github-card{max-width:none}}
+</style>
