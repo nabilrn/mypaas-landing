@@ -2,5 +2,5 @@
 import ProductFigure from "./ProductFigure.astro";
 import shot from "../../../mypaas-dashboard-screenshots/2026-08-13T14-22-46-474Z-focused/desktop-dark-02-project-logs.png";
 ---
-<div><ProductFigure src={shot.src} alt="MyPaaS project logs" label="Project logs" /></div>
-<style>div{width:min(calc(100% - 2rem),76rem);margin:0 auto}</style>
+<div class="logs-proof"><ProductFigure src={shot.src} alt="MyPaaS project logs showing runtime output" label="PROJECT / LOGS" detail="REAL PRODUCT UI · DESKTOP DARK" /></div>
+<style>.logs-proof{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto clamp(5rem,9vw,7rem)}@media(max-width:600px){.logs-proof{width:min(calc(100% - 1.25rem),var(--page-width));margin-bottom:4.5rem}}</style>
