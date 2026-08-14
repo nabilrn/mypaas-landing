@@ -1,107 +1,44 @@
 ---
 import { siCaddy, siCloudflare, siDocker, siGithub, siGo, siLinux, siPostgresql } from "simple-icons";
-const icon = (path: string) => path;
 ---
 <section class="blueprint" aria-labelledby="architecture-title">
   <div class="blueprint-head">
     <div>
       <span class="eyebrow">ARCHITECTURE / SINGLE HOST</span>
-      <h2 id="architecture-title">GitHub in. Cloudflare out.</h2>
+      <h2 id="architecture-title">What runs on your server.</h2>
     </div>
-    <p>GitHub supplies source, OAuth, and deployment webhooks. Cloudflare Tunnel and Caddy publish the dashboard and project routes without handing over your Linux host.</p>
+    <p>MyPaaS is a focused control plane on one Linux host. GitHub feeds deployments, Cloudflare + Caddy publish traffic, and the Go API controls runtime state, routing, telemetry, databases, and automation.</p>
   </div>
 
-  <div class="integration-paths" aria-label="First-class integrations">
-    <article class="integration github" style={`--brand:#${siGithub.hex}`}>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path} /></svg>
-      <div><span>SOURCE + AUTOMATION</span><strong>GitHub</strong><small>repository · OAuth · webhooks</small></div>
-    </article>
-    <div class="integration-wire" aria-hidden="true"><i></i><i></i><i></i></div>
-    <article class="integration cloudflare" style={`--brand:#${siCloudflare.hex}`}>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siCloudflare.path} /></svg>
-      <div><span>PUBLIC EDGE</span><strong>Cloudflare</strong><small>Tunnel · TLS · analytics optional</small></div>
-    </article>
-  </div>
-
-  <div class="diagram" role="img" aria-label="MyPaaS architecture: Internet through Cloudflare Tunnel and Caddy to dashboard, API, containers, and static releases. The Go API connects to PostgreSQL, Docker-compatible runtime, and mypaas-statd on the Linux host.">
-    <div class="lane ingress">
-      <div class="node icon-node cloudflare-node" style={`--brand:#${siCloudflare.hex}`}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon(siCloudflare.path)} /></svg>
-        <span>Cloudflare Tunnel</span>
-      </div>
-      <div class="wire horizontal"><i></i></div>
-      <div class="node icon-node caddy-node" style={`--brand:#${siCaddy.hex}`}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon(siCaddy.path)} /></svg>
-        <span>Caddy</span>
-      </div>
+  <div class="diagram" role="img" aria-label="MyPaaS single-host architecture with GitHub source, Cloudflare and Caddy ingress, Go API control plane, PostgreSQL state, Docker-compatible runtime, mypaas-statd, containers, static releases, and CLI API MCP automation surfaces.">
+    <div class="external-row">
+      <div class="node external" style={`--brand:#${siGithub.hex}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg><div><span>SOURCE</span><strong>GitHub</strong><small>OAuth · repository · webhooks</small></div></div>
+      <div class="wire-label">deploy</div>
+      <div class="node external" style={`--brand:#${siCloudflare.hex}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siCloudflare.path}/></svg><div><span>PUBLIC EDGE</span><strong>Cloudflare</strong><small>Tunnel · TLS · optional analytics</small></div></div>
     </div>
 
-    <div class="bus" aria-hidden="true"><i></i><i></i><i></i></div>
-
-    <div class="lane control">
-      <div class="node panel">
-        <span class="node-kicker">UI</span>
-        <strong>Dashboard</strong>
-        <small>SvelteKit operator surface</small>
-      </div>
-      <div class="node panel primary">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon(siGo.path)} /></svg>
-        <span class="node-kicker">CONTROL</span>
-        <strong>Go API</strong>
-        <small>deploy · route · recover · automate</small>
-      </div>
-      <div class="node panel postgres" style={`--brand:#${siPostgresql.hex}`}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon(siPostgresql.path)} /></svg>
-        <span class="node-kicker">STATE</span>
-        <strong>PostgreSQL</strong>
-        <small>platform + optional shared DB</small>
-      </div>
+    <div class="control-grid">
+      <div class="node panel"><span>UI</span><strong>Dashboard</strong><small>SvelteKit operator interface</small></div>
+      <div class="node panel primary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGo.path}/></svg><span>CONTROL</span><strong>Go API</strong><small>deploy · route · recover · automate</small></div>
+      <div class="node panel" style={`--brand:#${siPostgresql.hex}`}><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d={siPostgresql.path}/></svg><span>STATE</span><strong>PostgreSQL</strong><small>platform state + optional shared DB</small></div>
+      <div class="node automation"><span>AUTOMATION SURFACES</span><strong>CLI · API · MCP</strong><small>scripts, operators, and MCP-compatible agents use the same platform API</small></div>
+      <div class="node ingress" style={`--brand:#${siCaddy.hex}`}><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d={siCaddy.path}/></svg><span>ROUTING</span><strong>Caddy</strong><small>dashboard · API · project routes · static files</small></div>
     </div>
 
     <div class="host-shell">
-      <div class="host-title">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon(siLinux.path)} /></svg>
-        <div><span>LINUX HOST</span><strong>single VM / bare-metal host</strong></div>
-      </div>
-
+      <div class="host-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siLinux.path}/></svg><div><span>LINUX HOST</span><strong>single VM / bare metal</strong></div></div>
       <div class="runtime-grid">
-        <div class="runtime-box docker" style={`--brand:#${siDocker.hex}`}>
-          <div class="runtime-title">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon(siDocker.path)} /></svg>
-            <strong>Docker-compatible runtime</strong>
-          </div>
-          <p>Docker Engine or rootful Podman through the same command/socket contract.</p>
-        </div>
-        <div class="runtime-box statd">
-          <span class="node-kicker">HOST NATIVE</span>
-          <strong>mypaas-statd</strong>
-          <p>systemd + Unix socket · cgroup v2 telemetry</p>
-        </div>
-        <div class="runtime-box project">
-          <span class="node-kicker">PROJECT OUTPUT</span>
-          <strong>Containers</strong>
-          <p>Dockerfile · Compose · public OCI image</p>
-        </div>
-        <div class="runtime-box project">
-          <span class="node-kicker">PROJECT OUTPUT</span>
-          <strong>Static release</strong>
-          <p>Atomic files served directly by Caddy</p>
-        </div>
+        <div class="runtime-box" style={`--brand:#${siDocker.hex}`}><div class="runtime-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={siDocker.path}/></svg><strong>Docker-compatible runtime</strong></div><p>Docker Engine or rootful Podman through the same command/socket contract.</p></div>
+        <div class="runtime-box"><span>HOST NATIVE</span><strong>mypaas-statd</strong><p>systemd + Unix socket · cgroup v2 telemetry.</p></div>
+        <div class="runtime-box"><span>PROJECT OUTPUT</span><strong>Containers</strong><p>Dockerfile · Compose · public OCI image.</p></div>
+        <div class="runtime-box"><span>PROJECT OUTPUT</span><strong>Static release</strong><p>Atomic files served directly by Caddy.</p></div>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-.blueprint{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:2.5rem 0 2rem;border-top:1px solid var(--app-border-strong)}
-.blueprint-head{display:grid;grid-template-columns:1fr minmax(18rem,.7fr);gap:3rem;align-items:end;margin-bottom:1.2rem}.eyebrow,.node-kicker,.host-title span,.integration span{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--app-subtle)}h2{max-width:14ch;margin:.6rem 0 0;font-size:clamp(1.85rem,3.5vw,3rem);line-height:1.02;letter-spacing:-.035em}.blueprint-head p{margin:0;color:var(--app-muted);font-size:.82rem;line-height:1.55}
-.integration-paths{display:grid;grid-template-columns:minmax(0,1fr) 5rem minmax(0,1fr);align-items:stretch;margin-bottom:1rem}.integration{position:relative;display:flex;align-items:center;gap:.8rem;min-height:4.7rem;padding:.8rem 1rem;border:1px solid var(--app-border-strong);background:var(--app-surface)}.integration::before{position:absolute;top:-1px;left:-1px;width:7px;height:7px;background:var(--brand);box-shadow:8px 0 color-mix(in srgb,var(--brand) 45%,transparent);content:""}.integration svg{width:1.4rem;height:1.4rem;fill:var(--brand);flex:0 0 auto}.integration>div{display:grid;gap:.08rem}.integration strong{font-size:.86rem}.integration small{color:var(--app-muted);font-size:.66rem}.integration-wire{position:relative}.integration-wire::before{position:absolute;top:50%;left:.45rem;right:.45rem;height:1px;background:var(--app-border-strong);content:""}.integration-wire i{position:absolute;top:calc(50% - 3px);width:6px;height:6px;background:var(--app-ink)}.integration-wire i:first-child{left:.45rem}.integration-wire i:nth-child(2){left:calc(50% - 3px)}.integration-wire i:last-child{right:.45rem}
-.diagram{position:relative;padding:1rem;border:1px solid var(--app-border-strong);background-image:linear-gradient(var(--app-border) 1px,transparent 1px),linear-gradient(90deg,var(--app-border) 1px,transparent 1px);background-size:24px 24px;background-color:var(--app-bg)}.diagram::after{position:absolute;right:8px;bottom:8px;width:4px;height:4px;background:#ff9f1c;box-shadow:-8px 0 #2d8cff,-16px 0 #f48120;content:""}
-.lane{display:grid;align-items:stretch}.ingress{grid-template-columns:minmax(0,1fr) 5rem minmax(0,1fr);max-width:34rem;margin:0 auto 1rem}.control{grid-template-columns:repeat(3,1fr);gap:1px;background:var(--app-border-strong);border:1px solid var(--app-border-strong)}
-.node{background:var(--app-surface)}.icon-node{display:flex;align-items:center;justify-content:center;gap:.65rem;min-height:3.25rem;border:1px solid var(--app-border-strong);font-size:.74rem;font-weight:620}.icon-node svg,.panel svg,.host-title svg,.runtime-title svg{width:1.1rem;height:1.1rem;fill:currentColor;flex:0 0 auto}.icon-node svg,.postgres svg,.docker svg{fill:var(--brand)}.wire{position:relative}.wire:before{content:"";position:absolute;left:.6rem;right:.6rem;top:50%;height:1px;background:var(--app-border-strong)}.wire i{position:absolute;left:50%;top:calc(50% - 3px);width:6px;height:6px;background:var(--app-ink)}
-.bus{display:grid;grid-template-columns:repeat(3,1fr);height:1.2rem;margin:0 12%;position:relative}.bus:before{content:"";position:absolute;left:16.5%;right:16.5%;top:.55rem;height:1px;background:var(--app-border-strong)}.bus i{justify-self:center;width:1px;height:100%;background:var(--app-border-strong)}
-.panel{display:grid;align-content:start;gap:.3rem;min-height:7rem;padding:.85rem}.panel.primary{background:var(--app-ink);color:var(--app-bg)}.panel strong{font-size:.86rem}.panel small{color:var(--app-subtle);font-size:.67rem;line-height:1.4}.panel.primary small,.panel.primary .node-kicker{color:color-mix(in srgb,var(--app-bg) 65%,transparent)}
-.host-shell{margin-top:1rem;border:1px solid var(--app-border-strong);background:var(--app-surface)}.host-title{display:flex;align-items:center;gap:.65rem;padding:.7rem .85rem;border-bottom:1px solid var(--app-border-strong)}.host-title>div{display:grid;gap:.05rem}.host-title strong{font-size:.74rem;font-weight:600}.runtime-grid{display:grid;grid-template-columns:1.3fr .7fr 1fr 1fr;gap:1px;background:var(--app-border)}.runtime-box{min-height:7rem;padding:.8rem;background:var(--app-surface)}.runtime-title{display:flex;align-items:center;gap:.5rem}.runtime-box strong{display:block;margin:.25rem 0;font-size:.78rem}.runtime-box p{margin:.35rem 0 0;color:var(--app-muted);font-size:.66rem;line-height:1.45}
-@media(max-width:820px){.blueprint-head{grid-template-columns:1fr;gap:1rem}.integration-paths{grid-template-columns:1fr}.integration-wire{height:1.6rem}.integration-wire::before{top:.2rem;bottom:.2rem;left:50%;width:1px;height:auto}.integration-wire i{left:calc(50% - 3px)!important;right:auto!important}.integration-wire i:first-child{top:.2rem}.integration-wire i:nth-child(2){top:calc(50% - 3px)}.integration-wire i:last-child{top:auto;bottom:.2rem}.control,.runtime-grid{grid-template-columns:1fr 1fr}.ingress{max-width:none}.bus{display:none}.control{margin-top:.75rem}.panel{min-height:6rem}.runtime-grid>.runtime-box:first-child{grid-column:1/-1}}
-@media(max-width:520px){.blueprint{width:min(calc(100% - 1.25rem),var(--page-width));padding-top:2rem}.diagram{padding:.65rem}.ingress{grid-template-columns:1fr}.wire{height:1.4rem}.wire:before{left:50%;top:.15rem;bottom:.15rem;width:1px;height:auto}.wire i{top:calc(50% - 3px);left:calc(50% - 3px)}.control,.runtime-grid{grid-template-columns:1fr}.runtime-grid>.runtime-box:first-child{grid-column:auto}}
+.blueprint{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:3rem 0;border-top:1px solid var(--app-border-strong)}.blueprint-head{display:grid;grid-template-columns:1fr minmax(20rem,.72fr);gap:3.5rem;align-items:end;margin-bottom:1.5rem}.eyebrow,.node span,.host-title span,.runtime-box>span{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--app-subtle)}h2{max-width:15ch;margin:.65rem 0 0;color:var(--app-ink);font-family:var(--font-display);font-size:clamp(2.3rem,4vw,3.8rem);font-weight:560;line-height:.95;letter-spacing:-.035em}.blueprint-head p{margin:0;color:var(--app-muted);font-size:1rem;line-height:1.6}.diagram{position:relative;padding:1rem;border:1px solid var(--app-border-strong);background-color:var(--app-bg);background-image:linear-gradient(var(--app-border) 1px,transparent 1px),linear-gradient(90deg,var(--app-border) 1px,transparent 1px);background-size:28px 28px}.external-row{display:grid;grid-template-columns:minmax(0,1fr) 5rem minmax(0,1fr);align-items:center;margin-bottom:1rem}.node{background:var(--app-surface)}.external{display:flex;align-items:center;gap:.8rem;min-height:5rem;padding:.85rem 1rem;border:1px solid var(--app-border-strong)}.external svg,.panel svg,.host-title svg,.runtime-title svg{width:1.3rem;height:1.3rem;flex:0 0 auto}.external svg,.brand-icon,.runtime-title svg{fill:var(--brand)}.external>div{display:grid;gap:.08rem}.external strong{font-size:1rem}.external small{color:var(--app-muted);font-size:.78rem}.wire-label{position:relative;color:var(--app-subtle);font-family:var(--font-mono);font-size:.62rem;text-align:center;text-transform:uppercase}.wire-label::before,.wire-label::after{position:absolute;top:50%;width:1.1rem;height:1px;background:var(--app-border-strong);content:""}.wire-label::before{left:.2rem}.wire-label::after{right:.2rem}.control-grid{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:1px;border:1px solid var(--app-border-strong);background:var(--app-border-strong)}.panel,.automation,.ingress{min-height:8rem;padding:1rem}.panel{display:grid;align-content:start;gap:.32rem}.panel.primary{background:var(--app-ink);color:var(--app-bg)}.panel strong,.automation strong,.ingress strong{font-family:var(--font-display);font-size:1.3rem;font-weight:560}.panel small,.automation small,.ingress small{color:var(--app-muted);font-size:.8rem;line-height:1.45}.panel.primary span,.panel.primary small{color:color-mix(in srgb,var(--app-bg) 68%,transparent)}.automation{grid-column:1/3;display:grid;align-content:center;gap:.3rem}.ingress{display:grid;align-content:center;gap:.3rem}.ingress .brand-icon{width:1.25rem;height:1.25rem}.host-shell{margin-top:1rem;border:1px solid var(--app-border-strong);background:var(--app-surface)}.host-title{display:flex;align-items:center;gap:.7rem;padding:.8rem 1rem;border-bottom:1px solid var(--app-border-strong)}.host-title svg{fill:var(--app-ink)}.host-title>div{display:grid;gap:.08rem}.host-title strong{font-size:.9rem}.runtime-grid{display:grid;grid-template-columns:1.25fr .8fr 1fr 1fr;gap:1px;background:var(--app-border)}.runtime-box{min-height:8.3rem;padding:1rem;background:var(--app-surface)}.runtime-title{display:flex;align-items:center;gap:.55rem}.runtime-box strong{display:block;margin:.35rem 0;font-family:var(--font-display);font-size:1.1rem;font-weight:560}.runtime-box p{margin:.35rem 0 0;color:var(--app-muted);font-size:.8rem;line-height:1.48}
+@media(max-width:840px){.blueprint-head{grid-template-columns:1fr;gap:1rem}.control-grid,.runtime-grid{grid-template-columns:1fr 1fr}.automation{grid-column:1/-1}.ingress{grid-column:1/-1}.runtime-grid>.runtime-box:first-child{grid-column:1/-1}}
+@media(max-width:560px){.blueprint{width:min(calc(100% - 1.25rem),var(--page-width));padding:2.4rem 0}.diagram{padding:.65rem}.external-row{grid-template-columns:1fr}.wire-label{height:1.5rem;display:grid;place-items:center}.wire-label::before,.wire-label::after{display:none}.control-grid,.runtime-grid{grid-template-columns:1fr}.automation,.ingress,.runtime-grid>.runtime-box:first-child{grid-column:auto}.panel,.automation,.ingress,.runtime-box{min-height:auto}.blueprint-head p{font-size:.94rem}}
 </style>
