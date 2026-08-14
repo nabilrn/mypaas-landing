@@ -1,39 +1,20 @@
 ---
-interface Props {
-  src?: string;
-  alt?: string;
-  title: string;
-  source?: string;
-  note?: string;
-  placeholder?: string;
-}
+type ImageLike = string | { src: string; width?: number; height?: number };
+interface Props { src?: ImageLike; alt?: string; title: string; source?: string; note?: string; placeholder?: string }
 const { src, alt = "", title, source = "MyPaaS", note, placeholder } = Astro.props;
+const imageSrc = typeof src === "string" ? src : src?.src;
+const width = typeof src === "string" ? undefined : src?.width;
+const height = typeof src === "string" ? undefined : src?.height;
 ---
-<figure class:list={["doc-media", { placeholder: !src }]}>
-  <figcaption>
-    <span><strong>{title}</strong>{source && <small>{source}</small>}</span>
-    {note && <small>{note}</small>}
-  </figcaption>
-  {src ? (
-    <img {src} {alt} loading="lazy" decoding="async" />
-  ) : (
+<figure class:list={["doc-media", { placeholder: !imageSrc }]}>
+  <figcaption><span><strong>{title}</strong>{source && <small>{source}</small>}</span>{note && <small>{note}</small>}</figcaption>
+  {imageSrc ? <img src={imageSrc} {alt} {width} {height} loading="lazy" decoding="async" /> : (
     <div class="placeholder-body" role="img" aria-label={`${title} screenshot placeholder`}>
-      <div class="placeholder-frame" aria-hidden="true">
-        <span></span><span></span><span></span>
-        <div></div>
-      </div>
-      <strong>Screenshot placeholder</strong>
-      <p>{placeholder ?? "Replace with a verified screenshot before the final documentation capture pass."}</p>
+      <div class="placeholder-frame" aria-hidden="true"><i></i><i></i><i></i><div></div></div>
+      <strong>Screenshot placeholder</strong><p>{placeholder ?? "Replace with a verified screenshot during the documentation capture pass."}</p>
     </div>
   )}
 </figure>
 <style>
-.doc-media{margin:1.5rem 0;overflow:hidden;border:1px solid var(--app-border);border-radius:.5rem;background:var(--app-surface)}
-figcaption{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:.75rem .9rem;border-bottom:1px solid var(--app-border);color:var(--app-muted)}
-figcaption span{display:grid;gap:.15rem}figcaption strong{color:var(--app-ink);font-size:.76rem;font-weight:600}figcaption small{color:var(--app-subtle);font-family:var(--font-mono);font-size:.62rem}
-img{display:block;width:100%;height:auto}.placeholder-body{display:grid;place-items:center;min-height:18rem;padding:2rem;text-align:center;background:linear-gradient(var(--app-border) 1px,transparent 1px),linear-gradient(90deg,var(--app-border) 1px,transparent 1px);background-size:32px 32px}
-.placeholder-body>strong{margin-top:1.1rem;color:var(--app-ink);font-size:.85rem}.placeholder-body p{max-width:34rem;margin:.35rem 0 0;color:var(--app-muted);font-size:.78rem;line-height:1.6}
-.placeholder-frame{display:grid;grid-template-columns:repeat(3,.4rem) 1fr;align-items:center;gap:.3rem;width:min(100%,28rem);height:10rem;padding:.7rem;border:1px solid var(--app-border-strong);border-radius:.4rem;background:var(--app-surface)}
-.placeholder-frame>span{width:.4rem;height:.4rem;border-radius:999px;background:var(--app-border-strong)}.placeholder-frame>div{grid-column:1/-1;align-self:stretch;margin-top:.2rem;border-top:1px solid var(--app-border);background:var(--app-surface-muted)}
-@media(max-width:640px){figcaption{display:grid}.placeholder-body{min-height:14rem}}
+.doc-media{margin:1.5rem 0;overflow:hidden;border:1px solid var(--app-border-strong);background:var(--app-surface);clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}figcaption{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:.7rem .85rem;border-bottom:1px solid var(--app-border);color:var(--app-muted)}figcaption span{display:grid;gap:.15rem}figcaption strong{color:var(--app-ink);font-size:.76rem;font-weight:600}figcaption small{color:var(--app-subtle);font-family:var(--font-mono);font-size:.61rem;letter-spacing:.03em}img{display:block;width:100%;height:auto}.placeholder-body{display:grid;place-items:center;min-height:17rem;padding:2rem;text-align:center;background-color:var(--app-surface-muted);background-image:url('/patterns/dither-25.svg')}.placeholder-body>strong{margin-top:1rem;color:var(--app-ink);font-size:.84rem}.placeholder-body p{max-width:34rem;margin:.35rem 0 0;color:var(--app-muted);font-size:.78rem;line-height:1.6}.placeholder-frame{display:grid;grid-template-columns:repeat(3,6px) 1fr;align-items:center;gap:5px;width:min(100%,28rem);height:9rem;padding:.7rem;border:1px solid var(--app-border-strong);background:var(--app-surface)}.placeholder-frame>i{width:6px;height:6px;background:var(--app-border-strong)}.placeholder-frame>div{grid-column:1/-1;align-self:stretch;margin-top:.2rem;border-top:1px solid var(--app-border);background:var(--app-surface-muted)}@media(max-width:640px){figcaption{display:grid}.placeholder-body{min-height:14rem}}
 </style>
