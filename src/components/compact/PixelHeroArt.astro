@@ -4,67 +4,100 @@
 </div>
 
 <style>
-/* Hero-only visual reconstruction against the approved desktop reference. */
+/* Figma Desktop - 1 (1440px): preserve the existing committed artwork assets,
+   but place the hero geometry from the design instead of approximating from a screenshot. */
+:global(.hero-shell){
+  background:#000002!important;
+  color:#fff!important;
+}
 :global(.hero){
   position:relative;
-  display:grid!important;
-  grid-template-columns:minmax(0,48%) minmax(0,52%)!important;
-  min-height:clamp(31.5rem,42vw,35.5rem)!important;
+  display:block!important;
+  width:min(100%,90rem)!important;
+  min-height:638px!important;
+  margin:0 auto!important;
   isolation:isolate;
   overflow:hidden;
 }
 :global(.hero-copy){
   position:relative;
   z-index:5;
-  align-self:start!important;
-  padding:3rem 1.9rem 1.9rem!important;
+  width:688px;
+  max-width:calc(100% - 2rem);
+  padding:56px 0 0 54px!important;
 }
 :global(.hero .eyebrow){
   margin:0!important;
-  color:#d0d0d0!important;
-  font-size:.68rem!important;
-  letter-spacing:.14em!important;
+  color:#fff!important;
+  font-family:"Intel One Mono","IBM Plex Mono",ui-monospace,monospace!important;
+  font-size:18px!important;
+  font-weight:400!important;
+  line-height:27px!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  white-space:nowrap;
 }
 :global(.hero h1){
-  max-width:10.6em!important;
-  margin:.8rem 0 .9rem!important;
+  width:634px!important;
+  max-width:100%!important;
+  margin:10px 0 0!important;
   color:#fff!important;
-  font-size:clamp(3.45rem,4.35vw,4rem)!important;
-  font-weight:680!important;
-  line-height:.95!important;
-  letter-spacing:-.043em!important;
-  text-wrap:balance;
+  font-family:"Inter",var(--font-display)!important;
+  font-size:60px!important;
+  font-weight:600!important;
+  line-height:68px!important;
+  letter-spacing:0!important;
+  text-wrap:wrap!important;
 }
 :global(.hero .intro){
-  max-width:35.5rem!important;
-  margin:0!important;
-  color:#c3c3c3!important;
-  font-size:clamp(.96rem,1.1vw,1.04rem)!important;
-  line-height:1.55!important;
+  width:502px!important;
+  max-width:100%!important;
+  margin:9px 0 0!important;
+  color:#fff!important;
+  font-family:"Inter",var(--font-sans)!important;
+  font-size:18px!important;
+  font-weight:400!important;
+  line-height:27px!important;
+  letter-spacing:-.03em!important;
 }
 :global(.hero-install){
-  width:min(100%,35.5rem)!important;
-  margin-top:1.15rem!important;
+  width:594.5px!important;
+  max-width:100%!important;
+  margin-top:28px!important;
   padding:0!important;
   border:0!important;
   background:transparent!important;
 }
 :global(.hero .install-head),
+:global(.hero .runtime-badges),
 :global(.hero .actions){display:none!important}
-:global(.hero .runtime-badges){
-  display:flex!important;
-  flex-wrap:wrap!important;
-  gap:.5rem!important;
-  margin-top:.72rem!important;
+:global(.hero-install .command-box.hero){
+  width:594.5px!important;
+  max-width:100%!important;
+  height:87px!important;
+  min-height:87px!important;
+  overflow:hidden!important;
+  border:1px solid #d9d9d9!important;
+  background:#000002!important;
+  box-shadow:none!important;
+  clip-path:polygon(7px 0,calc(100% - 7px) 0,calc(100% - 7px) 7px,100% 7px,100% calc(100% - 7px),calc(100% - 7px) calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,7px calc(100% - 7px),0 calc(100% - 7px),0 7px,7px 7px)!important;
 }
-:global(.hero .runtime-badges span){
-  gap:.38rem!important;
-  min-height:2rem;
-  padding:.34rem .58rem!important;
-  border-color:#3c3c3c!important;
-  background:#0a0a0a!important;
-  color:#d0d0d0!important;
-  font-size:.69rem!important;
+:global(.hero-install .command-box.hero)::before{display:none!important}
+:global(.hero-install .command-meta),
+:global(.hero-install .command-box.hero > p){display:none!important}
+:global(.hero-install .command-box.hero pre){
+  width:100%!important;
+  min-height:87px!important;
+  margin:0!important;
+  overflow:hidden!important;
+  padding:10px 42px 10px 48px!important;
+  color:#fff!important;
+  font-family:"Inconsolata","IBM Plex Mono",ui-monospace,monospace!important;
+  font-size:19px!important;
+  font-weight:400!important;
+  line-height:27px!important;
+  letter-spacing:-.015em!important;
+  white-space:pre-wrap!important;
 }
 
 .hero-art{
@@ -72,7 +105,7 @@
   z-index:1;
   inset:0;
   overflow:hidden;
-  background:#050505;
+  background:#000002;
   pointer-events:none;
 }
 .hero-grid{
@@ -81,61 +114,64 @@
   inset:0;
   width:100%;
   height:100%;
-  object-fit:cover;
-  object-position:70% center;
-  opacity:.94;
-}
-.hero-art::before{
-  position:absolute;
-  z-index:2;
-  inset:0;
-  background:linear-gradient(90deg,#050505 0%,#050505 30%,rgb(5 5 5 / .98) 39%,rgb(5 5 5 / .78) 48%,rgb(5 5 5 / .18) 64%,transparent 79%);
-  content:"";
+  max-width:none;
+  object-fit:fill;
+  opacity:1;
 }
 .hero-logo{
   position:absolute;
   z-index:3;
-  top:49%;
-  left:75.4%;
-  width:min(21.5vw,19rem);
-  max-height:62%;
+  top:17.4%;
+  left:68.05%;
+  width:20.21%;
+  height:auto;
+  max-width:none;
   object-fit:contain;
-  transform:translate(-50%,-50%);
-  filter:drop-shadow(0 0 20px rgb(255 255 255 / .025));
 }
 .hero-art::after{
   position:absolute;
   z-index:2;
   inset:0;
-  background:linear-gradient(180deg,rgb(0 0 0 / .08),transparent 20% 78%,rgb(0 0 0 / .16));
+  background:linear-gradient(90deg,#000002 0%,#000002 35%,rgb(0 0 2 / .94) 43%,rgb(0 0 2 / .48) 50%,transparent 61%);
   content:"";
 }
+.hero-logo{z-index:4}
 
-@media(max-width:1200px){
-  :global(.hero){grid-template-columns:minmax(0,50%) minmax(0,50%)!important}
-  :global(.hero-copy){padding-inline:1.45rem!important}
-  :global(.hero h1){font-size:clamp(3.2rem,5vw,3.85rem)!important}
-  .hero-logo{left:76%;width:min(24vw,18rem)}
+@media(max-width:1100px){
+  :global(.hero){min-height:620px!important}
+  :global(.hero-copy){width:56%;padding-left:32px!important}
+  :global(.hero h1){font-size:52px!important;line-height:59px!important}
+  :global(.hero .intro){font-size:16px!important;line-height:25px!important}
+  :global(.hero-install){width:530px!important}
+  :global(.hero-install .command-box.hero){width:530px!important}
+  :global(.hero-install .command-box.hero pre){font-size:16px!important;line-height:24px!important}
+  .hero-logo{left:69%;width:22.5%}
 }
 
 @media(max-width:900px){
-  :global(.hero){grid-template-columns:1fr!important;min-height:auto!important;overflow:visible}
-  :global(.hero-copy){padding:2.8rem 1rem 2rem!important}
-  :global(.hero h1){max-width:11em!important;font-size:clamp(3rem,8vw,3.8rem)!important}
-  .hero-art{position:relative;grid-column:1/-1;grid-row:2;min-height:23rem}
-  .hero-grid{object-position:72% center}
-  .hero-logo{top:50%;left:64%;width:min(44vw,18rem);max-height:64%}
-  .hero-art::before{background:linear-gradient(90deg,#050505 0%,rgb(5 5 5 / .8) 24%,rgb(5 5 5 / .12) 58%,transparent 76%)}
+  :global(.hero){min-height:720px!important}
+  :global(.hero-copy){width:min(100%,640px);max-width:100%;padding:48px 32px 0!important}
+  :global(.hero .eyebrow){font-size:14px!important;line-height:22px!important}
+  :global(.hero h1){width:590px!important;margin-top:10px!important;font-size:48px!important;line-height:54px!important}
+  :global(.hero .intro){width:520px!important;margin-top:12px!important;font-size:16px!important;line-height:24px!important}
+  :global(.hero-install){width:520px!important;margin-top:24px!important}
+  :global(.hero-install .command-box.hero){width:520px!important}
+  :global(.hero-install .command-box.hero pre){font-size:15px!important;line-height:23px!important;padding-left:34px!important}
+  .hero-grid{object-fit:cover;object-position:68% center;opacity:.82}
+  .hero-art::after{background:linear-gradient(180deg,#000002 0%,rgb(0 0 2 / .96) 43%,rgb(0 0 2 / .3) 70%,transparent 100%)}
+  .hero-logo{top:54%;left:57%;width:min(34%,260px)}
 }
 
 @media(max-width:560px){
-  :global(.hero-copy){padding:2.35rem .75rem 1.7rem!important}
-  :global(.hero h1){max-width:10.4em!important;font-size:clamp(2.55rem,11.5vw,3.35rem)!important;line-height:.98!important}
-  :global(.hero .intro){font-size:.95rem!important}
-  :global(.hero .runtime-badges){display:grid!important}
-  :global(.hero .runtime-badges span){width:max-content;max-width:100%}
-  .hero-art{min-height:17.5rem}
-  .hero-grid{object-position:74% center}
-  .hero-logo{left:64%;width:min(55vw,15rem);max-height:64%}
+  :global(.hero){min-height:700px!important}
+  :global(.hero-copy){padding:38px 20px 0!important}
+  :global(.hero .eyebrow){font-size:12px!important;line-height:20px!important;white-space:normal}
+  :global(.hero h1){font-size:40px!important;line-height:45px!important}
+  :global(.hero .intro){font-size:15px!important;line-height:23px!important;letter-spacing:-.02em!important}
+  :global(.hero-install){width:100%!important;margin-top:22px!important}
+  :global(.hero-install .command-box.hero){width:100%!important;height:96px!important;min-height:96px!important}
+  :global(.hero-install .command-box.hero pre){min-height:96px!important;padding:11px 22px!important;font-size:13px!important;line-height:21px!important;overflow-wrap:anywhere!important}
+  .hero-grid{object-position:71% center;opacity:.72}
+  .hero-logo{top:61%;left:54%;width:min(48%,230px)}
 }
 </style>

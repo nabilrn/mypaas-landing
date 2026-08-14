@@ -1,32 +1,59 @@
 ---
 import SearchDialog from "./SearchDialog.astro";
+import { siGithub } from "simple-icons";
 import { localeMeta, locales, repositoryUrl, uiCopy, type Locale } from "../lib/site";
 const { locale = "en" } = Astro.props as { locale?: Locale };
 const copy = uiCopy[locale];
 const landing = ["/", "/id/", "/zh/"].includes(Astro.url.pathname);
 ---
 <header class:list={["site-header", { landing }]}>
-  <a class="brand" href={localeMeta[locale].path} aria-label={copy.home}><img src="/brand/logowithtext_black.png" alt="MyPaaS" /></a>
-  <nav aria-label={copy.navLabel}><a href="/docs/">{copy.docs}</a><a href="/docs/installation/">{copy.install}</a><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a></nav>
-  <div class="header-tools">
-    <button class="search-button" data-search-trigger aria-label={copy.searchOpen}>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
-      <span>{copy.search}</span>
-    </button>
-    <details class="language"><summary aria-label={copy.language}>{localeMeta[locale].short}</summary><div>{locales.map((item)=><a href={localeMeta[item].path} aria-current={item===locale?"page":undefined}>{localeMeta[item].short}</a>)}</div></details>
-    <button class="theme-toggle" type="button" data-theme-toggle aria-label={copy.themeDark}>
-      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v3M12 19v3M4.9 4.9 7 7M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"></path></svg>
-      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.4 8.4 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z"></path></svg>
-    </button>
-  </div>
+  {landing ? (
+    <>
+      <a class="landing-brand" href={localeMeta[locale].path} aria-label={copy.home}>
+        <img src="/brand/logowithtext_white.png" alt="MyPaaS" />
+      </a>
+      <nav class="landing-nav" aria-label={copy.navLabel}>
+        <a href="#features" data-scroll-target=".why-section">Features</a>
+        <a href="#architecture" data-scroll-target=".blueprint">Architecture</a>
+        <a href="#integrations" data-scroll-target=".integration-section">Integrations</a>
+        <a href="/docs/">Docs</a>
+        <a href={`${repositoryUrl}/releases`} target="_blank" rel="noreferrer">Changelog</a>
+      </nav>
+      <a class="github-button" href={repositoryUrl} target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg>
+        <span>View on Github</span>
+      </a>
+    </>
+  ) : (
+    <>
+      <a class="brand" href={localeMeta[locale].path} aria-label={copy.home}><img src="/brand/logowithtext_black.png" alt="MyPaaS" /></a>
+      <nav aria-label={copy.navLabel}><a href="/docs/">{copy.docs}</a><a href="/docs/installation/">{copy.install}</a><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a></nav>
+      <div class="header-tools">
+        <button class="search-button" data-search-trigger aria-label={copy.searchOpen}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+          <span>{copy.search}</span>
+        </button>
+        <details class="language"><summary aria-label={copy.language}>{localeMeta[locale].short}</summary><div>{locales.map((item)=><a href={localeMeta[item].path} aria-current={item===locale?"page":undefined}>{localeMeta[item].short}</a>)}</div></details>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label={copy.themeDark}>
+          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v3M12 19v3M4.9 4.9 7 7M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"></path></svg>
+          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.4 8.4 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z"></path></svg>
+        </button>
+      </div>
+    </>
+  )}
 </header>
 <SearchDialog {locale} />
 <script is:inline define:vars={{ darkLabel: copy.themeDark, lightLabel: copy.themeLight }}>
 (()=>{const button=document.querySelector('[data-theme-toggle]');if(!(button instanceof HTMLButtonElement))return;const sync=()=>{const dark=document.documentElement.classList.contains('dark');button.setAttribute('aria-label',dark?lightLabel:darkLabel);button.dataset.mode=dark?'dark':'light'};button.addEventListener('click',()=>{const dark=!document.documentElement.classList.contains('dark');document.documentElement.classList.toggle('dark',dark);localStorage.setItem('mypaas-theme',dark?'dark':'light');sync()});sync()})();
 </script>
+<script is:inline>
+(()=>{document.querySelectorAll('[data-scroll-target]').forEach((link)=>{if(!(link instanceof HTMLAnchorElement))return;link.addEventListener('click',(event)=>{const selector=link.dataset.scrollTarget;const target=selector?document.querySelector(selector):null;if(!(target instanceof HTMLElement))return;event.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'',link.hash)})})})();
+</script>
 <style>
 .site-header{position:relative;z-index:20;display:flex;min-height:4.4rem;align-items:center;gap:1.5rem;padding:0 max(1rem,calc((100% - var(--page-width))/2));border-bottom:1px solid var(--app-border);background:color-mix(in srgb,var(--app-bg) 94%,transparent)}.brand{margin-right:auto}.brand img{width:7.25rem;height:auto}:global(.dark) .brand img{filter:invert(1)}nav{display:flex;align-items:center;gap:1.35rem}.site-header a,.site-header button,.site-header summary{color:var(--app-muted);font-size:.86rem;font-weight:570;text-decoration:none}.site-header a:hover,.site-header button:hover,.site-header summary:hover{color:var(--app-ink)}.header-tools{display:flex;align-items:center;gap:.35rem}.search-button,.theme-toggle,.language summary{min-height:2.15rem;border:1px solid transparent;background:transparent;cursor:pointer}.search-button{display:flex;align-items:center;gap:.42rem;padding:0 .48rem}.search-button svg,.theme-toggle svg{width:1.05rem;height:1.05rem;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:square;stroke-linejoin:miter}.theme-toggle{position:relative;display:grid;width:2.15rem;padding:0;place-items:center}.theme-toggle .moon{display:none}.theme-toggle[data-mode="dark"] .sun{display:none}.theme-toggle[data-mode="dark"] .moon{display:block}.language{position:relative}.language summary{display:grid;padding:0 .48rem;place-items:center;list-style:none;cursor:pointer}.language summary::-webkit-details-marker{display:none}.language div{position:absolute;top:calc(100% + .45rem);right:0;display:grid;min-width:4.7rem;border:1px solid var(--app-border-strong);background:var(--app-surface)}.language div a{padding:.6rem .75rem;font-family:var(--font-mono);font-size:.72rem}.language div a[aria-current="page"]{background:var(--app-ink);color:var(--app-bg)}
-.site-header.landing{border-bottom-color:#252525;background:#050505}.site-header.landing .brand img{filter:invert(1)}.site-header.landing a,.site-header.landing button,.site-header.landing summary{color:#b8b8b8}.site-header.landing a:hover,.site-header.landing button:hover,.site-header.landing summary:hover{color:#fff}.site-header.landing .search-button,.site-header.landing .theme-toggle,.site-header.landing .language summary{border-color:#242424}.site-header.landing .language div{border-color:#333;background:#0c0c0c}.site-header.landing .language div a[aria-current="page"]{background:#f5f5f5;color:#080808}
-@media(max-width:720px){.site-header{gap:.6rem;min-height:3.95rem}.brand img{width:6.25rem}nav{gap:.8rem}nav a:nth-child(2){display:none}.search-button span{display:none}.header-tools{gap:.15rem}}
-@media(max-width:420px){nav a:first-child{display:none}.site-header{padding-inline:.75rem}}
+.site-header.landing{height:69px;min-height:69px;gap:0;padding-left:max(1rem,calc((100% - 90rem)/2 + 47px));padding-right:max(1rem,calc((100% - 90rem)/2 + 17px));border-bottom:0;background:#000002}.landing-brand{display:flex;width:130px;height:41px;align-items:center;flex:none}.landing-brand img{width:130px;height:41px;object-fit:contain}.landing-nav{position:absolute;left:50%;gap:35px;transform:translateX(-50%)}.site-header.landing .landing-nav a{color:#fff;font-family:"Instrument Sans Variable",var(--font-sans);font-size:14px;font-weight:400;line-height:27px;white-space:nowrap}.site-header.landing .landing-nav a:hover{color:#d9d9d9}.github-button{display:flex;width:163px;height:36px;margin-left:auto;align-items:center;justify-content:center;gap:10px;border:1px solid #f2f2f2;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);color:#fff!important;font-family:"Instrument Sans Variable",var(--font-sans);font-size:14px!important;font-weight:400!important;line-height:27px;white-space:nowrap}.github-button svg{width:20px;height:20px;fill:currentColor}.github-button:hover{background:#fff;color:#000002!important}
+@media(max-width:1100px){.landing-nav{gap:24px}.site-header.landing .landing-nav a{font-size:13px}.landing-nav a:nth-child(5){display:none}}
+@media(max-width:900px){.site-header.landing{padding-inline:1rem}.landing-brand{width:118px;height:37px}.landing-brand img{width:118px;height:37px}.landing-nav a:nth-child(1),.landing-nav a:nth-child(2),.landing-nav a:nth-child(3){display:none}.landing-nav{left:auto;right:190px;transform:none}.github-button{width:158px}}
+@media(max-width:720px){.site-header:not(.landing){gap:.6rem;min-height:3.95rem}.brand img{width:6.25rem}.site-header:not(.landing) nav{gap:.8rem}.site-header:not(.landing) nav a:nth-child(2){display:none}.search-button span{display:none}.header-tools{gap:.15rem}.landing-nav{display:none}.github-button{width:42px;height:36px}.github-button span{display:none}}
+@media(max-width:420px){.site-header:not(.landing) nav a:first-child{display:none}.site-header:not(.landing){padding-inline:.75rem}.site-header.landing{height:62px;min-height:62px;padding-inline:.75rem}.landing-brand{width:108px;height:34px}.landing-brand img{width:108px;height:34px}}
 </style>
