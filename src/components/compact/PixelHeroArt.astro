@@ -1,23 +1,143 @@
 <div class="hero-art" aria-hidden="true">
   <img class="hero-grid" src="/brand/hero/hero-grid.svg" alt="" />
   <img class="hero-logo" src="/brand/logoonly_white.png" alt="" />
-  <span class="micro source">SOURCE</span>
-  <span class="micro deploy">DEPLOY</span>
-  <span class="micro route">ROUTE</span>
 </div>
 
 <style>
-:global(.hero){position:relative;min-height:38rem;isolation:isolate}
-:global(.hero-copy){position:relative;z-index:5}
-:global(.hero-install){padding:0!important;border:0!important;background:transparent!important}
-:global(.hero .install-head),:global(.hero .actions){display:none!important}
-.hero-art{position:absolute;z-index:1;inset:0;overflow:hidden;background:#050505;pointer-events:none}
-.hero-grid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:74% center}
-.hero-logo{position:absolute;z-index:2;top:50%;left:76%;width:min(33vw,29rem);max-height:72%;object-fit:contain;transform:translate(-50%,-50%);filter:drop-shadow(0 0 30px rgb(255 255 255 / .045))}
-.hero-art::before{position:absolute;z-index:3;inset:0;background:linear-gradient(90deg,#050505 0%,#050505 34%,rgb(5 5 5 / .92) 43%,rgb(5 5 5 / .22) 63%,transparent 80%);content:""}
-.hero-art::after{position:absolute;z-index:3;right:0;bottom:0;width:44%;height:1px;background:rgb(255 255 255 / .34);box-shadow:0 -150px rgb(255 255 255 / .1);content:""}
-.micro{position:absolute;z-index:4;color:rgb(255 255 255 / .42);font-family:var(--font-mono);font-size:.56rem;letter-spacing:.12em;text-transform:uppercase}
-.source{top:17%;left:47%}.deploy{top:46%;right:5%}.route{bottom:9%;left:53%}
-@media(max-width:900px){:global(.hero){min-height:auto}.hero-art{position:relative;grid-column:1/-1;grid-row:2;min-height:27rem}.hero-grid{object-position:72% center}.hero-logo{left:62%;width:min(48vw,22rem);max-height:70%}.hero-art::before{background:linear-gradient(90deg,#050505 0%,rgb(5 5 5 / .58) 28%,transparent 58%)}.source{left:8%}.route{left:12%}}
-@media(max-width:560px){.hero-art{min-height:20rem}.hero-grid{object-position:74% center}.hero-logo{left:63%;width:min(58vw,17rem);max-height:68%}.micro{font-size:.5rem}}
+/*
+ * Hero-only fidelity pass.
+ * Keep the rest of the landing untouched while matching the approved reference:
+ * compact left copy, generous right artwork, official MyPaaS mark, and quiet pixel grid.
+ */
+:global(.hero){
+  position:relative;
+  display:grid!important;
+  grid-template-columns:minmax(0,47%) minmax(0,53%)!important;
+  min-height:34rem!important;
+  isolation:isolate;
+}
+:global(.hero-copy){
+  position:relative;
+  z-index:5;
+  padding:3.15rem 1.9rem 2.75rem!important;
+  align-self:center;
+}
+:global(.hero .eyebrow){
+  margin:0!important;
+  color:#c8c8c8!important;
+  font-size:.68rem!important;
+  letter-spacing:.13em!important;
+}
+:global(.hero h1){
+  max-width:15ch!important;
+  margin:.75rem 0 .85rem!important;
+  color:#fff!important;
+  font-size:clamp(3.25rem,4.45vw,4.75rem)!important;
+  font-weight:680!important;
+  line-height:.99!important;
+  letter-spacing:-.045em!important;
+  text-wrap:balance;
+}
+:global(.hero .intro){
+  max-width:35rem!important;
+  margin:0!important;
+  color:#c5c5c5!important;
+  font-size:clamp(.98rem,1.16vw,1.08rem)!important;
+  line-height:1.55!important;
+}
+:global(.hero-install){
+  max-width:35.5rem!important;
+  margin-top:1.15rem!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+:global(.hero .install-head),
+:global(.hero .actions){display:none!important}
+:global(.hero .runtime-badges){
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:.48rem!important;
+  margin-top:.72rem!important;
+}
+:global(.hero .runtime-badges span){
+  gap:.38rem!important;
+  min-height:2rem;
+  padding:.34rem .55rem!important;
+  border-color:#383838!important;
+  background:#0b0b0b!important;
+  color:#d2d2d2!important;
+  font-size:.69rem!important;
+}
+
+.hero-art{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  overflow:hidden;
+  background:#050505;
+  pointer-events:none;
+}
+.hero-grid{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:69% center;
+  opacity:.84;
+}
+.hero-logo{
+  position:absolute;
+  z-index:2;
+  top:50%;
+  left:76.2%;
+  width:min(25vw,23.5rem);
+  max-height:68%;
+  object-fit:contain;
+  transform:translate(-50%,-50%);
+  filter:drop-shadow(0 0 24px rgb(255 255 255 / .035));
+}
+.hero-art::before{
+  position:absolute;
+  z-index:3;
+  inset:0;
+  background:linear-gradient(90deg,#050505 0%,#050505 31%,rgb(5 5 5 / .96) 38%,rgb(5 5 5 / .7) 48%,rgb(5 5 5 / .14) 65%,transparent 82%);
+  content:"";
+}
+.hero-art::after{
+  position:absolute;
+  z-index:3;
+  inset:0;
+  background:radial-gradient(circle at 75% 50%,transparent 0 25%,rgb(0 0 0 / .04) 47%,rgb(0 0 0 / .2) 100%);
+  content:"";
+}
+
+@media(max-width:1100px){
+  :global(.hero){grid-template-columns:minmax(0,52%) minmax(0,48%)!important}
+  :global(.hero-copy){padding-inline:1.35rem!important}
+  :global(.hero h1){font-size:clamp(3rem,5vw,4.15rem)!important}
+  .hero-logo{left:76%;width:min(29vw,21rem)}
+}
+
+@media(max-width:900px){
+  :global(.hero){grid-template-columns:1fr!important;min-height:auto!important}
+  :global(.hero-copy){padding:3rem 1rem 2.2rem!important}
+  :global(.hero h1){max-width:13ch!important}
+  .hero-art{position:relative;grid-column:1/-1;grid-row:2;min-height:24rem}
+  .hero-grid{object-position:71% center}
+  .hero-logo{top:50%;left:63%;width:min(45vw,20rem);max-height:67%}
+  .hero-art::before{background:linear-gradient(90deg,#050505 0%,rgb(5 5 5 / .7) 24%,rgb(5 5 5 / .08) 58%,transparent 76%)}
+}
+
+@media(max-width:560px){
+  :global(.hero-copy){padding:2.5rem .75rem 1.8rem!important}
+  :global(.hero h1){max-width:12ch!important;font-size:clamp(2.65rem,12vw,3.55rem)!important;line-height:1!important}
+  :global(.hero .intro){font-size:.96rem!important}
+  :global(.hero .runtime-badges){display:grid!important}
+  :global(.hero .runtime-badges span){width:max-content;max-width:100%}
+  .hero-art{min-height:18rem}
+  .hero-grid{object-position:73% center}
+  .hero-logo{left:64%;width:min(57vw,16rem);max-height:66%}
+}
 </style>
