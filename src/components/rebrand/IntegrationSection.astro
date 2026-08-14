@@ -1,7 +1,21 @@
 ---
-const { copy } = Astro.props;
+import TechLabel from "../pixel/TechLabel.astro";
+const { copy, locale = "en" } = Astro.props;
+const labels = {
+  en: { keep: "You keep", connect: "MyPaaS connects" },
+  id: { keep: "Tetap milik Anda", connect: "MyPaaS menghubungkan" },
+  zh: { keep: "你保留", connect: "MyPaaS 连接" },
+} as const;
+const text = labels[locale as keyof typeof labels] ?? labels.en;
 ---
-<section id="integrations"><p class="label">{copy.ownershipLabel}</p><h2>{copy.ownershipTitle}</h2><p>{copy.ownershipBody}</p><div><article><strong>Portable core</strong><span>{copy.ownershipItems.join(" · ")}</span></article><article><strong>Integration edge</strong><span>{copy.integrationItems.join(" · ")}</span></article></div></section>
+<section id="ownership" class="ownership">
+  <div class="intro"><TechLabel label={copy.ownershipLabel} index="03" /><h2>{copy.ownershipTitle}</h2><p>{copy.ownershipBody}</p></div>
+  <div class="split">
+    <article><h3>{text.keep}</h3><ul>{copy.ownershipItems.map((item)=><li><span aria-hidden="true"></span>{item}</li>)}</ul></article>
+    <article><h3>{text.connect}</h3><ul>{copy.integrationItems.map((item)=><li><span aria-hidden="true"></span>{item}</li>)}</ul></article>
+  </div>
+</section>
 <style>
-section{padding:5rem 1rem;border-top:1px solid var(--app-border);background:var(--app-surface-muted)}section>*{max-width:76rem;margin-left:auto;margin-right:auto}.label,strong{font-family:var(--font-mono);color:var(--app-subtle)}h2{max-width:13ch;font-size:3rem;letter-spacing:-.05em}p,span{color:var(--app-muted);line-height:1.7}section>div{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}article{display:grid;gap:.8rem;padding:1rem;border:1px solid var(--app-border);border-radius:.5rem;background:var(--app-surface)}
+.ownership{width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(5rem,9vw,7rem) 0}.intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,31rem);column-gap:4rem;align-items:end}.intro :global(.tech-label){grid-column:1/-1;margin-bottom:1.2rem}.intro h2{max-width:11ch;margin:0;color:var(--app-ink);font-size:clamp(2.25rem,4vw,3.55rem);font-weight:620;letter-spacing:-.035em;line-height:1.02}.intro>p{margin:0;color:var(--app-muted);line-height:1.65}.split{display:grid;grid-template-columns:1fr 1fr;margin-top:3rem;border-block:1px solid var(--app-border-strong)}article{padding:1.5rem 0}article+article{padding-left:2rem;border-left:1px solid var(--app-border-strong)}article:first-child{padding-right:2rem}h3{margin:0 0 1rem;color:var(--app-ink);font-family:var(--font-mono);font-size:.68rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase}ul{margin:0;padding:0;list-style:none}li{display:flex;align-items:center;gap:.7rem;padding:.65rem 0;border-top:1px solid var(--app-border);color:var(--app-body);font-size:.86rem}li span{flex:0 0 auto;width:6px;height:6px;border:1px solid var(--app-ink)}article+article li span{background:var(--app-ink)}
+@media(max-width:760px){.ownership{width:min(calc(100% - 1.25rem),var(--page-width));padding:4.5rem 0}.intro{grid-template-columns:1fr;gap:1rem}.intro h2{font-size:clamp(2.15rem,10vw,3rem)}.split{grid-template-columns:1fr}.split article{padding:1.5rem 0}.split article+article{border-top:1px solid var(--app-border-strong);border-left:0}}
 </style>
