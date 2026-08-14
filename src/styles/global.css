@@ -28,6 +28,15 @@
   --font-mono:"Inconsolata",ui-monospace,SFMono-Regular,Consolas,monospace;
   --page-width:76rem;
   --reading-width:46rem;
+  --landing-panel-gap:24px;
+  --landing-panel-padding:26px;
+  --landing-card-gap:16px;
+  --landing-card-padding:18px;
+  --landing-card-title-size:14px;
+  --landing-card-body-size:13px;
+  --landing-section-label-size:13px;
+  --landing-card-radius:10px;
+  --landing-panel-radius:16px;
 }
 
 :root.dark{
