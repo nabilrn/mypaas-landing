@@ -1,0 +1,26 @@
+---
+import { siCaddy, siCloudflare, siDocker, siGithub, siGit, siLinux, siPodman, siPostgresql } from "simple-icons";
+const items = [
+  ["Linux", siLinux],
+  ["Docker", siDocker],
+  ["Podman", siPodman],
+  ["Caddy", siCaddy],
+  ["Cloudflare", siCloudflare],
+  ["PostgreSQL", siPostgresql],
+  ["Git", siGit],
+  ["GitHub", siGithub],
+] as const;
+---
+<div class="tech-rail" aria-label="Technology stack">
+  {items.map(([name, icon]) => (
+    <div class="tech-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg>
+      <span>{name}</span>
+    </div>
+  ))}
+</div>
+<style>
+.tech-rail{display:grid;grid-template-columns:repeat(8,1fr);border-block:1px solid var(--app-border-strong)}.tech-item{display:flex;min-width:0;align-items:center;justify-content:center;gap:.5rem;padding:.8rem .45rem;border-right:1px solid var(--app-border);color:var(--app-ink)}.tech-item:last-child{border-right:0}.tech-item svg{width:1rem;height:1rem;fill:currentColor;flex:0 0 auto}.tech-item span{overflow:hidden;font-family:var(--font-mono);font-size:.58rem;letter-spacing:.03em;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:820px){.tech-rail{grid-template-columns:repeat(4,1fr)}.tech-item:nth-child(4){border-right:0}.tech-item:nth-child(-n+4){border-bottom:1px solid var(--app-border)}}
+@media(max-width:460px){.tech-rail{grid-template-columns:repeat(2,1fr)}.tech-item{border-bottom:1px solid var(--app-border)}.tech-item:nth-child(even){border-right:0}.tech-item:nth-last-child(-n+2){border-bottom:0}}
+</style>
