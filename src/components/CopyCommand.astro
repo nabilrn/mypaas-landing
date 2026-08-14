@@ -2,9 +2,10 @@
 interface Props { command: string; label?: string; copyLabel?: string; copiedLabel?: string; failedLabel?: string }
 const { command, label = "Shell", copyLabel = "Copy", copiedLabel = "Copied", failedLabel = "Copy failed" } = Astro.props;
 const hero = label === "bootstrap.sh";
-const displayCommand = hero ? command.replace("https://raw.githubusercontent.com/", "https://raw.githubusercontent.com/\n") : command;
+const effectiveCommand = hero ? command.replace(" | env USE_PODMAN=true bash", " | bash") : command;
+const displayCommand = hero ? effectiveCommand.replace("https://raw.githubusercontent.com/", "https://raw.githubusercontent.com/\n") : effectiveCommand;
 ---
-<div class:list={["command-box", { hero }]} data-command-box data-command={command} data-copy-default={copyLabel} data-copy-success={copiedLabel} data-copy-failed={failedLabel}>
+<div class:list={["command-box", { hero }]} data-command-box data-command={effectiveCommand} data-copy-default={copyLabel} data-copy-success={copiedLabel} data-copy-failed={failedLabel}>
   <div class="command-meta"><span>{label}</span><button type="button" data-copy-button aria-label={copyLabel}><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="10" height="10" rx="1"></rect><path d="M6 15H5a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2h8a1 1 0 0 1 1 1v1"></path></svg><span data-copy-label>{copyLabel}</span></button></div>
   <pre><code>{displayCommand}</code></pre>
   <p role="status" aria-live="polite" data-copy-feedback></p>
