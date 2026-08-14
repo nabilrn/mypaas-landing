@@ -18,8 +18,8 @@ The landing page itself does **not** provide a theme switch. Documentation may k
 
 Use the approved hero typography across the landing and shared design tokens:
 
-- **Inter** — navigation, headings, body text, buttons, card titles, and normal UI labels.
-- **Inconsolata** — commands, code, compact technical labels, diagram interface labels, terminal text, and monospace annotations.
+- **Inter** for navigation, headings, body text, buttons, card titles, and normal UI labels.
+- **Inconsolata** for commands, code, compact technical labels, diagram interface labels, terminal text, and monospace annotations.
 
 Do not introduce or explicitly force Instrument Sans, IBM Plex Mono, Pixelify Sans, or another display family into landing components.
 
@@ -89,11 +89,17 @@ Do not treat every icon the same, but keep each icon category internally consist
 - target `24px` box;
 - target `1.5–1.75px` stroke;
 - rounded line caps / joins unless the reference clearly requires terminal geometry;
-- Dashboard, CLI, API, metrics, agent, and similar functional marks should have comparable optical weight.
+- Dashboard, CLI/Shell, and API must come from the same shared `InterfaceIcon` source rather than ad-hoc CSS boxes, text glyphs, or per-section SVGs;
+- the terminal icon used in feature cards must reuse that same shared source;
+- metrics, agent, and similar functional marks should keep comparable optical weight.
 
 ### MCP / agent icon
 
 Use the shared **robot/agent glyph** for MCP everywhere on the landing. Do not create per-section robot variants and do not restore the protocol radial/starburst glyph for MCP.
+
+## Copy punctuation
+
+Avoid em dashes in landing-facing marketing copy. Prefer commas, periods, or direct sentence rewrites so the page keeps the concise technical tone of the approved reference.
 
 ## Architecture and body sections
 

@@ -2,11 +2,12 @@
 import { siGithub } from "simple-icons";
 import { repositoryUrl } from "../../lib/site";
 import AgentRobotIcon from "./AgentRobotIcon.astro";
+import InterfaceIcon from "./InterfaceIcon.astro";
 
 const whyItems = [
   { title: "Self-hosted", body: ["You own the server.", "You own the data.", "No vendor lock-in."], icon: "server" },
   { title: "Integration-first", body: ["Built to work with the", "tools you already use", "and love."], icon: "puzzle" },
-  { title: "Single-server focused", body: ["Designed for one server", "to do one thing—really", "well."], icon: "cube" },
+  { title: "Single-server focused", body: ["Designed for one server", "to do one thing really", "well."], icon: "cube" },
   { title: "Logs and metrics built in", body: ["mypaas-statd gives you", "observability out of the", "box."], icon: "bars" },
   { title: "GitHub + Cloudflare + MCP", body: ["Integrate code, delivery,", "and agent workflows", "seamlessly."], icon: "robot" },
   { title: "Standard deployment paths", body: ["Docker by default.", "Podman optional.", "No surprises."], icon: "terminal" },
@@ -35,7 +36,7 @@ const steps = [
           {item.icon === "cube" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="m16 3 11 6v14l-11 6-11-6V9l11-6Zm0 0v13m11-7-11 7L5 9m11 7v13"/></svg>}
           {item.icon === "bars" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 27h24M6 27V17h5v10m4 0V8h5v19m4 0V13h5v14"/></svg>}
           {item.icon === "robot" && <AgentRobotIcon size={28} strokeWidth={1.75} />}
-          {item.icon === "terminal" && <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="22" rx="2"/><path d="m9 12 4 4-4 4m7 1h7"/></svg>}
+          {item.icon === "terminal" && <InterfaceIcon name="terminal" size={28} strokeWidth={1.6} />}
           <h3>{item.title}</h3>
         </div>
         <p>{item.body.map((line) => <>{line}<br /></>)}</p>
