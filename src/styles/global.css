@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+@import "./technical-frame.css";
 
 @font-face{
   font-family:"Geist Pixel Circle";
@@ -45,8 +46,11 @@
   --landing-card-title-size:14px;
   --landing-card-body-size:13px;
   --landing-section-label-size:13px;
-  --landing-card-radius:10px;
-  --landing-panel-radius:16px;
+  --technical-frame-cut:8px;
+  --technical-frame-panel-cut:12px;
+  --technical-frame-compact-cut:6px;
+  --landing-card-radius:0;
+  --landing-panel-radius:0;
 }
 
 :root.dark{

@@ -1,0 +1,90 @@
+/*
+ * Canonical landing container primitive.
+ *
+ * One outline grammar is used everywhere: a thin 1px frame with a clipped
+ * top-left and bottom-right corner. Surface, contrast, and size may vary by
+ * context, but card geometry does not.
+ */
+
+.technical-frame,
+:where(
+  .integration-strip,
+  .logo-tile,
+  .architecture-inner,
+  .diagram-frame,
+  .interfaces-box,
+  .interface-card,
+  .reference-panel,
+  .why-card,
+  .step-card,
+  .github-card,
+  .github-button,
+  .landing-search,
+  .command-box,
+  .copy-toast,
+  .hero .runtime-badges > span,
+  .hero-install .command-meta button
+){
+  --frame-cut:var(--technical-frame-cut,8px);
+  border-radius:0!important;
+  border-style:solid!important;
+  box-shadow:none!important;
+  clip-path:polygon(
+    var(--frame-cut) 0,
+    100% 0,
+    100% calc(100% - var(--frame-cut)),
+    calc(100% - var(--frame-cut)) 100%,
+    0 100%,
+    0 var(--frame-cut)
+  )!important;
+}
+
+/* Larger section and rail frames use the same geometry at a larger scale. */
+:where(.integration-strip,.architecture-inner,.reference-panel){
+  --frame-cut:var(--technical-frame-panel-cut,12px);
+  border-color:#d8d8d8!important;
+}
+
+/* Light content cards and diagram nodes share one neutral stroke. */
+:where(.logo-tile,.diagram-frame,.interfaces-box,.interface-card,.why-card,.step-card){
+  --frame-cut:var(--technical-frame-cut,8px);
+  border-color:#d9d9d9!important;
+}
+
+/* Dark hero/footer surfaces keep the same outline grammar with lower contrast. */
+:where(.command-box,.copy-toast,.github-card,.landing-search,.hero .runtime-badges > span,.hero-install .command-meta button){
+  --frame-cut:var(--technical-frame-compact-cut,6px);
+}
+
+:where(.command-box.hero,.github-card,.landing-search,.hero .runtime-badges > span,.hero-install .command-meta button){
+  border-color:rgb(255 255 255 / .26)!important;
+}
+
+/* The repository CTA is the reference treatment and remains the strongest frame. */
+:where(.github-button){
+  --frame-cut:var(--technical-frame-cut,8px);
+  border-color:rgb(255 255 255 / .82)!important;
+}
+
+/* The install command no longer carries its own competing animated perimeter. */
+:where(.command-border-light){display:none!important}
+
+/* How It Works gets one frame only: the step card. Illustration art is unboxed. */
+:where(.step-illustration){
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+:where(.step-illustration .frame){display:none!important}
+
+/* Star-count treatment mirrors the divider used by the header GitHub CTA. */
+:where(.github-badge){
+  border:0!important;
+  border-left:1px solid rgb(255 255 255 / .22)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  clip-path:none!important;
+  box-shadow:none!important;
+}

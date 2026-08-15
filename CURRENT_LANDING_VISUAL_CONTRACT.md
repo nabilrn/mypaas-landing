@@ -31,6 +31,23 @@ Geist Pixel Circle is loaded from the official `vercel/geist-font` repository at
 --font-mono: "Inconsolata", ui-monospace, monospace;
 ```
 
+## Canonical technical frame
+
+Landing containers use one reusable outline primitive from `src/styles/technical-frame.css`.
+
+The reference geometry is the **View on GitHub** header CTA:
+
+- 1px outline;
+- flat surface with no card shadow;
+- no conventional rounded rectangle;
+- clipped top-left and bottom-right corners;
+- `8px` cut for normal cards, `12px` for large panels, and `6px` for compact controls;
+- light and dark surfaces may use different contrast, but they must keep the same geometry.
+
+Apply this frame language to the integration rail and tiles, architecture panel and nodes, feature cards, How It Works cards, hero command box, runtime chips, header controls, copy toast, and footer GitHub card.
+
+Dashed strokes are reserved for **connectors / relationships / flow**, not container borders. How It Works illustrations are intentionally unboxed so each step has one container frame instead of nested cards.
+
 ## Landing spacing and card rhythm
 
 Body sections share canonical tokens from `src/styles/global.css` rather than per-section guesses:
@@ -42,8 +59,9 @@ Body sections share canonical tokens from `src/styles/global.css` rather than pe
 - `--landing-card-title-size`
 - `--landing-card-body-size`
 - `--landing-section-label-size`
-- `--landing-card-radius`
-- `--landing-panel-radius`
+- `--technical-frame-cut`
+- `--technical-frame-panel-cut`
+- `--technical-frame-compact-cut`
 
 Why MyPaaS and How It Works card titles use the same title size. Card body copy uses the same body size. Multi-line card titles reserve a consistent title row so body copy aligns across a row.
 
@@ -90,10 +108,10 @@ The install copy control owns both its interaction logic and its visual feedback
 4. failure shows a failure toast;
 5. preserve an `aria-live` state for assistive technology;
 6. keep a clipboard fallback where the modern Clipboard API is unavailable;
-7. the command frame carries a subtle perimeter-running light;
-8. reduced-motion users must not receive continuous perimeter animation.
+7. command geometry follows the canonical technical frame;
+8. do not add a separate animated perimeter that competes with the shared frame language.
 
-Interaction state belongs in TypeScript under `src/scripts/`; compositor-friendly border motion remains CSS.
+Interaction state belongs in TypeScript under `src/scripts/`.
 
 ## Header search and repository metadata
 
@@ -144,7 +162,7 @@ Avoid em dashes in landing-facing marketing copy. Prefer commas, periods, or dir
 
 ## Architecture and body sections
 
-Continue matching approved screenshot geometry and hierarchy before introducing independent design ideas. Keep thin neutral strokes, white surfaces, Geist Pixel Circle for `h1`/`h2`, Inter for supporting UI typography, Inconsolata technical microcopy, restrained brand colors, and simple rounded diagram frames. Architecture topology must stay clear before decorative geometry is added.
+Continue matching approved screenshot geometry and hierarchy before introducing independent design ideas. Keep thin neutral strokes, white surfaces, Geist Pixel Circle for `h1`/`h2`, Inter for supporting UI typography, Inconsolata technical microcopy, restrained brand colors, and the canonical technical frame for containers. Architecture topology must stay clear before decorative geometry is added.
 
 ## Change discipline
 
@@ -152,6 +170,6 @@ Continue matching approved screenshot geometry and hierarchy before introducing 
 2. Preserve completed sections unless the human request names them.
 3. Do not restore a landing theme toggle.
 4. Keep Geist Pixel Circle limited to semantic `h1`/`h2`; do not replace normal UI or technical typography with it.
-5. Reuse shared icon/distro primitives instead of duplicating SVG variants.
+5. Reuse shared icon/distro/frame primitives instead of duplicating variants.
 6. Keep client-side metadata/network failures non-fatal.
 7. Run the repository build on every PR before merge.
