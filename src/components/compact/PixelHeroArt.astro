@@ -1,5 +1,8 @@
 <div class="hero-art" aria-hidden="true">
-  <img class="hero-logo" src="/brand/logoonly_white.png" alt="" />
+  <div class="hero-logo-stage">
+    <img class="hero-logo hero-logo-haze" src="/brand/logoonly_white.png" alt="" />
+    <img class="hero-logo hero-logo-wire" src="/brand/logoonly_white.png" alt="" />
+  </div>
 </div>
 
 <style>
@@ -32,7 +35,11 @@
 
 .hero-art{position:absolute;z-index:1;inset:0;overflow:hidden;background:transparent;pointer-events:none}
 .hero-art::before{position:absolute;z-index:2;inset:0;background:linear-gradient(180deg,rgb(255 255 255 / .008),transparent 28% 74%,rgb(0 0 0 / .18));content:""}
-.hero-logo{position:absolute;z-index:4;top:16.5%;left:68.2%;width:20.4%;height:auto;max-width:none;object-fit:contain;filter:drop-shadow(0 12px 30px rgb(255 255 255 / .025))}
+.hero-logo-stage{position:absolute;z-index:4;top:10%;left:64.5%;display:grid;width:27%;aspect-ratio:1;place-items:center;mix-blend-mode:screen}
+.hero-logo-stage::before{position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(circle,rgb(214 214 224 / .10) 0%,rgb(190 190 202 / .055) 34%,transparent 69%);filter:blur(20px);content:""}
+.hero-logo{grid-area:1/1;width:100%;height:auto;max-width:none;object-fit:contain;transform-origin:center}
+.hero-logo-haze{opacity:.10;filter:blur(8px) drop-shadow(0 0 34px rgb(255 255 255 / .14));transform:scale(1.045)}
+.hero-logo-wire{opacity:.27;filter:contrast(.9) brightness(1.04) drop-shadow(0 0 1px rgb(255 255 255 / .30)) drop-shadow(0 0 18px rgb(255 255 255 / .06))}
 .hero-art::after{position:absolute;z-index:3;inset:0;background:linear-gradient(90deg,rgb(0 0 2 / .94) 0%,rgb(0 0 2 / .9) 27%,rgb(0 0 2 / .72) 39%,rgb(0 0 2 / .42) 50%,rgb(0 0 2 / .08) 63%,transparent 74%);content:""}
 
 @media(max-width:1100px){
@@ -45,7 +52,7 @@
   :global(.hero-install .command-box.hero pre){font-size:14px!important;line-height:23px!important}
   :global(.hero .runtime-badges){gap:7px!important}
   :global(.hero .runtime-badges > span){padding-inline:9px!important;font-size:11px!important}
-  .hero-logo{left:69%;width:22.5%}
+  .hero-logo-stage{top:12%;left:65.5%;width:27.5%}
 }
 @media(max-width:900px){
   :global(.hero){min-height:700px!important}
@@ -57,7 +64,7 @@
   :global(.hero-install .command-box.hero){width:520px!important}
   :global(.hero-install .command-box.hero pre){font-size:14px!important;line-height:23px!important;padding-left:50px!important}
   .hero-art::after{background:linear-gradient(180deg,rgb(0 0 2 / .94) 0%,rgb(0 0 2 / .84) 38%,rgb(0 0 2 / .3) 68%,transparent 100%)}
-  .hero-logo{top:56%;left:58%;width:min(32%,250px)}
+  .hero-logo-stage{top:55%;right:7%;left:auto;width:min(31%,245px)}
 }
 @media(max-width:560px){
   :global(.hero){min-height:710px!important}
@@ -74,6 +81,8 @@
   :global(.hero .runtime-badges){gap:7px!important;margin-top:10px!important}
   :global(.hero .runtime-badges > span){min-height:31px!important;padding:5px 8px!important;font-size:10.5px!important}
   :global(.hero .runtime-badges > span:nth-child(2) > svg){width:19px!important;height:19px!important}
-  .hero-logo{top:64%;left:55%;width:min(45%,220px)}
+  .hero-logo-stage{top:65%;right:3%;width:min(43%,215px)}
+  .hero-logo-wire{opacity:.22}
+  .hero-logo-haze{opacity:.08}
 }
 </style>
