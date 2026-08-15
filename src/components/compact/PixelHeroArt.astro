@@ -1,14 +1,9 @@
----
-import PlasmaHeroBackground from "./PlasmaHeroBackground.astro";
----
-
 <div class="hero-art" aria-hidden="true">
-  <PlasmaHeroBackground />
   <img class="hero-logo" src="/brand/logoonly_white.png" alt="" />
 </div>
 
 <style>
-:global(.hero-shell){background:#000002!important;color:#fff!important}
+:global(.hero-shell){background:transparent!important;color:#fff!important}
 :global(.hero){position:relative;display:block!important;width:min(100%,90rem)!important;min-height:570px!important;margin:0 auto!important;isolation:isolate;overflow:hidden}
 :global(.hero-copy){position:relative;z-index:5;width:688px;max-width:calc(100% - 2rem);padding:48px 0 0 54px!important}
 :global(.hero .eyebrow){margin:0!important;color:#fff!important;font-family:var(--font-mono)!important;font-size:16px!important;font-weight:400!important;line-height:24px!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap}
@@ -17,28 +12,28 @@ import PlasmaHeroBackground from "./PlasmaHeroBackground.astro";
 :global(.hero-install){width:594.5px!important;max-width:100%!important;margin-top:22px!important;padding:0!important;border:0!important;background:transparent!important}
 :global(.hero .install-head),:global(.hero .actions){display:none!important}
 
-:global(.hero-install .command-box.hero){width:594.5px!important;max-width:100%!important;height:76px!important;min-height:76px!important;overflow:hidden!important;border:1px solid #505054!important;background:linear-gradient(180deg,rgb(10 10 12 / .97),rgb(3 3 5 / .99))!important;box-shadow:inset 0 1px 0 rgb(255 255 255 / .035),0 8px 28px rgb(0 0 0 / .14)!important;clip-path:polygon(8px 0,calc(100% - 8px) 0,calc(100% - 8px) 8px,100% 8px,100% calc(100% - 8px),calc(100% - 8px) calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,8px calc(100% - 8px),0 calc(100% - 8px),0 8px,8px 8px)!important}
+:global(.hero-install .command-box.hero){width:594.5px!important;max-width:100%!important;height:76px!important;min-height:76px!important;overflow:hidden!important;border:1px solid #505054!important;background:linear-gradient(180deg,rgb(10 10 12 / .86),rgb(3 3 5 / .92))!important;box-shadow:inset 0 1px 0 rgb(255 255 255 / .035),0 8px 28px rgb(0 0 0 / .14)!important;clip-path:polygon(8px 0,calc(100% - 8px) 0,calc(100% - 8px) 8px,100% 8px,100% calc(100% - 8px),calc(100% - 8px) calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,8px calc(100% - 8px),0 calc(100% - 8px),0 8px,8px 8px)!important}
 :global(.hero-install .command-box.hero)::before{display:block!important;position:absolute!important;z-index:4!important;top:14px!important;left:18px!important;transform:none!important;color:#f5f5f5!important;content:">_"!important;font-family:var(--font-mono)!important;font-size:15px!important;font-weight:500!important;line-height:22px!important}
 :global(.hero-install .command-meta){display:block!important;position:absolute!important;z-index:8!important;top:50%!important;right:12px!important;bottom:auto!important;left:auto!important;transform:translateY(-50%)!important;padding:0!important;border:0!important;background:transparent!important}
 :global(.hero-install .command-meta>span),:global(.hero-install .command-box.hero > p){display:none!important}
-:global(.hero-install .command-meta button){display:grid!important;width:32px!important;height:32px!important;padding:0!important;border:1px solid #3b3b42!important;border-radius:6px!important;background:#0d0d10!important;color:#d7d7dc!important;box-shadow:0 2px 10px rgb(0 0 0 / .28)!important;place-items:center!important}
-:global(.hero-install .command-meta button:hover){border-color:#777780!important;color:#fff!important;background:#17171c!important}
-:global(.hero-install .command-meta button[data-copy-state="copied"]){border-color:#bdbdc5!important;color:#fff!important;background:#151519!important}
+:global(.hero-install .command-meta button){display:grid!important;width:32px!important;height:32px!important;padding:0!important;border:1px solid #3b3b42!important;border-radius:6px!important;background:rgb(13 13 16 / .86)!important;color:#d7d7dc!important;box-shadow:0 2px 10px rgb(0 0 0 / .28)!important;place-items:center!important}
+:global(.hero-install .command-meta button:hover){border-color:#777780!important;color:#fff!important;background:rgb(23 23 28 / .9)!important}
+:global(.hero-install .command-meta button[data-copy-state="copied"]){border-color:#bdbdc5!important;color:#fff!important;background:rgb(21 21 25 / .9)!important}
 :global(.hero-install .command-meta button svg){width:16px!important;height:16px!important;stroke-width:1.65!important}
 :global(.hero-install .command-box.hero pre){position:relative!important;z-index:3!important;width:100%!important;min-height:76px!important;margin:0!important;overflow:hidden!important;padding:12px 58px 10px 54px!important;color:#f7f7f7!important;font-family:var(--font-mono)!important;font-size:15px!important;font-weight:400!important;line-height:24px!important;letter-spacing:0!important;white-space:pre-wrap!important}
 
 :global(.hero .runtime-badges){display:flex!important;flex-wrap:wrap!important;gap:10px!important;margin-top:12px!important}
-:global(.hero .runtime-badges > span){display:flex!important;min-height:34px!important;align-items:center!important;gap:8px!important;padding:6px 11px!important;border:1px solid #34343a!important;border-radius:8px!important;background:#09090b!important;color:#d8d8dc!important;font-family:var(--font-sans)!important;font-size:12px!important;font-weight:520!important;line-height:18px!important;white-space:nowrap!important}
+:global(.hero .runtime-badges > span){display:flex!important;min-height:34px!important;align-items:center!important;gap:8px!important;padding:6px 11px!important;border:1px solid #34343a!important;border-radius:8px!important;background:rgb(9 9 11 / .82)!important;color:#d8d8dc!important;font-family:var(--font-sans)!important;font-size:12px!important;font-weight:520!important;line-height:18px!important;white-space:nowrap!important;backdrop-filter:blur(3px)}
 :global(.hero .runtime-badges > span:nth-child(1)){order:1;padding-left:7px!important}
 :global(.hero .runtime-badges > span:nth-child(2)){order:3}
 :global(.hero .runtime-badges > span:nth-child(3)){order:2}
 :global(.hero .runtime-badges > span > svg){width:17px!important;height:17px!important;flex:none!important;fill:var(--brand)!important}
 :global(.hero .runtime-badges > span:nth-child(2) > svg){width:21px!important;height:21px!important;padding:2px!important;border-radius:999px!important;background:#fff!important}
 
-.hero-art{position:absolute;z-index:1;inset:0;overflow:hidden;background:#000002;pointer-events:none}
+.hero-art{position:absolute;z-index:1;inset:0;overflow:hidden;background:transparent;pointer-events:none}
 .hero-art::before{position:absolute;z-index:2;inset:0;background:linear-gradient(180deg,rgb(255 255 255 / .008),transparent 28% 74%,rgb(0 0 0 / .18));content:""}
 .hero-logo{position:absolute;z-index:4;top:16.5%;left:68.2%;width:20.4%;height:auto;max-width:none;object-fit:contain;filter:drop-shadow(0 12px 30px rgb(255 255 255 / .025))}
-.hero-art::after{position:absolute;z-index:3;inset:0;background:linear-gradient(90deg,#000002 0%,#000002 31%,rgb(0 0 2 / .94) 40%,rgb(0 0 2 / .56) 49%,rgb(0 0 2 / .12) 61%,transparent 71%);content:""}
+.hero-art::after{position:absolute;z-index:3;inset:0;background:linear-gradient(90deg,rgb(0 0 2 / .94) 0%,rgb(0 0 2 / .9) 27%,rgb(0 0 2 / .72) 39%,rgb(0 0 2 / .42) 50%,rgb(0 0 2 / .08) 63%,transparent 74%);content:""}
 
 @media(max-width:1100px){
   :global(.hero){min-height:590px!important}
@@ -61,7 +56,7 @@ import PlasmaHeroBackground from "./PlasmaHeroBackground.astro";
   :global(.hero-install){width:520px!important;margin-top:22px!important}
   :global(.hero-install .command-box.hero){width:520px!important}
   :global(.hero-install .command-box.hero pre){font-size:14px!important;line-height:23px!important;padding-left:50px!important}
-  .hero-art::after{background:linear-gradient(180deg,#000002 0%,rgb(0 0 2 / .96) 43%,rgb(0 0 2 / .34) 70%,transparent 100%)}
+  .hero-art::after{background:linear-gradient(180deg,rgb(0 0 2 / .94) 0%,rgb(0 0 2 / .84) 38%,rgb(0 0 2 / .3) 68%,transparent 100%)}
   .hero-logo{top:56%;left:58%;width:min(32%,250px)}
 }
 @media(max-width:560px){
