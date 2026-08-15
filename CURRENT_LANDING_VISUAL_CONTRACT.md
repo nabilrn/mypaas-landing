@@ -12,15 +12,18 @@ The landing is implemented as a visual clone of the approved reference compositi
 
 The current black monochrome hero is locked. Preserve its composition, pixel infrastructure artwork, install command, runtime chips, and boundary integration rail unless explicitly instructed otherwise.
 
+The large cube mark is an intentional watermark, not a hidden decorative asset. Keep it visibly subordinate to the hero headline but high enough in contrast to read as a deliberate brand element.
+
 The landing page itself does **not** provide a theme switch. Documentation may keep its independent theme behavior.
 
 ## Typography
 
 Use the approved typography across the landing and shared design tokens:
 
-- **Geist Pixel Circle** for semantic `h1` and `h2` headings.
-- **Inter** for navigation, body text, buttons, card titles, `h3` headings, and normal UI labels.
-- **Inconsolata** for commands, code, compact technical labels, diagram interface labels, terminal text, and monospace annotations.
+- **Geist Pixel Circle** is the single display family for landing `h1` and `h2` headings, including Hero, Architecture, Why MyPaaS, and How It Works.
+- Prefer the native `400` face for landing display headings instead of synthesizing heavier weights.
+- **Inter** remains unchanged for navigation, body text, buttons, card titles, `h3` headings, and normal UI labels.
+- **Inconsolata** remains unchanged for commands, code, compact technical labels, diagram interface labels, terminal text, and monospace annotations.
 
 Geist Pixel Circle is loaded from the official `vercel/geist-font` repository at a pinned commit. Keep it isolated to the heading token instead of replacing the sans or monospace families.
 
@@ -93,6 +96,7 @@ The black/white split must come from the page boundary behind the rail, not from
 Supported host distro badges use one reusable **Ubuntu + Debian stacked pair**:
 
 - Ubuntu and Debian are the two overlapping marks;
+- both marks use the same monochrome icon treatment as the rest of the landing;
 - keep the marks smaller than normal integration logos;
 - use the same stack in the hero runtime chip and the Ubuntu/Debian ecosystem tile;
 - do not replace the pair with a generic Linux + Debian stack;
@@ -117,7 +121,7 @@ Interaction state belongs in TypeScript under `src/scripts/`.
 
 The landing header exposes the existing search dialog with a visible search icon beside the GitHub CTA. `Ctrl/Cmd + K` remains the primary keyboard shortcut.
 
-The GitHub CTA and footer star CTA may display the live star count for `nabilrn/MyPaas`. Fetch this client-side with a short cache and graceful failure. Do not make the static Astro build depend on GitHub API availability and do not hardcode a decorative fake count.
+For now, GitHub CTAs use label-only social proof. Do not render the live star count in either the header or footer until the count is meaningful enough to help rather than distract. This also avoids an unnecessary client-side GitHub metadata request on the landing page.
 
 ## Iconography contract
 
@@ -125,8 +129,10 @@ Do not treat every icon the same, but keep each icon category internally consist
 
 ### Brand and integration marks
 
-- use official brand marks / Simple Icons where available;
-- preserve recognizable brand color when useful;
+- use official brand silhouettes / Simple Icons where available;
+- render integration and runtime marks **monochrome** across the landing instead of mixing original brand colors;
+- on light surfaces use near-black / neutral gray; on the dark hero use white / neutral gray;
+- the same brand must keep the same monochrome treatment wherever it reappears, including the ecosystem rail, hero runtime chips, and Architecture diagram;
 - normalize normal integration marks to roughly `24px` optical size;
 - stacked distro marks are intentionally smaller.
 
@@ -145,6 +151,16 @@ Do not treat every icon the same, but keep each icon category internally consist
 
 Use the shared **robot/agent glyph** for MCP everywhere on the landing. Do not create per-section robot variants and do not restore the protocol radial/starburst glyph for MCP.
 
+## Architecture diagram semantics
+
+The current Architecture map uses one solid connector style for all topology lines. Do not mix dashed and solid connectors unless the difference communicates a real semantic category and that category is explained with an explicit legend.
+
+## Copy hierarchy
+
+Keep the full integration/tool list in the hero, where it establishes the platform surface area once. Supporting sections should describe outcomes instead of repeating the same GitHub + Cloudflare + MCP list.
+
+The ecosystem rail should frame compatibility with the user's existing stack. Why MyPaaS should communicate concrete operational benefits. Single-server positioning should be confident and intentional rather than apologetic: MyPaaS is not trying to be Kubernetes; it optimizes the one-host operating model.
+
 ## How It Works illustrations
 
 Do not use unreadable full-dashboard screenshots at card scale. Each step uses a purpose-built compact vector illustration with no tiny UI text:
@@ -162,7 +178,7 @@ Avoid em dashes in landing-facing marketing copy. Prefer commas, periods, or dir
 
 ## Architecture and body sections
 
-Continue matching approved screenshot geometry and hierarchy before introducing independent design ideas. Keep thin neutral strokes, white surfaces, Geist Pixel Circle for `h1`/`h2`, Inter for supporting UI typography, Inconsolata technical microcopy, restrained brand colors, and the canonical technical frame for containers. Architecture topology must stay clear before decorative geometry is added.
+Continue matching approved screenshot geometry and hierarchy before introducing independent design ideas. Keep thin neutral strokes, white surfaces, Geist Pixel Circle for `h1`/`h2`, Inter for supporting UI typography, Inconsolata technical microcopy, monochrome integration marks, and the canonical technical frame for containers. Architecture topology must stay clear before decorative geometry is added.
 
 ## Change discipline
 
