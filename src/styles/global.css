@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
 @font-face{
   font-family:"Geist Pixel Circle";
   src:url("https://raw.githubusercontent.com/vercel/geist-font/10dc7658f13c38a474cde201bb09a4617267545b/fonts/GeistPixel/webfonts/GeistPixel-Circle.woff2") format("woff2");
@@ -6,8 +8,6 @@
   font-display:swap;
   font-synthesis:none;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
 
 :root{
   color-scheme:light;
