@@ -16,14 +16,16 @@ The landing page itself does **not** provide a theme switch. Documentation may k
 
 ## Typography
 
-Use the approved hero typography across the landing and shared design tokens:
+Use the approved typography across the landing and shared design tokens:
 
-- **Inter** for navigation, headings, body text, buttons, card titles, and normal UI labels.
+- **Geist Pixel Circle** for semantic `h1` and `h2` headings.
+- **Inter** for navigation, body text, buttons, card titles, `h3` headings, and normal UI labels.
 - **Inconsolata** for commands, code, compact technical labels, diagram interface labels, terminal text, and monospace annotations.
 
-Do not introduce or explicitly force Instrument Sans, IBM Plex Mono, Pixelify Sans, or another display family into landing components.
+Geist Pixel Circle is loaded from the official `vercel/geist-font` repository at a pinned commit. Keep it isolated to the heading token instead of replacing the sans or monospace families.
 
 ```css
+--font-heading: "Geist Pixel Circle", "Inter", ui-sans-serif, system-ui, sans-serif;
 --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
 --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 --font-mono: "Inconsolata", ui-monospace, monospace;
@@ -142,14 +144,14 @@ Avoid em dashes in landing-facing marketing copy. Prefer commas, periods, or dir
 
 ## Architecture and body sections
 
-Continue matching approved screenshot geometry and hierarchy before introducing independent design ideas. Keep thin neutral strokes, white surfaces, Inter typography, Inconsolata technical microcopy, restrained brand colors, and simple rounded diagram frames. Architecture topology must stay clear before decorative geometry is added.
+Continue matching approved screenshot geometry and hierarchy before introducing independent design ideas. Keep thin neutral strokes, white surfaces, Geist Pixel Circle for `h1`/`h2`, Inter for supporting UI typography, Inconsolata technical microcopy, restrained brand colors, and simple rounded diagram frames. Architecture topology must stay clear before decorative geometry is added.
 
 ## Change discipline
 
 1. Prefer screenshot fidelity over older planning prose when they conflict.
 2. Preserve completed sections unless the human request names them.
 3. Do not restore a landing theme toggle.
-4. Do not reintroduce old font families through component-local CSS.
+4. Keep Geist Pixel Circle limited to semantic `h1`/`h2`; do not replace normal UI or technical typography with it.
 5. Reuse shared icon/distro primitives instead of duplicating SVG variants.
 6. Keep client-side metadata/network failures non-fatal.
 7. Run the repository build on every PR before merge.

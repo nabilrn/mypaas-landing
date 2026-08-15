@@ -1,0 +1,245 @@
+<canvas class="plasma-hero" data-plasma-hero aria-hidden="true"></canvas>
+
+<style>
+.plasma-hero{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  background:
+    radial-gradient(circle at 76% 48%,rgb(66 66 70 / .2),transparent 34%),
+    #000002;
+}
+</style>
+
+<script>
+const VERT = `attribute vec2 a_position;
+void main() {
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+
+// Reduced version of the Plasma recipe used for the visual reference.
+// It keeps the same monochrome wave language while removing unused cursor,
+// OKLab, FBM warp, blur, and multi-uniform paths from the original shader.
+const FRAG = `#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform float u_time;
+
+vec3 palette(float x) {
+  float f = clamp(x, 0.0, 1.0) * 3.0;
+  vec3 black = vec3(0.008, 0.008, 0.010);
+  vec3 light = vec3(0.255, 0.255, 0.270);
+  vec3 mid = vec3(0.105, 0.105, 0.115);
+  vec3 dark = vec3(0.018, 0.018, 0.022);
+
+  if (f < 1.0) return mix(black, light, smoothstep(0.0, 1.0, f));
+  if (f < 2.0) return mix(light, mid, smoothstep(0.0, 1.0, f - 1.0));
+  return mix(mid, dark, smoothstep(0.0, 1.0, f - 2.0));
+}
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+  vec2 p = (gl_FragCoord.xy - 0.5 * u_resolution.xy)
+    / min(u_resolution.x, u_resolution.y);
+
+  p *= 1.34;
+  float t = u_time;
+  float k = 3.45;
+  float v = sin(p.x * k + t)
+    + sin(p.y * k * 0.78 - t * 0.68)
+    + sin((p.x + p.y) * k * 0.54 + t * 0.42)
+    + 0.62 * sin(length(p + vec2(0.16, -0.08)) * k * 1.04 - t * 0.56);
+
+  float field = 0.5 + 0.5 * sin(v + 0.72);
+  vec3 col = palette(field);
+
+  // Keep the edges quiet so copy and the hero boundary stay dominant.
+  float vignette = smoothstep(0.32, 0.98, length(uv - 0.5) * 1.36);
+  col *= 1.0 - vignette * 0.20;
+
+  gl_FragColor = vec4(col, 1.0);
+}`;
+
+const MAX_PIXELS = 900_000;
+const MAX_DPR = 1.25;
+const TARGET_FRAME_MS = 1000 / 30;
+const TIME_SCALE = 0.18;
+
+function initPlasmaHero(canvas: HTMLCanvasElement) {
+  if (canvas.dataset.plasmaReady === "true") return;
+  canvas.dataset.plasmaReady = "true";
+
+  const gl = canvas.getContext("webgl", {
+    antialias: false,
+    alpha: false,
+    depth: false,
+    stencil: false,
+    powerPreference: "low-power",
+  });
+  if (!gl) return;
+
+  const compile = (type: number, source: string) => {
+    const shader = gl.createShader(type);
+    if (!shader) return null;
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.warn("MyPaaS hero shader compilation failed.");
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  };
+
+  const vertexShader = compile(gl.VERTEX_SHADER, VERT);
+  const fragmentShader = compile(gl.FRAGMENT_SHADER, FRAG);
+  if (!vertexShader || !fragmentShader) return;
+
+  const program = gl.createProgram();
+  if (!program) return;
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  gl.deleteShader(vertexShader);
+  gl.deleteShader(fragmentShader);
+
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.warn("MyPaaS hero shader linking failed.");
+    gl.deleteProgram(program);
+    return;
+  }
+
+  gl.useProgram(program);
+
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array([-1, -1, 3, -1, -1, 3]),
+    gl.STATIC_DRAW,
+  );
+
+  const position = gl.getAttribLocation(program, "a_position");
+  gl.enableVertexAttribArray(position);
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+  const resolution = gl.getUniformLocation(program, "u_resolution");
+  const time = gl.getUniformLocation(program, "u_time");
+  const startedAt = performance.now();
+
+  let raf = 0;
+  let lastFrame = 0;
+  let visible = document.visibilityState === "visible";
+  let inView = true;
+  let disposed = false;
+  const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let reducedMotion = motionQuery.matches;
+
+  const resize = () => {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+    const rawWidth = Math.max(1, Math.round(rect.width * dpr));
+    const rawHeight = Math.max(1, Math.round(rect.height * dpr));
+    const pixelScale = Math.min(
+      1,
+      Math.sqrt(MAX_PIXELS / Math.max(1, rawWidth * rawHeight)),
+    );
+    const width = Math.max(1, Math.round(rawWidth * pixelScale));
+    const height = Math.max(1, Math.round(rawHeight * pixelScale));
+
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+      gl.viewport(0, 0, width, height);
+    }
+  };
+
+  const draw = (now: number) => {
+    resize();
+    gl.uniform2f(resolution, canvas.width, canvas.height);
+    gl.uniform1f(time, ((now - startedAt) / 1000) * TIME_SCALE);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+
+  const schedule = () => {
+    if (disposed || !visible || !inView || reducedMotion || raf !== 0) return;
+    raf = requestAnimationFrame(frame);
+  };
+
+  const frame = (now: number) => {
+    raf = 0;
+    if (disposed || !visible || !inView || reducedMotion) return;
+    if (now - lastFrame >= TARGET_FRAME_MS) {
+      draw(now);
+      lastFrame = now;
+    }
+    schedule();
+  };
+
+  const resizeObserver = new ResizeObserver(() => {
+    resize();
+    if (reducedMotion) draw(startedAt);
+    else schedule();
+  });
+  resizeObserver.observe(canvas);
+
+  const intersectionObserver = new IntersectionObserver(([entry]) => {
+    inView = entry?.isIntersecting ?? true;
+    if (inView) schedule();
+    else if (raf !== 0) {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
+  });
+  intersectionObserver.observe(canvas);
+
+  const onVisibilityChange = () => {
+    visible = document.visibilityState === "visible";
+    if (visible) schedule();
+    else if (raf !== 0) {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
+  };
+
+  const onMotionChange = (event: MediaQueryListEvent) => {
+    reducedMotion = event.matches;
+    if (reducedMotion) {
+      if (raf !== 0) cancelAnimationFrame(raf);
+      raf = 0;
+      draw(startedAt);
+    } else {
+      schedule();
+    }
+  };
+
+  const cleanup = () => {
+    disposed = true;
+    if (raf !== 0) cancelAnimationFrame(raf);
+    resizeObserver.disconnect();
+    intersectionObserver.disconnect();
+    document.removeEventListener("visibilitychange", onVisibilityChange);
+    motionQuery.removeEventListener("change", onMotionChange);
+    gl.deleteBuffer(buffer);
+    gl.deleteProgram(program);
+  };
+
+  document.addEventListener("visibilitychange", onVisibilityChange);
+  motionQuery.addEventListener("change", onMotionChange);
+  window.addEventListener("pagehide", cleanup, { once: true });
+
+  resize();
+  draw(startedAt);
+  schedule();
+}
+
+document
+  .querySelectorAll<HTMLCanvasElement>("[data-plasma-hero]")
+  .forEach(initPlasmaHero);
+</script>
