@@ -5,8 +5,9 @@ const hero = label === "bootstrap.sh";
 const effectiveCommand = command;
 /* Keep the copied command single-line, but present the beta install as a readable
    shell continuation. Breaking at the pipe avoids arbitrary URL wrapping. */
+const shellContinuation = " \\" + "\n  | env ";
 const displayCommand = hero
-  ? effectiveCommand.replace(" | env ", " \\\n  | env ")
+  ? effectiveCommand.replace(" | env ", shellContinuation)
   : effectiveCommand;
 ---
 <div class:list={["copy-command-root", { "hero-command": hero }]} data-copy-command-root>
