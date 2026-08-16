@@ -4,7 +4,7 @@ export const locales: Locale[] = ["en", "id", "zh"];
 
 export const localeMeta = {
   en: { label: "English", short: "EN", path: "/", htmlLang: "en", ogLocale: "en_US" },
-  id: { label: "Bahasa Indonesia", short: "ID", path: "/id/", htmlLang: "id_ID", ogLocale: "id_ID" },
+  id: { label: "Bahasa Indonesia", short: "ID", path: "/id/", htmlLang: "id", ogLocale: "id_ID" },
   zh: { label: "简体中文", short: "中文", path: "/zh/", htmlLang: "zh-CN", ogLocale: "zh_CN" },
 } satisfies Record<Locale, { label: string; short: string; path: string; htmlLang: string; ogLocale: string }>;
 
