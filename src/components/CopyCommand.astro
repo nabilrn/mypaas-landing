@@ -4,8 +4,7 @@ const { command, label = "Shell", copyLabel = "Copy", copiedLabel = "Command cop
 const hero = label === "bootstrap.sh";
 const effectiveCommand = command;
 /* Keep the copied command single-line, while rendering the hero installer as an
-   explicit two-line shell continuation. The hero surface is widened so the URL
-   line does not re-wrap into a third visual line on desktop. */
+   explicit two-line shell continuation. */
 const shellContinuation = " \\" + "\n  | env ";
 const displayCommand = hero
   ? effectiveCommand.replace(" | env ", shellContinuation)
@@ -50,20 +49,20 @@ p{min-height:.8rem;margin:.2rem .75rem .45rem;color:var(--app-subtle);font-famil
 .copy-toast{position:absolute;z-index:40;top:calc(100% + 10px);right:0;display:flex;min-height:36px;align-items:center;gap:8px;padding:8px 11px;border:1px solid #d8d8d8;border-radius:8px;background:#fff;color:#111;font-family:var(--font-sans);font-size:12px;font-weight:600;line-height:1;box-shadow:0 8px 24px rgb(0 0 0 / .12);opacity:0;transform:translateY(-5px);transition:opacity .16s ease,transform .16s ease;pointer-events:none}
 .copy-toast[data-visible="true"]{opacity:1;transform:translateY(0)}.copy-toast svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.copy-toast .toast-error{display:none}.copy-toast[data-kind="failed"] .toast-check{display:none}.copy-toast[data-kind="failed"] .toast-error{display:block}
 
-/* Hero install is intentionally wider than the copy column. The beta URL is long;
-   widening the surface preserves the deliberate two-line shell presentation. */
-:global(.hero-install){width:min(62rem,calc(100vw - 3rem));max-width:none!important;position:relative;z-index:12}
+/* The installer intentionally escapes the narrow hero copy column. Its URL is long,
+   so reserve a desktop surface wide enough for a stable two-line presentation. */
+:global(.hero-install){width:min(72rem,calc(100vw - 1rem));max-width:none!important;position:relative;z-index:12}
 .copy-command-root.hero-command{width:100%;max-width:none;z-index:12}
-.command-box.hero{box-sizing:border-box;width:100%;min-height:6.6rem;overflow:visible!important;border-color:#545454;background:linear-gradient(180deg,#111317,#090a0c);clip-path:none!important;box-shadow:inset 0 0 0 1px rgb(255 255 255 / .025)}
-.command-box.hero::before{position:absolute;z-index:4;top:1.22rem;left:1rem;color:#fff;content:">_";font-family:var(--font-mono);font-size:1.02rem;font-weight:600}
-.hero .command-meta{position:absolute;z-index:8;inset:0 0 auto auto;padding:.72rem;border:0}.hero .command-meta>span{display:none}
-.hero button{width:2.25rem;height:2.25rem;padding:0;border-color:#3a414b;border-radius:.4rem;background:#12151a;place-content:center}.hero button svg{width:1rem;height:1rem}.hero button [data-copy-label]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.hero pre{display:block;box-sizing:border-box;width:100%;min-height:6.6rem;height:auto;margin:0;overflow-x:auto;overflow-y:visible;padding:1.1rem 4.3rem 1.25rem 3.45rem;color:#f5f5f5;font-size:.69rem;line-height:2.05;white-space:pre;word-break:normal}.hero code{display:block;white-space:pre}.hero p{display:none}
+.command-box.hero{box-sizing:border-box;width:100%;min-height:6.45rem;overflow:visible!important;border-color:#545454;background:linear-gradient(180deg,#111317,#090a0c);clip-path:none!important;box-shadow:inset 0 0 0 1px rgb(255 255 255 / .025)}
+.command-box.hero::before{position:absolute;z-index:4;top:1.2rem;left:.9rem;color:#fff;content:">_";font-family:var(--font-mono);font-size:1rem;font-weight:600}
+.hero .command-meta{position:absolute;z-index:8;inset:0 0 auto auto;padding:.62rem;border:0}.hero .command-meta>span{display:none}
+.hero button{width:2.05rem;height:2.05rem;padding:0;border-color:#3a414b;border-radius:.4rem;background:#12151a;place-content:center}.hero button svg{width:.95rem;height:.95rem}.hero button [data-copy-label]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero pre{display:block;box-sizing:border-box;width:100%;min-height:6.45rem;height:auto;margin:0;overflow-x:auto;overflow-y:visible;padding:1.05rem 3.7rem 1.2rem 3.15rem;color:#f5f5f5;font-size:.64rem;line-height:2.15;white-space:pre;word-break:normal}.hero code{display:block;white-space:pre}.hero p{display:none}
 .hero .command-border-light{display:none}
 .copy-command-root.hero-command .copy-toast{top:calc(100% + 9px);right:8px;background:#111216;color:#fff;border-color:#3f4148;box-shadow:0 10px 28px rgb(0 0 0 / .28)}
 
-@media(max-width:900px){:global(.hero-install){width:calc(100vw - 2rem)}.hero pre{font-size:.66rem}}
-@media(max-width:700px){pre{font-size:.7rem}:global(.hero-install){width:calc(100vw - 1.5rem)}.hero pre{min-height:6.35rem;padding:1.05rem 3.7rem 1.2rem 3rem;font-size:.62rem;line-height:2.1}.command-box.hero{min-height:6.35rem}.command-box.hero::before{top:1.15rem;left:.8rem;font-size:.88rem}.hero .command-meta{padding:.65rem}.hero button{width:2rem;height:2rem}.copy-toast{right:4px}}
-@media(max-width:420px){.hero pre{font-size:.58rem}}
+@media(max-width:900px){:global(.hero-install){width:calc(100vw - .75rem)}.hero pre{font-size:.61rem}}
+@media(max-width:700px){pre{font-size:.7rem}:global(.hero-install){width:calc(100vw - .5rem)}.hero pre{min-height:6.25rem;padding:1rem 3.35rem 1.15rem 2.8rem;font-size:.58rem;line-height:2.15}.command-box.hero{min-height:6.25rem}.command-box.hero::before{top:1.08rem;left:.7rem;font-size:.84rem}.hero .command-meta{padding:.58rem}.hero button{width:1.9rem;height:1.9rem}.copy-toast{right:4px}}
+@media(max-width:420px){.hero pre{font-size:.55rem}}
 @media(prefers-reduced-motion:reduce){.copy-toast{transition:none}}
 </style>
