@@ -2,7 +2,7 @@
 interface Props { command: string; label?: string; copyLabel?: string; copiedLabel?: string; failedLabel?: string }
 const { command, label = "Shell", copyLabel = "Copy", copiedLabel = "Command copied", failedLabel = "Copy failed" } = Astro.props;
 const hero = label === "bootstrap.sh";
-const effectiveCommand = hero ? command.replace(" | env USE_PODMAN=true bash", " | bash") : command;
+const effectiveCommand = command;
 const displayCommand = hero ? effectiveCommand.replace("https://raw.githubusercontent.com/", "https://raw.githubusercontent.com/\n") : effectiveCommand;
 ---
 <div class:list={["copy-command-root", { "hero-command": hero }]} data-copy-command-root>
