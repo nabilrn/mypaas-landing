@@ -20,43 +20,43 @@ const betaInstallCommand = "curl -fsSL https://raw.githubusercontent.com/nabilrn
 const copy = {
   en: {
     title: "MyPaaS | Self-hosted PaaS for one Linux server",
-    description: "Deploy Git repositories and public OCI images to one Linux server with Docker or Podman, Caddy routing, logs, metrics, databases, backups, recovery, CLI, API, and MCP workflows.",
+    description: "Deploy Git repositories and public OCI images to one Linux server with a Podman-first runtime, Docker Engine compatibility, Caddy routing, logs, metrics, databases, backups, recovery, CLI, API, and MCP workflows.",
     eyebrow: "BETA v0.5.0-beta.1 · SELF-HOSTED PAAS",
     h1: "Deploy on your own server without giving up control.",
     intro: "MyPaaS turns one Ubuntu or Debian server into a focused deployment control plane for Git repositories and public OCI images, with routing, operations, databases, backup, recovery, and automation built around standard Linux tools.",
     installLabel: "PINNED BETA INSTALL",
-    installHint: "Docker Engine default · Ubuntu / Debian",
+    installHint: "Rootful Podman default · Ubuntu / Debian",
     docs: "Read the docs",
     github: "View on GitHub",
-    badges: ["Ubuntu / Debian Linux", "Docker Engine default", "Rootful Podman supported"],
+    badges: ["Ubuntu / Debian Linux", "Rootful Podman default", "Docker Engine compatibility"],
   },
   id: {
     title: "MyPaaS | PaaS self-hosted untuk satu server Linux",
-    description: "Deploy repositori Git dan image OCI publik ke satu server Linux dengan Docker atau Podman, routing Caddy, log, metrik, database, backup, recovery, CLI, API, dan MCP.",
+    description: "Deploy repositori Git dan image OCI publik ke satu server Linux dengan runtime Podman-first, kompatibilitas Docker Engine, routing Caddy, log, metrik, database, backup, recovery, CLI, API, dan MCP.",
     eyebrow: "BETA v0.5.0-beta.1 · PAAS SELF-HOSTED",
     h1: "Deploy di server sendiri tanpa kehilangan kendali.",
     intro: "MyPaaS mengubah satu server Ubuntu atau Debian menjadi deployment control plane untuk repositori Git dan image OCI publik, lengkap dengan routing, operasi, database, backup, recovery, dan automation di atas tool Linux standar.",
     installLabel: "INSTALL BETA TERPIN",
-    installHint: "Docker Engine default · Ubuntu / Debian",
+    installHint: "Rootful Podman default · Ubuntu / Debian",
     docs: "Baca dokumentasi",
     github: "Lihat di GitHub",
-    badges: ["Ubuntu / Debian Linux", "Docker Engine default", "Rootful Podman didukung"],
+    badges: ["Ubuntu / Debian Linux", "Rootful Podman default", "Kompatibilitas Docker Engine"],
   },
   zh: {
     title: "MyPaaS | 面向单台 Linux 服务器的自托管 PaaS",
-    description: "将 Git 仓库和公开 OCI 镜像部署到一台 Linux 服务器，并提供 Docker 或 Podman、Caddy 路由、日志、指标、数据库、备份、恢复、CLI、API 与 MCP。",
+    description: "将 Git 仓库和公开 OCI 镜像部署到一台 Linux 服务器，默认使用 Rootful Podman，并保留 Docker Engine 兼容模式、Caddy 路由、日志、指标、数据库、备份、恢复、CLI、API 与 MCP。",
     eyebrow: "BETA v0.5.0-beta.1 · 自托管 PAAS",
     h1: "在自己的服务器上部署，同时保留控制权。",
     intro: "MyPaaS 将一台 Ubuntu 或 Debian 服务器变成面向 Git 仓库和公开 OCI 镜像的部署控制平面，并围绕标准 Linux 工具提供路由、运维、数据库、备份、恢复与自动化。",
     installLabel: "固定版本 BETA 安装",
-    installHint: "Docker Engine 默认 · Ubuntu / Debian",
+    installHint: "Rootful Podman 默认 · Ubuntu / Debian",
     docs: "阅读文档",
     github: "在 GitHub 查看",
-    badges: ["Ubuntu / Debian Linux", "Docker Engine 默认", "支持 Rootful Podman"],
+    badges: ["Ubuntu / Debian Linux", "Rootful Podman 默认", "Docker Engine 兼容模式"],
   },
 }[locale];
 
-const badgeIcons = [null, siDocker, siPodman] as const;
+const badgeIcons = [null, siPodman, siDocker] as const;
 ---
 <BaseLayout title={copy.title} description={copy.description} locale={locale} path={path} localizedAlternates>
   <div class="landing-plasma-backdrop" aria-hidden="true">
