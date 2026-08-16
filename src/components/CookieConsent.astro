@@ -1,0 +1,73 @@
+---
+import type { Locale } from "../lib/site";
+
+interface Props { locale?: Locale }
+const { locale = "en" } = Astro.props;
+
+const copy = {
+  en: {
+    eyebrow: "PRIVACY PREFERENCES",
+    title: "Cookie choices, without hidden tracking.",
+    body: "This build uses only essential browser storage. No analytics or advertising cookies are loaded. You can still record whether optional cookies are allowed for future site features.",
+    reject: "Reject optional",
+    accept: "Accept optional",
+    privacy: "Privacy policy",
+  },
+  id: {
+    eyebrow: "PREFERENSI PRIVASI",
+    title: "Pilihan cookie tanpa tracking tersembunyi.",
+    body: "Build ini hanya memakai browser storage yang esensial. Tidak ada cookie analytics atau iklan yang dimuat. Anda tetap dapat menyimpan pilihan apakah cookie opsional boleh digunakan untuk fitur situs di masa depan.",
+    reject: "Tolak opsional",
+    accept: "Terima opsional",
+    privacy: "Kebijakan privasi",
+  },
+  zh: {
+    eyebrow: "隐私偏好",
+    title: "明确的 Cookie 选择，不做隐藏追踪。",
+    body: "当前构建仅使用必要的浏览器本地存储，不加载分析或广告 Cookie。你仍可保存是否允许未来站点功能使用可选 Cookie 的偏好。",
+    reject: "拒绝可选 Cookie",
+    accept: "接受可选 Cookie",
+    privacy: "隐私政策",
+  },
+}[locale];
+---
+
+<aside class="consent" data-cookie-consent hidden aria-labelledby="cookie-consent-title">
+  <div class="consent-copy">
+    <span>{copy.eyebrow}</span>
+    <h2 id="cookie-consent-title">{copy.title}</h2>
+    <p>{copy.body}</p>
+    <a href="/privacy/">{copy.privacy} →</a>
+  </div>
+  <div class="consent-actions" aria-label="Cookie preferences">
+    <button type="button" data-consent-choice="rejected">{copy.reject}</button>
+    <button type="button" class="primary" data-consent-choice="accepted">{copy.accept}</button>
+  </div>
+</aside>
+
+<script>
+  const STORAGE_KEY = "mypaas-cookie-consent";
+  const panel = document.querySelector<HTMLElement>("[data-cookie-consent]");
+
+  if (panel) {
+    let choice: string | null = null;
+    try { choice = localStorage.getItem(STORAGE_KEY); } catch {}
+    if (!choice) panel.hidden = false;
+
+    panel.querySelectorAll<HTMLButtonElement>("[data-consent-choice]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.dataset.consentChoice ?? "rejected";
+        try { localStorage.setItem(STORAGE_KEY, value); } catch {}
+        document.documentElement.dataset.cookieConsent = value;
+        window.dispatchEvent(new CustomEvent("mypaas:cookie-consent", { detail: { value } }));
+        panel.hidden = true;
+      });
+    });
+  }
+</script>
+
+<style>
+.consent{position:fixed;z-index:120;right:18px;bottom:18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;width:min(calc(100vw - 36px),720px);padding:18px;border:1px solid #292929;background:#090a0c;color:#f4f4f4;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.consent[hidden]{display:none}.consent-copy>span{display:block;margin-bottom:7px;color:#a9a9a9;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.09em}.consent h2{margin:0;color:#fff;font-family:var(--font-sans);font-size:16px;font-weight:720;letter-spacing:-.015em}.consent p{max-width:520px;margin:8px 0 9px;color:#bcbcbc;font-family:var(--font-sans);font-size:12.5px;line-height:1.5}.consent a{color:#e4e4e4;font-family:var(--font-sans);font-size:11.5px;font-weight:650;text-underline-offset:3px}.consent-actions{display:flex;align-items:flex-end;gap:8px}.consent button{min-height:38px;padding:8px 12px;border:1px solid #4b4b4b;background:transparent;color:#f1f1f1;font-family:var(--font-sans);font-size:11.5px;font-weight:700;cursor:pointer}.consent button:hover,.consent button:focus-visible{border-color:#fff;outline:none}.consent button.primary{border-color:#fff;background:#fff;color:#090909}
+@media(max-width:700px){.consent{right:10px;bottom:10px;grid-template-columns:1fr;width:calc(100vw - 20px);gap:14px;padding:15px}.consent-actions{justify-content:stretch}.consent button{flex:1}}
+</style>
