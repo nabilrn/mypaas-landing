@@ -24,9 +24,9 @@ const landing = ["/", "/id/", "/zh/"].includes(Astro.url.pathname);
         <button class="landing-search" type="button" data-search-trigger aria-label={`${copy.searchOpen} (Ctrl+K)`} title={`${copy.search} (Ctrl+K)`}>
           <InterfaceIcon name="search" size={18} strokeWidth={1.6} />
         </button>
-        <a class="github-button" href={repositoryUrl} target="_blank" rel="noreferrer">
+        <a class="github-button" href={repositoryUrl} target="_blank" rel="noreferrer" aria-label="View on GitHub">
           <svg class="github-mark" viewBox="0 0 24 24" aria-hidden="true"><path d={siGithub.path}/></svg>
-          <span>View on GitHub</span>
+          <span aria-hidden="true">View on GitHub</span>
         </a>
       </div>
     </>

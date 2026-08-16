@@ -66,9 +66,9 @@ const copy = content[locale];
 
     <div class="github-card">
       <p>{copy.githubCard}</p>
-      <a href={repositoryUrl} target="_blank" rel="noreferrer">
+      <a href={repositoryUrl} target="_blank" rel="noreferrer" aria-label={copy.githubCard}>
         <InterfaceIcon name="star" size={20} strokeWidth={1.55} />
-        <span>{copy.star}</span>
+        <span aria-hidden="true">{copy.star}</span>
       </a>
     </div>
   </div>
