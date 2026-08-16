@@ -16,6 +16,18 @@ The large cube mark is an intentional watermark, not a hidden decorative asset. 
 
 The landing page itself does **not** provide a theme switch. Documentation may keep its independent theme behavior.
 
+## Product-truth guardrails
+
+Public landing claims follow the current MyPaaS documentation source-of-truth order. Keep these runtime statements precise:
+
+- fresh supported Ubuntu/Debian installations are **Podman-first**;
+- rootful Podman is the installer default;
+- Docker Engine remains an explicit supported compatibility mode through the same Docker-compatible command/socket contract;
+- do not describe Podman as optional merely because Docker Engine is supported;
+- `mypaas-statd` is optional host/runtime telemetry, and runtime metrics can fall back through the Docker-compatible engine path;
+- do not imply supported in-place Docker Engine → Podman state migration;
+- capacity evidence must stay tied to the tested VM shape and workload fixture mix.
+
 ## Typography
 
 Use the approved typography across the landing and shared design tokens:
