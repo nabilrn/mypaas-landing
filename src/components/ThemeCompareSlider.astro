@@ -9,8 +9,8 @@ interface Props {
 }
 
 const {
-  lightSrc = "/landing/mypaas-dashboard-light.webp",
-  darkSrc = "/landing/mypaas-dashboard-dark.webp",
+  lightSrc = "/landing/mypaas-dashboard-light.png",
+  darkSrc = "/landing/mypaas-dashboard-dark.png",
   lightAlt = "MyPaaS projects dashboard in light mode",
   darkAlt = "MyPaaS projects dashboard in dark mode",
   compareLabel = "Compare light and dark MyPaaS dashboard themes",
@@ -24,8 +24,8 @@ const {
       class="compare-image compare-image-light"
       src={lightSrc}
       alt={lightAlt}
-      width="1280"
-      height="630"
+      width="1858"
+      height="914"
       loading="lazy"
       decoding="async"
       draggable="false"
@@ -34,8 +34,8 @@ const {
       class="compare-image compare-image-dark"
       src={darkSrc}
       alt={darkAlt}
-      width="1280"
-      height="630"
+      width="1858"
+      height="914"
       loading="lazy"
       decoding="async"
       draggable="false"
@@ -118,7 +118,7 @@ const {
 
 <style>
 .compare-shell{margin:0;overflow:hidden;border:1px solid #cfcfcf;background:#fff}
-.compare-stage{position:relative;isolation:isolate;aspect-ratio:1280/630;overflow:hidden;background:#090909;user-select:none}
+.compare-stage{position:relative;isolation:isolate;aspect-ratio:1858/914;overflow:hidden;background:#090909;user-select:none}
 .compare-image{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:left top;pointer-events:none}
 .compare-image-dark{clip-path:inset(0 calc(100% - var(--reveal)) 0 0)}
 .compare-input{position:absolute;z-index:8;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;touch-action:pan-y}
