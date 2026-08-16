@@ -33,12 +33,12 @@ const content = {
     data: {
       title: "Data & automation",
       body: "Keep common database and automation workflows close to the project while preserving explicit access boundaries.",
-      items: ["Optional shared PostgreSQL provisioning", "DB Studio Lite for PostgreSQL, MySQL, and MariaDB", "Read-only DB Studio by default with expiring write sessions", "Dashboard, CLI, REST API, GitHub webhooks, and local MCP bridge", "Optional mypaas-statd runtime/host telemetry with Docker-compatible runtime fallback"],
+      items: ["Optional shared PostgreSQL provisioning", "DB Studio Lite for PostgreSQL, MySQL, and MariaDB", "Read-only DB Studio by default with expiring write sessions", "Dashboard, CLI, REST API, GitHub webhooks, and local MCP bridge", "Optional mypaas-statd runtime/host telemetry with runtime-metrics fallback through the Docker-compatible engine path"],
     },
     scopeLabel: "CURRENT BETA SCOPE",
     scopeTitle: "Built deliberately for one Linux host.",
     scopeBody: "MyPaaS targets an owner developer or a small trusted team. It is not a multi-node HA platform or a hostile multi-tenant security boundary.",
-    scope: ["Single Linux host", "Docker Engine default", "Rootful Podman supported", "Public OCI registries only", "No multi-node scheduler", "No automatic horizontal scaling"],
+    scope: ["Single Linux host", "Rootful Podman default", "Docker Engine compatibility", "Public OCI registries only", "No multi-node scheduler", "No in-place Docker → Podman migration"],
     details: "Read beta limitations",
   },
   id: {
@@ -68,12 +68,12 @@ const content = {
     data: {
       title: "Data & automation",
       body: "Dekatkan workflow database dan automation ke project sambil mempertahankan boundary akses yang eksplisit.",
-      items: ["Provisioning shared PostgreSQL opsional", "DB Studio Lite untuk PostgreSQL, MySQL, dan MariaDB", "DB Studio read-only secara default dengan write session yang kedaluwarsa", "Dashboard, CLI, REST API, GitHub webhook, dan local MCP bridge", "Telemetry runtime/host opsional melalui mypaas-statd dengan fallback runtime kompatibel Docker"],
+      items: ["Provisioning shared PostgreSQL opsional", "DB Studio Lite untuk PostgreSQL, MySQL, dan MariaDB", "DB Studio read-only secara default dengan write session yang kedaluwarsa", "Dashboard, CLI, REST API, GitHub webhook, dan local MCP bridge", "Telemetry runtime/host opsional melalui mypaas-statd dengan fallback metrics melalui engine path yang kompatibel Docker"],
     },
     scopeLabel: "SCOPE BETA SAAT INI",
     scopeTitle: "Sengaja dibuat untuk satu host Linux.",
     scopeBody: "MyPaaS menargetkan owner developer atau tim kecil tepercaya. Ini bukan platform HA multi-node dan bukan security boundary untuk tenant yang saling tidak dipercaya.",
-    scope: ["Satu host Linux", "Docker Engine default", "Rootful Podman didukung", "Hanya registry OCI publik", "Tanpa multi-node scheduler", "Tanpa horizontal auto-scaling"],
+    scope: ["Satu host Linux", "Rootful Podman default", "Kompatibilitas Docker Engine", "Hanya registry OCI publik", "Tanpa multi-node scheduler", "Tanpa migrasi Docker → Podman in-place"],
     details: "Baca batasan beta",
   },
   zh: {
@@ -103,12 +103,12 @@ const content = {
     data: {
       title: "数据与自动化",
       body: "让常用数据库与自动化流程贴近项目，同时保持明确的访问边界。",
-      items: ["可选共享 PostgreSQL 配置", "支持 PostgreSQL、MySQL 与 MariaDB 的 DB Studio Lite", "DB Studio 默认只读，写入需要有期限的显式会话", "Dashboard、CLI、REST API、GitHub Webhook 与本地 MCP bridge", "可选 mypaas-statd 运行时/主机遥测，并保留 Docker-compatible 运行时 fallback"],
+      items: ["可选共享 PostgreSQL 配置", "支持 PostgreSQL、MySQL 与 MariaDB 的 DB Studio Lite", "DB Studio 默认只读，写入需要有期限的显式会话", "Dashboard、CLI、REST API、GitHub Webhook 与本地 MCP bridge", "可选 mypaas-statd 运行时/主机遥测；运行时指标可回退到 Docker-compatible engine path"],
     },
     scopeLabel: "当前 BETA 范围",
     scopeTitle: "明确为单台 Linux 主机设计。",
     scopeBody: "MyPaaS 面向个人开发者或小型可信团队。它不是多节点 HA 平台，也不是面向互不信任租户的安全隔离边界。",
-    scope: ["单台 Linux 主机", "Docker Engine 默认", "支持 Rootful Podman", "仅公开 OCI Registry", "无多节点调度器", "无自动水平扩缩容"],
+    scope: ["单台 Linux 主机", "Rootful Podman 默认", "Docker Engine 兼容模式", "仅公开 OCI Registry", "无多节点调度器", "不支持 Docker → Podman 原地迁移"],
     details: "查看 Beta 限制",
   },
 } as const;
