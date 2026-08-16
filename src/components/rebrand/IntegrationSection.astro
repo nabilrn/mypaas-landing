@@ -11,8 +11,8 @@ const text = labels[locale as keyof typeof labels] ?? labels.en;
 <section id="ownership" class="ownership">
   <div class="intro"><TechLabel label={copy.ownershipLabel} index="03" /><h2>{copy.ownershipTitle}</h2><p>{copy.ownershipBody}</p></div>
   <div class="split">
-    <article><h3>{text.keep}</h3><ul>{copy.ownershipItems.map((item)=><li><span aria-hidden="true"></span>{item}</li>)}</ul></article>
-    <article><h3>{text.connect}</h3><ul>{copy.integrationItems.map((item)=><li><span aria-hidden="true"></span>{item}</li>)}</ul></article>
+    <article><h3>{text.keep}</h3><ul>{copy.ownershipItems.map((item: string)=><li><span aria-hidden="true"></span>{item}</li>)}</ul></article>
+    <article><h3>{text.connect}</h3><ul>{copy.integrationItems.map((item: string)=><li><span aria-hidden="true"></span>{item}</li>)}</ul></article>
   </div>
 </section>
 <style>

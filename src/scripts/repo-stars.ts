@@ -50,7 +50,7 @@ const fetchStars = async () => {
     if (!Number.isFinite(count)) return;
     paint(count as number);
     try {
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ count, cachedAt: Date.now() } satisfies CachedStars));
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ count: count as number, cachedAt: Date.now() } satisfies CachedStars));
     } catch {
       // Rendering must not depend on storage availability.
     }

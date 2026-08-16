@@ -4,7 +4,7 @@ const { copy } = Astro.props;
 ---
 <section id="operate" class="operations">
   <div class="intro"><TechLabel label={copy.operationsLabel} index="02" /><h2>{copy.operationsTitle}</h2><p>{copy.operationsBody}</p></div>
-  <ol>{copy.operations.map((item, index) => <li><span class="index">{String(index + 1).padStart(2,"0")}</span><strong>{item[0]}</strong><p>{item[1]}</p></li>)}</ol>
+  <ol>{copy.operations.map((item: string[], index: number) => <li><span class="index">{String(index + 1).padStart(2,"0")}</span><strong>{item[0]}</strong><p>{item[1]}</p></li>)}</ol>
 </section>
 <style>
 .operations{display:grid;grid-template-columns:minmax(16rem,.75fr) minmax(0,1.25fr);gap:clamp(3rem,7vw,7rem);width:min(calc(100% - 2rem),var(--page-width));margin:0 auto;padding:clamp(5rem,9vw,7rem) 0}.intro h2{max-width:10ch;margin:1.3rem 0 1rem;color:var(--app-ink);font-size:clamp(2.25rem,4vw,3.55rem);font-weight:620;letter-spacing:-.035em;line-height:1.02}.intro>p{max-width:30rem;margin:0;color:var(--app-muted);line-height:1.65}ol{margin:0;padding:0;border-top:1px solid var(--app-border-strong);list-style:none}li{display:grid;grid-template-columns:2.5rem minmax(7rem,.45fr) minmax(0,1fr);gap:1rem;align-items:start;padding:1.15rem 0;border-bottom:1px solid var(--app-border)}.index{color:var(--app-subtle);font-family:var(--font-mono);font-size:.62rem}li strong{color:var(--app-ink);font-size:.88rem;font-weight:600}li p{margin:0;color:var(--app-muted);font-size:.84rem;line-height:1.58}
