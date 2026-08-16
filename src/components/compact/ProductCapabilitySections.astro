@@ -1,0 +1,172 @@
+---
+import type { Locale } from "../../lib/site";
+import InterfaceIcon from "./InterfaceIcon.astro";
+
+interface Props { locale?: Locale }
+const { locale = "en" } = Astro.props;
+
+const content = {
+  en: {
+    evidenceLabel: "BETA QUALIFICATION",
+    evidenceTitle: "A beta backed by runtime evidence.",
+    evidenceBody: "v0.5.0-beta.1 cleared all mandatory beta-readiness gates for the qualified release lineage.",
+    evidence: [
+      ["8 / 8", "Mandatory gates", "Update safety, fresh-VM restore, performance, resilience, retention, Create Project, DB Studio, and documentation."],
+      ["50 / 50", "Qualified deployments", "The largest 10/25/50-project fixture tier completed successfully on the tested 4-vCPU / ~8-GiB VM."],
+      ["RESTORE", "Fresh-VM verified", "Control-plane state, routes, encrypted environment values, persistent data, and DB Studio were exercised after restore."],
+      ["FAIL CLOSED", "Runtime contracts", "Stale analysis, missing required configuration, unhealthy replacements, and invalid deployment states are blocked instead of promoted."],
+    ],
+    evidenceCaveat: "Capacity is workload- and host-specific. The 50-project result is evidence for the tested VM shape and fixture mix, not a universal capacity promise.",
+    capabilitiesLabel: "PRODUCT SURFACE",
+    capabilitiesTitle: "From source to recovery, on one control plane.",
+    capabilitiesBody: "MyPaaS covers the operational path around a deployment without replacing the Linux and container tooling underneath it.",
+    deploy: {
+      title: "Deploy",
+      body: "Start from Git or a public OCI image, then use the supported deployment contract for the workload.",
+      items: ["Git: Dockerfile, Docker Compose, or static output", "Public OCI images from Docker Hub, GHCR, and compatible registries", "Repository inspection, branch and base-directory selection", "Environment-template discovery and Compose preflight analysis", "GitHub webhooks with HMAC verification and branch filtering"],
+    },
+    operate: {
+      title: "Operate & recover",
+      body: "Inspect state, make deliberate changes, and recover supported releases without rebuilding your own control glue.",
+      items: ["Deployment history, build logs, runtime logs, and metrics", "Start, stop, restart, redeploy, and supported rollback", "Caddy route reconciliation and readiness-gated promotion", "AES-256-GCM encrypted project environment values", "Scheduled PostgreSQL backups, restore validation, and retention", "Scoped image/cache cleanup, opt-in self-update, and VM migration tooling"],
+    },
+    data: {
+      title: "Data & automation",
+      body: "Keep common database and automation workflows close to the project while preserving explicit access boundaries.",
+      items: ["Optional shared PostgreSQL provisioning", "DB Studio Lite for PostgreSQL, MySQL, and MariaDB", "Read-only DB Studio by default with expiring write sessions", "Dashboard, CLI, REST API, GitHub webhooks, and local MCP bridge", "Optional mypaas-statd runtime/host telemetry with Docker-compatible runtime fallback"],
+    },
+    scopeLabel: "CURRENT BETA SCOPE",
+    scopeTitle: "Built deliberately for one Linux host.",
+    scopeBody: "MyPaaS targets an owner developer or a small trusted team. It is not a multi-node HA platform or a hostile multi-tenant security boundary.",
+    scope: ["Single Linux host", "Docker Engine default", "Rootful Podman supported", "Public OCI registries only", "No multi-node scheduler", "No automatic horizontal scaling"],
+    details: "Read beta limitations",
+  },
+  id: {
+    evidenceLabel: "KUALIFIKASI BETA",
+    evidenceTitle: "Beta yang didukung bukti runtime.",
+    evidenceBody: "v0.5.0-beta.1 melewati seluruh gate wajib beta-readiness pada release lineage yang sudah dikualifikasi.",
+    evidence: [
+      ["8 / 8", "Gate wajib", "Update safety, restore ke VM baru, performance, resilience, retention, Create Project, DB Studio, dan dokumentasi."],
+      ["50 / 50", "Deployment teruji", "Tier fixture terbesar pada pengujian 10/25/50 project selesai sukses di VM 4-vCPU / ~8-GiB yang diuji."],
+      ["RESTORE", "Fresh-VM terverifikasi", "State control plane, route, environment terenkripsi, data persisten, dan DB Studio diuji setelah restore."],
+      ["FAIL CLOSED", "Kontrak runtime", "Analisis stale, konfigurasi wajib yang hilang, replacement tidak sehat, dan state deployment invalid diblokir sebelum dipromosikan."],
+    ],
+    evidenceCaveat: "Kapasitas bergantung pada workload dan host. Hasil 50 project adalah evidence untuk bentuk VM dan fixture yang diuji, bukan janji kapasitas universal.",
+    capabilitiesLabel: "CAKUPAN PRODUK",
+    capabilitiesTitle: "Dari source sampai recovery, dalam satu control plane.",
+    capabilitiesBody: "MyPaaS menangani jalur operasional di sekitar deployment tanpa mengganti Linux dan container tooling yang menjadi fondasinya.",
+    deploy: {
+      title: "Deploy",
+      body: "Mulai dari Git atau image OCI publik, lalu gunakan kontrak deployment yang didukung untuk workload tersebut.",
+      items: ["Git: Dockerfile, Docker Compose, atau static output", "Image OCI publik dari Docker Hub, GHCR, dan registry kompatibel", "Repository inspection, pemilihan branch dan base directory", "Environment-template discovery dan Compose preflight analysis", "GitHub webhook dengan verifikasi HMAC dan branch filtering"],
+    },
+    operate: {
+      title: "Operate & recover",
+      body: "Inspeksi state, lakukan perubahan secara eksplisit, dan pulihkan release yang didukung tanpa merakit control glue sendiri.",
+      items: ["Deployment history, build log, runtime log, dan metrics", "Start, stop, restart, redeploy, dan rollback yang didukung", "Rekonsiliasi route Caddy dan promosi berbasis readiness", "Environment project terenkripsi AES-256-GCM", "Backup PostgreSQL terjadwal, validasi restore, dan retention", "Image/cache cleanup terkontrol, self-update opt-in, dan tooling migrasi VM"],
+    },
+    data: {
+      title: "Data & automation",
+      body: "Dekatkan workflow database dan automation ke project sambil mempertahankan boundary akses yang eksplisit.",
+      items: ["Provisioning shared PostgreSQL opsional", "DB Studio Lite untuk PostgreSQL, MySQL, dan MariaDB", "DB Studio read-only secara default dengan write session yang kedaluwarsa", "Dashboard, CLI, REST API, GitHub webhook, dan local MCP bridge", "Telemetry runtime/host opsional melalui mypaas-statd dengan fallback runtime kompatibel Docker"],
+    },
+    scopeLabel: "SCOPE BETA SAAT INI",
+    scopeTitle: "Sengaja dibuat untuk satu host Linux.",
+    scopeBody: "MyPaaS menargetkan owner developer atau tim kecil tepercaya. Ini bukan platform HA multi-node dan bukan security boundary untuk tenant yang saling tidak dipercaya.",
+    scope: ["Satu host Linux", "Docker Engine default", "Rootful Podman didukung", "Hanya registry OCI publik", "Tanpa multi-node scheduler", "Tanpa horizontal auto-scaling"],
+    details: "Baca batasan beta",
+  },
+  zh: {
+    evidenceLabel: "BETA 验证",
+    evidenceTitle: "由真实运行验证支撑的 Beta。",
+    evidenceBody: "v0.5.0-beta.1 已通过该验证发布链上的全部强制 beta-readiness gate。",
+    evidence: [
+      ["8 / 8", "强制 Gate", "覆盖更新安全、全新 VM 恢复、性能、并发韧性、保留策略、Create Project、DB Studio 与文档。"],
+      ["50 / 50", "验证部署", "10/25/50 项目测试中的最大 fixture 层在测试的 4-vCPU / ~8-GiB VM 上全部成功。"],
+      ["RESTORE", "全新 VM 验证", "恢复后验证了控制平面状态、路由、加密环境变量、持久数据与 DB Studio。"],
+      ["FAIL CLOSED", "运行时契约", "过期分析、缺失必要配置、不健康替换与非法部署状态会被阻止，而不是被错误提升。"],
+    ],
+    evidenceCaveat: "容量取决于工作负载与主机。50 项目结果只代表测试 VM 规格与 fixture 组合，不是通用容量承诺。",
+    capabilitiesLabel: "产品能力",
+    capabilitiesTitle: "从源码到恢复，都在一个控制平面中。",
+    capabilitiesBody: "MyPaaS 管理部署周边的运维路径，同时保留底层 Linux 与容器工具链。",
+    deploy: {
+      title: "部署",
+      body: "从 Git 或公开 OCI 镜像开始，并按受支持的部署契约运行工作负载。",
+      items: ["Git：Dockerfile、Docker Compose 或静态输出", "来自 Docker Hub、GHCR 与兼容 Registry 的公开 OCI 镜像", "仓库检查、分支与 base directory 选择", "环境模板发现与 Compose preflight 分析", "带 HMAC 验证与分支过滤的 GitHub Webhook"],
+    },
+    operate: {
+      title: "运维与恢复",
+      body: "检查状态、明确执行变更，并恢复受支持的发布版本，而无需自己拼接控制工具。",
+      items: ["部署历史、构建日志、运行日志与指标", "启动、停止、重启、重新部署与受支持的回滚", "Caddy 路由对账与 readiness gate 后的流量提升", "AES-256-GCM 加密的项目环境变量", "定时 PostgreSQL 备份、恢复校验与保留策略", "受控镜像/缓存清理、可选自更新与 VM 迁移工具"],
+    },
+    data: {
+      title: "数据与自动化",
+      body: "让常用数据库与自动化流程贴近项目，同时保持明确的访问边界。",
+      items: ["可选共享 PostgreSQL 配置", "支持 PostgreSQL、MySQL 与 MariaDB 的 DB Studio Lite", "DB Studio 默认只读，写入需要有期限的显式会话", "Dashboard、CLI、REST API、GitHub Webhook 与本地 MCP bridge", "可选 mypaas-statd 运行时/主机遥测，并保留 Docker-compatible 运行时 fallback"],
+    },
+    scopeLabel: "当前 BETA 范围",
+    scopeTitle: "明确为单台 Linux 主机设计。",
+    scopeBody: "MyPaaS 面向个人开发者或小型可信团队。它不是多节点 HA 平台，也不是面向互不信任租户的安全隔离边界。",
+    scope: ["单台 Linux 主机", "Docker Engine 默认", "支持 Rootful Podman", "仅公开 OCI Registry", "无多节点调度器", "无自动水平扩缩容"],
+    details: "查看 Beta 限制",
+  },
+} as const;
+
+const copy = content[locale];
+---
+
+<section class="evidence-section technical-frame" id="beta-evidence" aria-labelledby="beta-evidence-title">
+  <div class="section-intro">
+    <span class="section-label">{copy.evidenceLabel}</span>
+    <h2 id="beta-evidence-title">{copy.evidenceTitle}</h2>
+    <p>{copy.evidenceBody}</p>
+  </div>
+  <div class="evidence-grid">
+    {copy.evidence.map(([value, title, body]) => (
+      <article class="evidence-card technical-frame">
+        <strong>{value}</strong>
+        <h3>{title}</h3>
+        <p>{body}</p>
+      </article>
+    ))}
+  </div>
+  <p class="evidence-caveat">{copy.evidenceCaveat}</p>
+</section>
+
+<section class="capabilities-section technical-frame" id="capabilities" aria-labelledby="capabilities-title">
+  <div class="section-intro capability-intro">
+    <span class="section-label">{copy.capabilitiesLabel}</span>
+    <h2 id="capabilities-title">{copy.capabilitiesTitle}</h2>
+    <p>{copy.capabilitiesBody}</p>
+  </div>
+
+  <div class="capability-grid">
+    {[copy.deploy, copy.operate, copy.data].map((group, index) => (
+      <article class="capability-card technical-frame">
+        <div class="capability-heading">
+          <InterfaceIcon name={index === 0 ? "terminal" : index === 1 ? "dashboard" : "api"} size={22} strokeWidth={1.55} />
+          <h3>{group.title}</h3>
+        </div>
+        <p>{group.body}</p>
+        <ul>{group.items.map((item) => <li>{item}</li>)}</ul>
+      </article>
+    ))}
+  </div>
+</section>
+
+<section class="scope-section technical-frame" id="scope" aria-labelledby="scope-title">
+  <div class="scope-copy">
+    <span class="section-label">{copy.scopeLabel}</span>
+    <h2 id="scope-title">{copy.scopeTitle}</h2>
+    <p>{copy.scopeBody}</p>
+    <a href="/docs/limitations/">{copy.details} →</a>
+  </div>
+  <ul class="scope-list">{copy.scope.map((item) => <li>{item}</li>)}</ul>
+</section>
+
+<style>
+.evidence-section,.capabilities-section,.scope-section{width:min(calc(100% - 36px),1368px);margin:0 auto var(--landing-panel-gap);padding:var(--landing-panel-padding);border:1px solid #d8d8d8;background:#fff;color:#111}.section-intro{display:grid;grid-template-columns:minmax(170px,.62fr) minmax(0,1.25fr) minmax(260px,1fr);gap:24px;align-items:start;margin-bottom:22px}.section-label{padding-top:6px;color:#333;font-family:var(--font-mono);font-size:var(--landing-section-label-size);font-weight:600;letter-spacing:.08em}.section-intro h2,.scope-copy h2{margin:0;font-family:var(--font-heading);font-size:clamp(2rem,3.2vw,3.25rem);font-weight:400;line-height:1.02;letter-spacing:-.03em}.section-intro>p,.scope-copy>p{margin:4px 0 0;color:#555;font-family:var(--font-sans);font-size:14px;line-height:1.55}.evidence-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--landing-card-gap)}.evidence-card{min-height:190px;padding:18px;border:1px solid #d9d9d9;background:#fff}.evidence-card>strong{display:block;margin-bottom:22px;font-family:var(--font-mono);font-size:clamp(1.5rem,2.3vw,2.35rem);font-weight:500;letter-spacing:-.04em}.evidence-card h3,.capability-card h3{margin:0;color:#111;font-family:var(--font-sans);font-size:var(--landing-card-title-size);font-weight:700}.evidence-card p,.capability-card>p{margin:8px 0 0;color:#5b5b5b;font-family:var(--font-sans);font-size:var(--landing-card-body-size);line-height:1.5}.evidence-caveat{margin:16px 0 0;color:#666;font-family:var(--font-mono);font-size:11px;line-height:1.5}.capability-intro{margin-bottom:24px}.capability-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--landing-card-gap)}.capability-card{padding:20px;border:1px solid #d9d9d9;background:#fff}.capability-heading{display:flex;align-items:center;gap:10px}.capability-heading :global(svg){color:#111}.capability-card>p{min-height:62px;margin-top:12px}.capability-card ul{display:grid;gap:9px;margin:18px 0 0;padding:0;list-style:none}.capability-card li{position:relative;padding-left:16px;color:#333;font-family:var(--font-sans);font-size:12.5px;line-height:1.45}.capability-card li::before{position:absolute;top:.62em;left:1px;width:5px;height:1px;background:#111;content:""}.scope-section{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(340px,.9fr);gap:36px;align-items:center}.scope-copy{display:grid;grid-template-columns:165px minmax(0,1fr);gap:12px 24px}.scope-copy .section-label{grid-row:1/5}.scope-copy>p{max-width:620px}.scope-copy>a{width:max-content;color:#111;font-family:var(--font-sans);font-size:12.5px;font-weight:700;text-decoration:none}.scope-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0;padding:0;list-style:none}.scope-list li{padding:11px 12px;border:1px solid #dedede;color:#333;font-family:var(--font-mono);font-size:11.5px;line-height:1.25}
+@media(max-width:980px){.section-intro{grid-template-columns:1fr 1.4fr}.section-intro>p{grid-column:2}.evidence-grid{grid-template-columns:1fr 1fr}.capability-grid{grid-template-columns:1fr}.capability-card>p{min-height:0}.scope-section{grid-template-columns:1fr}.scope-copy{grid-template-columns:150px 1fr}}
+@media(max-width:680px){.evidence-section,.capabilities-section,.scope-section{width:calc(100% - 20px);padding:20px 15px}.section-intro,.scope-copy{grid-template-columns:1fr;gap:10px}.section-intro>p{grid-column:auto}.section-label,.scope-copy .section-label{grid-row:auto;padding-top:0}.evidence-grid{grid-template-columns:1fr}.evidence-card{min-height:0}.scope-list{grid-template-columns:1fr}.section-intro h2,.scope-copy h2{font-size:2rem}}
+</style>
