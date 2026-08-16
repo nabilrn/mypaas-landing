@@ -1,7 +1,6 @@
 ---
 import { repositoryUrl, type Locale } from "../../lib/site";
 import AgentRobotIcon from "./AgentRobotIcon.astro";
-import HowStepIllustration from "./HowStepIllustration.astro";
 import InterfaceIcon from "./InterfaceIcon.astro";
 
 interface Props { locale?: Locale }
@@ -18,17 +17,10 @@ const content = {
       { title: "One control surface", body: ["Deploy, route, inspect, and", "recover without stitching", "separate control apps."], icon: "robot" },
       { title: "Podman-first runtime", body: ["Rootful Podman by default.", "Docker Engine compatibility.", "One Docker-compatible contract."], icon: "terminal" },
     ],
-    howHeading: "HOW IT WORKS",
-    steps: [
-      { n: "1", kind: "connect", title: "Choose a source", body: "Use a Git repository or a public OCI image." },
-      { n: "2", kind: "inspect", title: "Inspect and configure", body: "Review detected runtime, required environment, ports, Compose preflight, and domain options." },
-      { n: "3", kind: "deploy", title: "Deploy when ready", body: "MyPaaS builds or pulls the workload, checks readiness, then promotes the supported route." },
-      { n: "4", kind: "operate", title: "Operate and recover", body: "Use logs, metrics, lifecycle controls, rollback, backups, and recovery tooling from the same control plane." },
-    ],
     footerBody: "Self-hosted deployment control plane for one Linux server.",
-    product: "PRODUCT", resources: "RESOURCES", community: "PROJECT",
-    features: "Features", architecture: "Architecture", integrations: "Integrations", docs: "Docs", guides: "Guides", changelog: "Changelog", github: "GitHub", discussions: "Discussions", automation: "Automation & MCP",
-    githubCard: "Open source. Evidence before claims.", star: "View on GitHub",
+    product: "PRODUCT", resources: "RESOURCES", project: "PROJECT",
+    features: "Features", architecture: "Architecture", integrations: "Integrations", docs: "Docs", security: "Security", privacy: "Privacy", changelog: "Changelog", github: "GitHub", discussions: "Discussions", automation: "Automation & MCP",
+    githubCard: "Open source. Evidence before claims.", githubAction: "View on GitHub",
   },
   id: {
     whyHeading: "KENAPA MYPAAS",
@@ -40,17 +32,10 @@ const content = {
       { title: "Satu control surface", body: ["Deploy, route, inspect, dan", "recover tanpa merangkai", "control app terpisah."], icon: "robot" },
       { title: "Runtime Podman-first", body: ["Rootful Podman sebagai default.", "Docker Engine mode kompatibilitas.", "Satu contract kompatibel Docker."], icon: "terminal" },
     ],
-    howHeading: "CARA KERJA",
-    steps: [
-      { n: "1", kind: "connect", title: "Pilih source", body: "Gunakan repositori Git atau image OCI publik." },
-      { n: "2", kind: "inspect", title: "Inspect dan konfigurasi", body: "Review runtime terdeteksi, environment wajib, port, Compose preflight, dan opsi domain." },
-      { n: "3", kind: "deploy", title: "Deploy saat siap", body: "MyPaaS build atau pull workload, memeriksa readiness, lalu mempromosikan route yang didukung." },
-      { n: "4", kind: "operate", title: "Operate dan recover", body: "Gunakan log, metrics, lifecycle control, rollback, backup, dan recovery dari control plane yang sama." },
-    ],
     footerBody: "Deployment control plane self-hosted untuk satu server Linux.",
-    product: "PRODUK", resources: "RESOURCE", community: "PROJECT",
-    features: "Fitur", architecture: "Arsitektur", integrations: "Integrasi", docs: "Dokumentasi", guides: "Panduan", changelog: "Changelog", github: "GitHub", discussions: "Diskusi", automation: "Automation & MCP",
-    githubCard: "Open source. Evidence sebelum klaim.", star: "Lihat di GitHub",
+    product: "PRODUK", resources: "RESOURCE", project: "PROJECT",
+    features: "Fitur", architecture: "Arsitektur", integrations: "Integrasi", docs: "Dokumentasi", security: "Keamanan", privacy: "Privasi", changelog: "Changelog", github: "GitHub", discussions: "Diskusi", automation: "Automation & MCP",
+    githubCard: "Open source. Evidence sebelum klaim.", githubAction: "Lihat di GitHub",
   },
   zh: {
     whyHeading: "为什么选择 MYPAAS",
@@ -62,17 +47,10 @@ const content = {
       { title: "一个控制界面", body: ["部署、路由、检查与恢复", "无需拼接多个独立的", "控制应用。"], icon: "robot" },
       { title: "Podman-first 运行时", body: ["默认 Rootful Podman。", "Docker Engine 兼容模式。", "共用 Docker-compatible 契约。"], icon: "terminal" },
     ],
-    howHeading: "工作方式",
-    steps: [
-      { n: "1", kind: "connect", title: "选择来源", body: "使用 Git 仓库或公开 OCI 镜像。" },
-      { n: "2", kind: "inspect", title: "检查并配置", body: "确认检测到的运行时、必要环境变量、端口、Compose preflight 与域名选项。" },
-      { n: "3", kind: "deploy", title: "准备好后部署", body: "MyPaaS 构建或拉取工作负载，检查 readiness，然后提升受支持的路由。" },
-      { n: "4", kind: "operate", title: "运维与恢复", body: "在同一控制平面使用日志、指标、生命周期控制、回滚、备份与恢复工具。" },
-    ],
     footerBody: "面向单台 Linux 服务器的自托管部署控制平面。",
-    product: "产品", resources: "资源", community: "项目",
-    features: "功能", architecture: "架构", integrations: "集成", docs: "文档", guides: "指南", changelog: "更新日志", github: "GitHub", discussions: "讨论", automation: "自动化与 MCP",
-    githubCard: "开源。先有证据，再做声明。", star: "在 GitHub 查看",
+    product: "产品", resources: "资源", project: "项目",
+    features: "功能", architecture: "架构", integrations: "集成", docs: "文档", security: "安全", privacy: "隐私", changelog: "更新日志", github: "GitHub", discussions: "讨论", automation: "自动化与 MCP",
+    githubCard: "开源。先有证据，再做声明。", githubAction: "在 GitHub 查看",
   },
 } as const;
 
@@ -103,34 +81,18 @@ const copy = content[locale];
   </div>
 </section>
 
-<section class="how-section reference-panel" id="how-it-works" aria-labelledby="how-heading">
-  <header class="panel-heading">
-    <svg class="heading-bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20v-7h3v7m3 0V5h3v15m3 0v-10h3v10"/></svg>
-    <h2 id="how-heading">{copy.howHeading}</h2>
-  </header>
-
-  <div class="steps-grid">
-    {copy.steps.map((step, index) => (
-      <article class="step-card">
-        <div class="step-head"><span>{step.n}</span><h3>{step.title}</h3></div>
-        <HowStepIllustration kind={step.kind} />
-        <p>{step.body}</p>
-        {index < copy.steps.length - 1 && <span class="step-connector" aria-hidden="true"><i></i></span>}
-      </article>
-    ))}
-  </div>
-</section>
-
 <footer class="reference-footer">
   <div class="footer-inner">
     <div class="footer-brand"><img src="/brand/logowithtext_white.png" alt="MyPaaS" /><p>{copy.footerBody}</p></div>
     <nav class="footer-column" aria-label="Product links"><strong>{copy.product}</strong><a href="#features">{copy.features}</a><a href="#architecture">{copy.architecture}</a><a href="#integrations">{copy.integrations}</a></nav>
-    <nav class="footer-column" aria-label="Resource links"><strong>{copy.resources}</strong><a href="/docs/">{copy.docs}</a><a href="/docs/">{copy.guides}</a><a href={`${repositoryUrl}/releases`} target="_blank" rel="noreferrer">{copy.changelog}</a></nav>
-    <nav class="footer-column" aria-label="Project links"><strong>{copy.community}</strong><a href={repositoryUrl} target="_blank" rel="noreferrer">{copy.github}</a><a href={`${repositoryUrl}/discussions`} target="_blank" rel="noreferrer">{copy.discussions}</a><a href="/docs/automation/">{copy.automation}</a></nav>
-    <div class="github-card"><p>{copy.githubCard}</p><a href={repositoryUrl} target="_blank" rel="noreferrer"><InterfaceIcon name="star" size={20} strokeWidth={1.55} /><span>{copy.star}</span></a></div>
+    <nav class="footer-column" aria-label="Resource links"><strong>{copy.resources}</strong><a href="/docs/">{copy.docs}</a><a href="/docs/security/">{copy.security}</a><a href="/privacy/">{copy.privacy}</a></nav>
+    <nav class="footer-column" aria-label="Project links"><strong>{copy.project}</strong><a href={repositoryUrl} target="_blank" rel="noreferrer">{copy.github}</a><a href={`${repositoryUrl}/releases`} target="_blank" rel="noreferrer">{copy.changelog}</a><a href={`${repositoryUrl}/discussions`} target="_blank" rel="noreferrer">{copy.discussions}</a><a href="/docs/automation/">{copy.automation}</a></nav>
+    <div class="github-card"><p>{copy.githubCard}</p><a href={repositoryUrl} target="_blank" rel="noreferrer"><InterfaceIcon name="star" size={20} strokeWidth={1.55} /><span>{copy.githubAction}</span></a></div>
   </div>
 </footer>
 
 <style>
-:global(body){background:#fff}.reference-panel{width:min(calc(100% - 36px),1368px);margin:0 auto var(--landing-panel-gap);padding:var(--landing-panel-padding);border:1px solid #dedede;border-radius:var(--landing-panel-radius);background:#fff;color:#111;box-shadow:none}.panel-heading{display:flex;align-items:center;gap:11px;margin-bottom:20px}.panel-heading h2{margin:0;font-family:var(--font-heading);font-size:var(--landing-section-label-size);font-weight:400;line-height:1;letter-spacing:.08em}.panel-heading>svg{width:21px;height:21px;fill:none;stroke:#101010;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.panel-heading .heading-bars{width:21px;height:21px}.why-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--landing-card-gap)}.why-card{display:grid;grid-template-rows:44px 1fr;gap:14px;min-width:0;min-height:176px;padding:var(--landing-card-padding);border:1px solid #dedede;border-radius:var(--landing-card-radius);background:#fff}.why-title-row{display:flex;min-height:44px;align-items:flex-start;gap:12px;color:#111}.why-title-row>svg{width:27px;height:27px;flex:none;margin-top:1px;fill:none;stroke:#111;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.why-title-row h3,.step-head h3{margin:0;font-family:var(--font-sans);font-size:var(--landing-card-title-size);font-weight:700;line-height:1.25}.why-card p{margin:0;color:#555;font-family:var(--font-sans);font-size:var(--landing-card-body-size);line-height:1.42}.how-section{padding-bottom:var(--landing-panel-padding)}.steps-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:42px}.step-card{position:relative;display:grid;grid-template-rows:32px auto minmax(34px,auto);gap:12px;min-width:0;padding:var(--landing-card-padding);border:1px dashed #cdcdcd;border-radius:var(--landing-card-radius);background:#fff}.step-head{display:flex;min-width:0;align-items:center;gap:9px}.step-head>span{display:grid;width:26px;height:26px;flex:none;border-radius:50%;background:#070707;color:#fff;font-family:var(--font-sans);font-size:13px;font-weight:700;place-items:center}.step-card>p{max-width:94%;margin:0 auto;color:#555;text-align:center;font-family:var(--font-sans);font-size:var(--landing-card-body-size);line-height:1.4}.step-connector{position:absolute;top:50%;left:calc(100% + 1px);width:42px;height:1px;border-top:1px dashed #aaa}.step-connector::after{position:absolute;top:-4px;right:0;width:7px;height:7px;border-top:1.5px solid #111;border-right:1.5px solid #111;transform:rotate(45deg);content:""}.reference-footer{width:100%;margin-top:0;background:#07080b;color:#fff}.footer-inner{display:grid;grid-template-columns:2fr .8fr .9fr 1fr 1.65fr;gap:48px;width:min(calc(100% - 72px),1320px);margin:0 auto;padding:27px 0 26px;align-items:start}.footer-brand img{width:136px;height:auto}.footer-brand p{margin:10px 0 0;color:#b8bac1;font-family:var(--font-sans);font-size:12.5px;line-height:1.45}.footer-column{display:grid;align-content:start;gap:4px}.footer-column strong{margin-bottom:4px;color:#fff;font-family:var(--font-sans);font-size:11px;font-weight:700}.footer-column a{color:#bcbec4;font-family:var(--font-sans);font-size:12px;line-height:1.25;text-decoration:none}.footer-column a:hover{color:#fff}.github-card{padding:15px 18px 13px;border:1px solid #3a3d45;border-radius:7px;background:#0c0d11}.github-card>p{margin:0 0 12px;color:#d7d8dc;font-family:var(--font-sans);font-size:12px}.github-card>a{display:flex;align-items:center;gap:10px;color:#fff;font-family:var(--font-sans);font-size:12px;font-weight:650;text-decoration:none}@media(max-width:1100px){.why-grid{grid-template-columns:repeat(3,1fr)}.steps-grid{grid-template-columns:1fr 1fr;gap:16px}.step-connector{display:none}.footer-inner{grid-template-columns:1.6fr repeat(3,1fr);gap:28px}.github-card{grid-column:1/-1;max-width:360px}}@media(max-width:680px){.reference-panel{width:calc(100% - 20px);padding:20px 15px}.why-grid,.steps-grid{grid-template-columns:1fr}.why-card{min-height:0}.footer-inner{grid-template-columns:1fr 1fr;width:calc(100% - 32px);gap:24px;padding-block:24px}.footer-brand,.github-card{grid-column:1/-1}.github-card{max-width:none}}
+:global(body){background:#fff}.reference-panel{width:min(calc(100% - 36px),1368px);margin:0 auto var(--landing-panel-gap);padding:var(--landing-panel-padding);border:1px solid #dedede;border-radius:var(--landing-panel-radius);background:#fff;color:#111;box-shadow:none}.panel-heading{display:flex;align-items:center;gap:11px;margin-bottom:20px}.panel-heading h2{margin:0;font-family:var(--font-heading);font-size:var(--landing-section-label-size);font-weight:400;line-height:1;letter-spacing:.08em}.panel-heading>svg{width:21px;height:21px;fill:none;stroke:#101010;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.why-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--landing-card-gap)}.why-card{display:grid;grid-template-rows:44px 1fr;gap:14px;min-width:0;min-height:176px;padding:var(--landing-card-padding);border:1px solid #dedede;border-radius:var(--landing-card-radius);background:#fff}.why-title-row{display:flex;min-height:44px;align-items:flex-start;gap:12px;color:#111}.why-title-row>svg{width:27px;height:27px;flex:none;margin-top:1px;fill:none;stroke:#111;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.why-title-row h3{margin:0;font-family:var(--font-sans);font-size:var(--landing-card-title-size);font-weight:700;line-height:1.25}.why-card p{margin:0;color:#555;font-family:var(--font-sans);font-size:var(--landing-card-body-size);line-height:1.42}.reference-footer{width:100%;margin-top:0;background:#07080b;color:#fff}.footer-inner{display:grid;grid-template-columns:2fr .8fr .9fr 1fr 1.65fr;gap:48px;width:min(calc(100% - 72px),1320px);margin:0 auto;padding:27px 0 26px;align-items:start}.footer-brand img{width:136px;height:auto}.footer-brand p{margin:10px 0 0;color:#b8bac1;font-family:var(--font-sans);font-size:12.5px;line-height:1.45}.footer-column{display:grid;align-content:start;gap:5px}.footer-column strong{margin-bottom:4px;color:#fff;font-family:var(--font-sans);font-size:11px;font-weight:700}.footer-column a{color:#bcbec4;font-family:var(--font-sans);font-size:12px;line-height:1.25;text-decoration:none}.footer-column a:hover,.footer-column a:focus-visible{color:#fff}.github-card{padding:15px 18px 13px;border:1px solid #3a3d45;background:#0c0d11}.github-card>p{margin:0 0 12px;color:#d7d8dc;font-family:var(--font-sans);font-size:12px}.github-card>a{display:flex;align-items:center;gap:10px;color:#fff;font-family:var(--font-sans);font-size:12px;font-weight:650;text-decoration:none}
+@media(max-width:1100px){.why-grid{grid-template-columns:repeat(3,1fr)}.footer-inner{grid-template-columns:1.6fr repeat(3,1fr);gap:28px}.github-card{grid-column:1/-1;max-width:360px}}
+@media(max-width:680px){.reference-panel{width:calc(100% - 20px);padding:20px 15px}.why-grid{grid-template-columns:1fr}.why-card{min-height:0}.footer-inner{grid-template-columns:1fr 1fr;width:calc(100% - 32px);gap:24px;padding-block:24px}.footer-brand,.github-card{grid-column:1/-1}.github-card{max-width:none}}
 </style>
