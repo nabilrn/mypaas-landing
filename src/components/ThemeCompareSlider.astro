@@ -1,37 +1,42 @@
 ---
-import { Image } from "astro:assets";
-
 interface Props {
   lightSrc?: string;
   darkSrc?: string;
+  lightAlt?: string;
+  darkAlt?: string;
+  compareLabel?: string;
+  privacyLabel?: string;
 }
 
 const {
-  lightSrc = "/landing/dashboard-light.png",
-  darkSrc = "/landing/dashboard-dark.png",
+  lightSrc = "/landing/mypaas-dashboard-light.webp",
+  darkSrc = "/landing/mypaas-dashboard-dark.webp",
+  lightAlt = "MyPaaS projects dashboard in light mode",
+  darkAlt = "MyPaaS projects dashboard in dark mode",
+  compareLabel = "Compare light and dark MyPaaS dashboard themes",
+  privacyLabel = "Account details hidden",
 } = Astro.props;
 ---
 
-<figure class="compare-shell" aria-label="MyPaas dashboard theme comparison" data-compare-shell>
+<figure class="compare-shell technical-frame" aria-label={compareLabel} data-compare-shell>
   <div class="compare-stage" style="--reveal: 50%" data-compare-stage>
-    <Image
+    <img
       class="compare-image compare-image-light"
       src={lightSrc}
-      alt="MyPaas deployment dashboard in light mode"
-      width="1920"
-      height="915"
-      loading="eager"
+      alt={lightAlt}
+      width="1280"
+      height="630"
+      loading="lazy"
       decoding="async"
       draggable="false"
     />
-    <Image
+    <img
       class="compare-image compare-image-dark"
       src={darkSrc}
-      alt=""
-      aria-hidden="true"
-      width="1920"
-      height="915"
-      loading="eager"
+      alt={darkAlt}
+      width="1280"
+      height="630"
+      loading="lazy"
       decoding="async"
       draggable="false"
     />
@@ -43,19 +48,18 @@ const {
       max="100"
       step="1"
       value="50"
-      aria-label="Compare light and dark MyPaas dashboard themes"
+      aria-label={compareLabel}
       aria-valuetext="50% dark theme shown"
       data-compare-input
     />
 
     <div class="compare-divider" aria-hidden="true"></div>
-    <div class="compare-handle" aria-hidden="true">
-      <span>‹</span><span>›</span>
-    </div>
+    <div class="compare-handle" aria-hidden="true"><span>←</span><span>→</span></div>
 
-    <div class="privacy-mask" aria-hidden="true">
-      <span>Workspace details hidden</span>
-    </div>
+    <div class="theme-label theme-label-light" aria-hidden="true">LIGHT</div>
+    <div class="theme-label theme-label-dark" aria-hidden="true">DARK</div>
+
+    <div class="privacy-mask" aria-hidden="true"><span>{privacyLabel}</span></div>
   </div>
 </figure>
 
@@ -83,7 +87,7 @@ const {
       timer = null;
     };
 
-    const ease = (value: number) => value < 0.5
+    const ease = (value: number) => value < .5
       ? 2 * value * value
       : 1 - Math.pow(-2 * value + 2, 2) / 2;
 
@@ -92,165 +96,36 @@ const {
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       animating = true;
       const startedAt = performance.now();
-
       const tick = (now: number) => {
         if (!animating) return;
-        const progress = Math.min((now - startedAt) / 1500, 1);
-        const position = progress <= 0.66
-          ? 24 + 52 * ease(progress / 0.66)
-          : 76 - 26 * ease((progress - 0.66) / 0.34);
+        const progress = Math.min((now - startedAt) / 1450, 1);
+        const position = progress <= .66
+          ? 28 + 44 * ease(progress / .66)
+          : 72 - 22 * ease((progress - .66) / .34);
         setPosition(position);
-
         if (progress < 1) frameId = requestAnimationFrame(tick);
-        else {
-          stop();
-          setPosition(50);
-        }
+        else { stop(); setPosition(50); }
       };
-
       frameId = requestAnimationFrame(tick);
     };
 
-    input?.addEventListener("input", () => {
-      stop();
-      setPosition(Number(input.value));
-    });
+    input?.addEventListener("input", () => { stop(); setPosition(Number(input.value)); });
     input?.addEventListener("pointerdown", stop);
     input?.addEventListener("keydown", stop);
-    timer = window.setTimeout(demo, 500);
+    timer = window.setTimeout(demo, 650);
   });
 </script>
 
 <style>
-  .compare-shell {
-    margin: 0;
-    overflow: hidden;
-    border: 1px solid var(--app-border-strong);
-    border-radius: 0.6rem;
-    background: var(--app-surface);
-    box-shadow: 0 24px 60px rgb(15 23 42 / 0.12);
-  }
-
-  .compare-stage {
-    position: relative;
-    isolation: isolate;
-    aspect-ratio: 1920 / 915;
-    overflow: hidden;
-    background: oklch(0.145 0.012 255);
-    user-select: none;
-  }
-
-  .compare-image {
-    position: absolute;
-    inset: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: left top;
-    pointer-events: none;
-  }
-
-  .compare-image-dark {
-    clip-path: inset(0 calc(100% - var(--reveal)) 0 0);
-  }
-
-  .compare-input {
-    position: absolute;
-    z-index: 5;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    opacity: 0;
-    cursor: ew-resize;
-    touch-action: pan-y;
-  }
-
-  .compare-divider {
-    position: absolute;
-    z-index: 3;
-    top: 0;
-    bottom: 0;
-    left: var(--reveal);
-    width: 2px;
-    background: white;
-    box-shadow: 0 0 0 1px rgb(2 6 23 / 0.2), 0 0 18px rgb(2 6 23 / 0.35);
-    transform: translateX(-50%);
-    pointer-events: none;
-  }
-
-  .compare-handle {
-    position: absolute;
-    z-index: 6;
-    top: 50%;
-    left: clamp(1.5rem, var(--reveal), calc(100% - 1.5rem));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
-    width: 3rem;
-    height: 3rem;
-    border: 2px solid white;
-    border-radius: 999px;
-    background: var(--app-accent-strong);
-    color: white;
-    box-shadow: 0 8px 24px rgb(2 6 23 / 0.3);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .compare-handle span {
-    font-family: var(--font-mono);
-    font-size: 1.05rem;
-    line-height: 1;
-  }
-
-  .compare-input:focus-visible ~ .compare-handle {
-    box-shadow: 0 0 0 2px var(--app-surface), 0 0 0 5px var(--app-accent);
-  }
-
-  .privacy-mask {
-    position: absolute;
-    z-index: 4;
-    left: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 15.65%;
-    height: 15.85%;
-    border-top: 1px solid rgb(255 255 255 / 0.16);
-    border-right: 1px solid rgb(255 255 255 / 0.16);
-    background: rgb(8 15 25 / 0.18);
-    backdrop-filter: blur(15px);
-    pointer-events: none;
-  }
-
-  .privacy-mask span {
-    max-width: 8rem;
-    padding: 0.3rem 0.45rem;
-    border: 1px solid rgb(255 255 255 / 0.2);
-    border-radius: 0.25rem;
-    background: rgb(3 11 20 / 0.72);
-    color: rgb(255 255 255 / 0.84);
-    font-size: clamp(0.38rem, 0.56vw, 0.65rem);
-    font-weight: 600;
-    line-height: 1.2;
-    text-align: center;
-  }
-
-  @media (max-width: 720px) {
-    .compare-stage {
-      aspect-ratio: 4 / 3;
-    }
-
-    .compare-image {
-      object-position: 20% top;
-    }
-
-    .privacy-mask {
-      width: 18%;
-    }
-  }
+.compare-shell{margin:0;overflow:hidden;border:1px solid #cfcfcf;background:#fff}
+.compare-stage{position:relative;isolation:isolate;aspect-ratio:1280/630;overflow:hidden;background:#090909;user-select:none}
+.compare-image{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:left top;pointer-events:none}
+.compare-image-dark{clip-path:inset(0 calc(100% - var(--reveal)) 0 0)}
+.compare-input{position:absolute;z-index:8;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;touch-action:pan-y}
+.compare-divider{position:absolute;z-index:5;top:0;bottom:0;left:var(--reveal);width:1px;background:#fff;box-shadow:0 0 0 1px rgb(0 0 0/.35);transform:translateX(-50%);pointer-events:none}
+.compare-handle{position:absolute;z-index:9;top:50%;left:clamp(1.5rem,var(--reveal),calc(100% - 1.5rem));display:flex;width:3rem;height:3rem;align-items:center;justify-content:center;gap:.28rem;border:1px solid #fff;background:#090909;color:#fff;font-family:var(--font-mono);font-size:.68rem;transform:translate(-50%,-50%);pointer-events:none}
+.compare-input:focus-visible~.compare-handle{outline:3px solid #fff;outline-offset:3px}
+.theme-label{position:absolute;z-index:6;top:14px;padding:5px 8px;border:1px solid rgb(127 127 127/.55);background:rgb(255 255 255/.88);color:#111;font-family:var(--font-mono);font-size:.62rem;font-weight:700;letter-spacing:.09em;pointer-events:none}.theme-label-light{right:14px}.theme-label-dark{left:14px;background:rgb(10 10 10/.88);color:#fff}
+.privacy-mask{position:absolute;z-index:7;left:0;bottom:0;display:flex;width:13.75%;height:14.8%;align-items:center;justify-content:center;border-top:1px solid rgb(127 127 127/.32);border-right:1px solid rgb(127 127 127/.32);background:rgb(18 18 18/.54);backdrop-filter:blur(16px);pointer-events:none}.privacy-mask span{padding:.3rem .42rem;border:1px solid rgb(255 255 255/.25);background:rgb(0 0 0/.76);color:#fff;font-family:var(--font-mono);font-size:clamp(.34rem,.48vw,.58rem);line-height:1.15;text-align:center}
+@media(max-width:720px){.compare-stage{aspect-ratio:4/3}.compare-image{width:auto;min-width:100%;height:100%;object-position:20% top}.privacy-mask{width:20%;height:13%}.compare-handle{width:2.6rem;height:2.6rem}.theme-label{top:9px}.theme-label-light{right:9px}.theme-label-dark{left:9px}}
 </style>

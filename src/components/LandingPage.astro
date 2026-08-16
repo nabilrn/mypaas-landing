@@ -2,61 +2,105 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CopyCommand from "./CopyCommand.astro";
 import LandingHeader from "./LandingHeader.astro";
+import ThemeCompareSlider from "./ThemeCompareSlider.astro";
 import ArchitectureBlueprint from "./compact/ArchitectureBlueprint.astro";
 import DistroStack from "./compact/DistroStack.astro";
 import PixelHeroArt from "./compact/PixelHeroArt.astro";
 import PlasmaHeroBackground from "./compact/PlasmaHeroBackground.astro";
+import ProductCapabilitySections from "./compact/ProductCapabilitySections.astro";
 import ReferenceBodySections from "./compact/ReferenceBodySections.astro";
 import TechRail from "./compact/TechRail.astro";
 import { siDocker, siPodman } from "simple-icons";
-import { podmanInstallCommand, repositoryUrl, type Locale } from "../lib/site";
+import { repositoryUrl, type Locale } from "../lib/site";
 
 interface Props { locale?: Locale }
 const { locale = "en" } = Astro.props;
 const path = locale === "en" ? "/" : `/${locale}/`;
+const betaInstallCommand = "curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/v0.5.0-beta.1/scripts/bootstrap.sh | env MYPAAS_REF=v0.5.0-beta.1 bash";
 
 const copy = {
   en: {
-    title: "MyPaaS | Self-hosted Platform as a Service",
-    description: "Run a self-hosted PaaS on one Ubuntu or Debian Linux server with GitHub, Cloudflare, Podman, Caddy, PostgreSQL, CLI, API, and MCP workflows.",
-    eyebrow: "SELF-HOSTED PLATFORM AS A SERVICE",
+    title: "MyPaaS | Self-hosted PaaS with automatic Caddy routing",
+    description: "Deploy Git repositories and public OCI images to one Linux server with Podman-first runtime, automatic project subdomains through Caddy, logs, metrics, databases, backups, recovery, CLI, API, and MCP workflows.",
+    eyebrow: "BETA v0.5.0-beta.1 · SELF-HOSTED PAAS",
     h1: "Deploy on your own server without giving up control.",
-    intro: "MyPaaS turns one Linux server into a focused deployment platform. Connect GitHub, publish through Cloudflare and Caddy, then operate apps from the dashboard, CLI, API, or MCP.",
-    installLabel: "RECOMMENDED LINUX HOST INSTALL",
-    installHint: "Podman path · Ubuntu / Debian",
+    intro: "MyPaaS turns one Ubuntu or Debian server into a focused deployment control plane for Git repositories and public OCI images, with automatic Caddy routing, operations, databases, backup, recovery, and automation built around standard Linux tools.",
+    installLabel: "PINNED BETA INSTALL",
+    installHint: "Rootful Podman default · Ubuntu / Debian",
     docs: "Read the docs",
     github: "View on GitHub",
-    badges: ["Ubuntu / Debian Linux", "Podman for Linux hosts", "Docker for local/dev"],
+    imageAlt: "MyPaaS dashboard showing host telemetry, projects, runtime state, and automatic project subdomains",
+    badges: ["Ubuntu / Debian Linux", "Rootful Podman default", "Docker Engine compatibility"],
+    previewLabel: "REAL PRODUCT UI",
+    previewTitle: "Operate the server from one dashboard.",
+    previewBody: "Live host telemetry, project inventory, runtime state, routing identity, backups, migration, audit, MCP, and operator settings stay visible without hiding the Linux host underneath.",
+    routeLabel: "AUTOMATIC PROJECT ROUTING",
+    routeTitle: "Project created. Subdomain ready after runtime readiness.",
+    routeBody: "MyPaaS maps each project to a hostname below your configured domain. Cloudflare Tunnel receives the wildcard traffic, while Caddy activates and reconciles the project route only after the expected runtime is ready.",
+    routeExampleFrom: "portfolio",
+    routeExampleTo: "portfolio.<your-domain>",
+    sliderLabel: "Compare the current MyPaaS dashboard in light and dark mode",
+    privacyLabel: "Account details hidden",
   },
   id: {
-    title: "MyPaaS | Platform as a Service self-hosted",
-    description: "Jalankan PaaS self-hosted pada satu server Linux Ubuntu atau Debian dengan GitHub, Cloudflare, Podman, Caddy, PostgreSQL, CLI, API, dan MCP.",
-    eyebrow: "SELF-HOSTED PLATFORM AS A SERVICE",
+    title: "MyPaaS | PaaS self-hosted dengan routing Caddy otomatis",
+    description: "Deploy repositori Git dan image OCI publik ke satu server Linux dengan runtime Podman-first, subdomain project otomatis melalui Caddy, log, metrik, database, backup, recovery, CLI, API, dan MCP.",
+    eyebrow: "BETA v0.5.0-beta.1 · PAAS SELF-HOSTED",
     h1: "Deploy di server sendiri tanpa kehilangan kendali.",
-    intro: "MyPaaS mengubah satu server Linux menjadi platform deployment yang fokus. Hubungkan GitHub, publish lewat Cloudflare dan Caddy, lalu operasikan aplikasi dari dashboard, CLI, API, atau MCP.",
-    installLabel: "INSTALL YANG DIREKOMENDASIKAN UNTUK HOST LINUX",
-    installHint: "Jalur Podman · Ubuntu / Debian",
+    intro: "MyPaaS mengubah satu server Ubuntu atau Debian menjadi deployment control plane untuk repositori Git dan image OCI publik, lengkap dengan routing Caddy otomatis, operasi, database, backup, recovery, dan automation di atas tool Linux standar.",
+    installLabel: "INSTALL BETA TERPIN",
+    installHint: "Rootful Podman default · Ubuntu / Debian",
     docs: "Baca dokumentasi",
     github: "Lihat di GitHub",
-    badges: ["Ubuntu / Debian Linux", "Podman untuk host Linux", "Docker untuk local/dev"],
+    imageAlt: "Dashboard MyPaaS yang menampilkan telemetry host, project, runtime, dan subdomain project otomatis",
+    badges: ["Ubuntu / Debian Linux", "Rootful Podman default", "Kompatibilitas Docker Engine"],
+    previewLabel: "UI PRODUK NYATA",
+    previewTitle: "Operasikan server dari satu dashboard.",
+    previewBody: "Telemetry host, inventory project, state runtime, routing identity, backup, migration, audit, MCP, dan operator settings tetap terlihat tanpa menyembunyikan host Linux di bawahnya.",
+    routeLabel: "ROUTING PROJECT OTOMATIS",
+    routeTitle: "Project dibuat. Subdomain aktif setelah runtime siap.",
+    routeBody: "MyPaaS memetakan setiap project ke hostname di bawah domain yang dikonfigurasi. Cloudflare Tunnel menerima traffic wildcard, lalu Caddy mengaktifkan dan merekonsiliasi route project hanya setelah runtime yang diharapkan siap.",
+    routeExampleFrom: "portfolio",
+    routeExampleTo: "portfolio.<domain-anda>",
+    sliderLabel: "Bandingkan dashboard MyPaaS terbaru dalam mode terang dan gelap",
+    privacyLabel: "Detail akun disembunyikan",
   },
   zh: {
-    title: "MyPaaS | 自托管 Platform as a Service",
-    description: "在一台 Ubuntu 或 Debian Linux 服务器上运行自托管 PaaS，并连接 GitHub、Cloudflare、Podman、Caddy、PostgreSQL、CLI、API 与 MCP。",
-    eyebrow: "SELF-HOSTED PLATFORM AS A SERVICE",
+    title: "MyPaaS | 带自动 Caddy 路由的单机自托管 PaaS",
+    description: "将 Git 仓库和公开 OCI 镜像部署到一台 Linux 服务器，默认使用 Rootful Podman，并提供 Caddy 自动项目子域、日志、指标、数据库、备份、恢复、CLI、API 与 MCP。",
+    eyebrow: "BETA v0.5.0-beta.1 · 自托管 PAAS",
     h1: "在自己的服务器上部署，同时保留控制权。",
-    intro: "MyPaaS 将一台 Linux 服务器变成聚焦的部署平台。连接 GitHub，通过 Cloudflare 与 Caddy 发布，然后通过 Dashboard、CLI、API 或 MCP 运维应用。",
-    installLabel: "推荐的 LINUX HOST 安装方式",
-    installHint: "Podman 路径 · Ubuntu / Debian",
+    intro: "MyPaaS 将一台 Ubuntu 或 Debian 服务器变成面向 Git 仓库和公开 OCI 镜像的部署控制平面，并围绕标准 Linux 工具提供自动 Caddy 路由、运维、数据库、备份、恢复与自动化。",
+    installLabel: "固定版本 BETA 安装",
+    installHint: "Rootful Podman 默认 · Ubuntu / Debian",
     docs: "阅读文档",
     github: "在 GitHub 查看",
-    badges: ["Ubuntu / Debian Linux", "Linux host 使用 Podman", "Docker 用于本地开发"],
+    imageAlt: "MyPaaS Dashboard，展示主机遥测、项目、运行状态与自动项目子域",
+    badges: ["Ubuntu / Debian Linux", "Rootful Podman 默认", "Docker Engine 兼容模式"],
+    previewLabel: "真实产品界面",
+    previewTitle: "在一个 Dashboard 中运维服务器。",
+    previewBody: "主机遥测、项目清单、运行状态、路由标识、备份、迁移、审计、MCP 与运维设置保持可见，同时不隐藏底层 Linux 主机。",
+    routeLabel: "自动项目路由",
+    routeTitle: "创建项目，运行时就绪后自动获得子域。",
+    routeBody: "MyPaaS 将每个项目映射到所配置域名下的主机名。Cloudflare Tunnel 接收通配符流量，Caddy 仅在预期运行时就绪后激活并对账项目路由。",
+    routeExampleFrom: "portfolio",
+    routeExampleTo: "portfolio.<your-domain>",
+    sliderLabel: "比较最新 MyPaaS Dashboard 的浅色与深色模式",
+    privacyLabel: "账户信息已隐藏",
   },
 }[locale];
 
 const badgeIcons = [null, siPodman, siDocker] as const;
 ---
-<BaseLayout title={copy.title} description={copy.description} locale={locale} path={path} localizedAlternates>
+<BaseLayout
+  title={copy.title}
+  description={copy.description}
+  image="/landing/mypaas-dashboard-dark.webp"
+  imageAlt={copy.imageAlt}
+  locale={locale}
+  path={path}
+  localizedAlternates
+>
   <div class="landing-plasma-backdrop" aria-hidden="true">
     <PlasmaHeroBackground />
   </div>
@@ -73,7 +117,7 @@ const badgeIcons = [null, siPodman, siDocker] as const;
 
           <div class="hero-install">
             <div class="install-head"><span>{copy.installLabel}</span><small>{copy.installHint}</small></div>
-            <CopyCommand command={podmanInstallCommand} label="bootstrap.sh" />
+            <CopyCommand command={betaInstallCommand} label="bootstrap.sh" />
           </div>
 
           <div class="runtime-badges">
@@ -92,13 +136,33 @@ const badgeIcons = [null, siPodman, siDocker] as const;
     </section>
 
     <div class="integration-section ecosystem-rail" id="integrations">
-      <TechRail />
+      <TechRail {locale} />
     </div>
 
-    <ArchitectureBlueprint />
+    <section class="dashboard-preview technical-frame" id="product-preview" aria-labelledby="product-preview-title">
+      <div class="preview-intro">
+        <span>{copy.previewLabel}</span>
+        <h2 id="product-preview-title">{copy.previewTitle}</h2>
+        <p>{copy.previewBody}</p>
+      </div>
+      <ThemeCompareSlider compareLabel={copy.sliderLabel} privacyLabel={copy.privacyLabel} lightAlt={copy.imageAlt} darkAlt={copy.imageAlt} />
+      <div class="routing-proof">
+        <div class="routing-copy">
+          <span>{copy.routeLabel}</span>
+          <h3>{copy.routeTitle}</h3>
+          <p>{copy.routeBody}</p>
+        </div>
+        <div class="route-example" aria-label={`${copy.routeExampleFrom} routes to ${copy.routeExampleTo}`}>
+          <code>{copy.routeExampleFrom}</code><span>→</span><code>{copy.routeExampleTo}</code>
+        </div>
+      </div>
+    </section>
+
+    <ArchitectureBlueprint {locale} />
+    <ProductCapabilitySections {locale} />
   </main>
 
-  <ReferenceBodySections />
+  <ReferenceBodySections {locale} />
 </BaseLayout>
 
 <style>
@@ -108,9 +172,10 @@ const badgeIcons = [null, siPodman, siDocker] as const;
 :global(.hero-art)::before,:global(.hero-art)::after{display:none!important}
 :global(main){position:relative;z-index:1;background:transparent}.hero-shell{position:relative;background:transparent;color:#f5f5f5}.hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(23rem,.92fr);width:min(100%,var(--page-width));margin:0 auto}.hero-copy{padding:clamp(3.5rem,7vw,6rem) clamp(1rem,3vw,2.4rem) 3.2rem}.eyebrow,.install-head span{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}.hero .eyebrow{margin:0;color:#bdbdbd}.hero h1{max-width:12ch;margin:.85rem 0 1rem;color:#fff;font-family:var(--font-heading);font-size:clamp(3.25rem,6vw,5.8rem);font-weight:400;line-height:.96;letter-spacing:-.048em;text-wrap:balance}.intro{max-width:43rem;margin:0;color:#c0c0c0;font-size:clamp(1.03rem,1.35vw,1.17rem);line-height:1.62}.hero-install{max-width:49rem;margin-top:1.45rem;padding:.8rem;border:1px solid #555;background:#0f0f0f}.install-head{display:flex;justify-content:space-between;gap:1rem;padding:.05rem .08rem .62rem;color:#aaa}.install-head small{color:#858585;font-family:var(--font-mono);font-size:.68rem}.hero-install :global(.command-box){border-color:#4d4d4d!important;background:#0b0b0b!important;color:#f5f5f5!important}.runtime-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.85rem}.runtime-badges>span{display:flex;align-items:center;gap:.4rem;padding:.38rem .55rem;border:1px solid #3a3a3a;background:#0e0e0e;color:#c6c6c6;font-size:.76rem}.runtime-badges>span>svg{width:1rem;height:1rem;fill:currentColor}.actions{display:flex;gap:.65rem;margin-top:1rem}.actions a{display:inline-flex;align-items:center;min-height:2.55rem;padding:.62rem .85rem;border:1px solid #555;color:#f5f5f5;font-size:.84rem;font-weight:640;text-decoration:none}.actions a.primary{background:#f5f5f5;color:#080808}
 .ecosystem-rail{position:relative;z-index:15;width:100%;padding:18px 0 38px;background:linear-gradient(to bottom,transparent 0,transparent 64px,#fff 64px,#fff 100%)}
+.dashboard-preview{width:min(calc(100% - 36px),1368px);margin:0 auto var(--landing-panel-gap);padding:var(--landing-panel-padding);border:1px solid #d8d8d8;background:#fff;color:#111}.preview-intro{display:grid;grid-template-columns:minmax(170px,.62fr) minmax(0,1.25fr) minmax(260px,1fr);gap:24px;align-items:start;margin-bottom:22px}.preview-intro>span,.routing-copy>span{padding-top:6px;color:#333;font-family:var(--font-mono);font-size:var(--landing-section-label-size);font-weight:600;letter-spacing:.08em}.preview-intro h2{margin:0;font-family:var(--font-heading);font-size:clamp(2rem,3.2vw,3.25rem);font-weight:400;line-height:1.02;letter-spacing:-.03em}.preview-intro p,.routing-copy p{margin:4px 0 0;color:#555;font-family:var(--font-sans);font-size:14px;line-height:1.55}.routing-proof{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:28px;align-items:end;padding-top:20px}.routing-copy{display:grid;grid-template-columns:minmax(170px,.54fr) minmax(0,1.46fr);gap:14px 24px}.routing-copy h3{margin:0;font-family:var(--font-sans);font-size:clamp(1.15rem,1.7vw,1.55rem);line-height:1.15}.routing-copy p{grid-column:2}.route-example{display:flex;min-height:76px;align-items:center;justify-content:center;gap:14px;border:1px solid #d9d9d9;background:#f8f8f8;padding:18px}.route-example code{font-family:var(--font-mono);font-size:clamp(.72rem,1vw,.9rem);font-weight:600}.route-example span{color:#777;font-family:var(--font-mono)}
 @media(max-width:1100px){.landing-plasma-backdrop{height:741px}.ecosystem-rail{padding:18px 0 40px;background:linear-gradient(to bottom,transparent 0,transparent 82px,#fff 82px,#fff 100%)}}
-@media(max-width:900px){.landing-plasma-backdrop{height:851px}.hero{grid-template-columns:1fr}.hero-copy{padding-bottom:2rem}.landing-plasma-backdrop::after{background:linear-gradient(180deg,rgb(0 0 2 / .50) 0%,rgb(0 0 2 / .38) 40%,rgb(0 0 2 / .12) 68%,transparent 88%)}}
-@media(max-width:650px){.landing-plasma-backdrop{height:837px}.ecosystem-rail{padding:14px 0 32px;background:linear-gradient(to bottom,transparent 0,transparent 68px,#fff 68px,#fff 100%)}}
+@media(max-width:900px){.landing-plasma-backdrop{height:851px}.hero{grid-template-columns:1fr}.hero-copy{padding-bottom:2rem}.landing-plasma-backdrop::after{background:linear-gradient(180deg,rgb(0 0 2 / .50) 0%,rgb(0 0 2 / .38) 40%,rgb(0 0 2 / .12) 68%,transparent 88%)}.preview-intro{grid-template-columns:1fr}.routing-proof{grid-template-columns:1fr}.routing-copy{grid-template-columns:1fr}.routing-copy p{grid-column:auto}}
+@media(max-width:650px){.landing-plasma-backdrop{height:837px}.ecosystem-rail{padding:14px 0 32px;background:linear-gradient(to bottom,transparent 0,transparent 68px,#fff 68px,#fff 100%)}.dashboard-preview{width:min(calc(100% - 20px),1368px);padding:18px}.route-example{justify-content:flex-start;overflow:auto}}
 @media(max-width:560px){.hero h1{font-size:clamp(2.8rem,13vw,4rem)}.hero-copy{padding-inline:.75rem}.install-head{display:grid;gap:.2rem}.runtime-badges{display:grid}.runtime-badges>span{width:max-content;max-width:100%}.actions{flex-wrap:wrap}}
 @media(max-width:420px){.landing-plasma-backdrop{height:840px}}
 </style>

@@ -1,78 +1,86 @@
 ---
-import { repositoryUrl } from "../../lib/site";
-import AgentRobotIcon from "./AgentRobotIcon.astro";
-import HowStepIllustration from "./HowStepIllustration.astro";
+import { repositoryUrl, type Locale } from "../../lib/site";
 import InterfaceIcon from "./InterfaceIcon.astro";
 
-const whyItems = [
-  { title: "Self-hosted", body: ["You own the server.", "You own the data.", "No vendor lock-in."], icon: "server" },
-  { title: "Integration-first", body: ["Built to work with the", "tools you already use", "and love."], icon: "puzzle" },
-  { title: "Single-server focused", body: ["Not trying to be Kubernetes.", "One host, less overhead,", "more control."], icon: "cube" },
-  { title: "Logs and metrics built in", body: ["mypaas-statd gives you", "observability out of the", "box."], icon: "bars" },
-  { title: "One control surface", body: ["Deploy, route, and operate", "without stitching together", "separate control apps."], icon: "robot" },
-  { title: "Standard deployment paths", body: ["Docker by default.", "Podman optional.", "No surprises."], icon: "terminal" },
-] as const;
+interface Props { locale?: Locale }
+const { locale = "en" } = Astro.props;
 
-const steps = [
-  { n: "1", kind: "connect", title: "Connect GitHub", body: "Link your repositories securely." },
-  { n: "2", kind: "inspect", title: "Inspect and configure", body: "Review apps and set environment, build, and domain options." },
-  { n: "3", kind: "deploy", title: "Deploy", body: "MyPaaS builds, configures, and deploys to your server." },
-  { n: "4", kind: "operate", title: "Operate", body: "Monitor logs and metrics, manage updates, and keep shipping." },
-] as const;
+const content = {
+  en: {
+    footerBody: "Self-hosted deployment control plane for one Linux server.",
+    product: "PRODUCT", resources: "RESOURCES", project: "PROJECT",
+    architecture: "Architecture", capabilities: "Capabilities", scope: "Beta scope",
+    docs: "Docs", changelog: "Changelog", privacy: "Privacy",
+    github: "GitHub", discussions: "Discussions", automation: "Automation & MCP", security: "Security",
+    githubCard: "Open source. Evidence before claims.", star: "View on GitHub",
+  },
+  id: {
+    footerBody: "Deployment control plane self-hosted untuk satu server Linux.",
+    product: "PRODUK", resources: "RESOURCE", project: "PROJECT",
+    architecture: "Arsitektur", capabilities: "Kapabilitas", scope: "Scope beta",
+    docs: "Dokumentasi", changelog: "Changelog", privacy: "Privasi",
+    github: "GitHub", discussions: "Diskusi", automation: "Automation & MCP", security: "Keamanan",
+    githubCard: "Open source. Evidence sebelum klaim.", star: "Lihat di GitHub",
+  },
+  zh: {
+    footerBody: "面向单台 Linux 服务器的自托管部署控制平面。",
+    product: "产品", resources: "资源", project: "项目",
+    architecture: "架构", capabilities: "能力", scope: "Beta 范围",
+    docs: "文档", changelog: "更新日志", privacy: "隐私",
+    github: "GitHub", discussions: "讨论", automation: "自动化与 MCP", security: "安全",
+    githubCard: "开源。先有证据，再做声明。", star: "在 GitHub 查看",
+  },
+} as const;
+
+const copy = content[locale];
 ---
-
-<section class="why-section reference-panel" id="features" aria-labelledby="why-heading">
-  <header class="panel-heading">
-    <InterfaceIcon name="star" size={21} strokeWidth={1.55} />
-    <h2 id="why-heading">WHY MYPAAS</h2>
-  </header>
-
-  <div class="why-grid">
-    {whyItems.map((item) => (
-      <article class="why-card">
-        <div class="why-title-row">
-          {item.icon === "server" && <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="24" height="6" rx="2"/><rect x="4" y="13" width="24" height="6" rx="2"/><rect x="4" y="21" width="24" height="6" rx="2"/><circle cx="9" cy="8" r="1"/><circle cx="9" cy="16" r="1"/><circle cx="9" cy="24" r="1"/></svg>}
-          {item.icon === "puzzle" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4h6v5a4 4 0 1 1 5 5h5v6h-5a4 4 0 1 1-5 5v3h-6v-5a4 4 0 1 1-5-5H4v-6h5a4 4 0 1 1 3-3V4Z"/></svg>}
-          {item.icon === "cube" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="m16 3 11 6v14l-11 6-11-6V9l11-6Zm0 0v13m11-7-11 7L5 9m11 7v13"/></svg>}
-          {item.icon === "bars" && <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 27h24M6 27V17h5v10m4 0V8h5v19m4 0V13h5v14"/></svg>}
-          {item.icon === "robot" && <AgentRobotIcon size={28} strokeWidth={1.7} />}
-          {item.icon === "terminal" && <InterfaceIcon name="terminal" size={28} strokeWidth={1.6} />}
-          <h3>{item.title}</h3>
-        </div>
-        <p>{item.body.map((line) => <>{line}<br /></>)}</p>
-      </article>
-    ))}
-  </div>
-</section>
-
-<section class="how-section reference-panel" id="how-it-works" aria-labelledby="how-heading">
-  <header class="panel-heading">
-    <svg class="heading-bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20v-7h3v7m3 0V5h3v15m3 0v-10h3v10"/></svg>
-    <h2 id="how-heading">HOW IT WORKS</h2>
-  </header>
-
-  <div class="steps-grid">
-    {steps.map((step, index) => (
-      <article class="step-card">
-        <div class="step-head"><span>{step.n}</span><h3>{step.title}</h3></div>
-        <HowStepIllustration kind={step.kind} />
-        <p>{step.body}</p>
-        {index < steps.length - 1 && <span class="step-connector" aria-hidden="true"><i></i></span>}
-      </article>
-    ))}
-  </div>
-</section>
 
 <footer class="reference-footer">
   <div class="footer-inner">
-    <div class="footer-brand"><img src="/brand/logowithtext_white.png" alt="MyPaaS" /><p>Self-hosted Platform as a Service<br/>for Ubuntu and Linux servers.</p></div>
-    <nav class="footer-column" aria-label="Product links"><strong>PRODUCT</strong><a href="#features">Features</a><a href="#architecture">Architecture</a><a href="#integrations">Integrations</a></nav>
-    <nav class="footer-column" aria-label="Resource links"><strong>RESOURCES</strong><a href="/docs/">Docs</a><a href="/docs/">Guides</a><a href={`${repositoryUrl}/releases`} target="_blank" rel="noreferrer">Changelog</a></nav>
-    <nav class="footer-column" aria-label="Community links"><strong>COMMUNITY</strong><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a><a href={`${repositoryUrl}/discussions`} target="_blank" rel="noreferrer">Discussions</a><a href="/docs/">MCP Registry</a></nav>
-    <div class="github-card"><p>Open source. Community driven.</p><a href={repositoryUrl} target="_blank" rel="noreferrer"><InterfaceIcon name="star" size={20} strokeWidth={1.55} /><span>Star on GitHub</span></a></div>
+    <div class="footer-brand">
+      <img src="/brand/logowithtext_white.png" alt="MyPaaS" />
+      <p>{copy.footerBody}</p>
+    </div>
+
+    <nav class="footer-column" aria-label="Product links">
+      <strong>{copy.product}</strong>
+      <a href="#architecture">{copy.architecture}</a>
+      <a href="#capabilities">{copy.capabilities}</a>
+      <a href="#scope">{copy.scope}</a>
+    </nav>
+
+    <nav class="footer-column" aria-label="Resource links">
+      <strong>{copy.resources}</strong>
+      <a href="/docs/">{copy.docs}</a>
+      <a href={`${repositoryUrl}/releases`} target="_blank" rel="noreferrer">{copy.changelog}</a>
+      <a href="/privacy/">{copy.privacy}</a>
+      <a href="/docs/security/">{copy.security}</a>
+    </nav>
+
+    <nav class="footer-column" aria-label="Project links">
+      <strong>{copy.project}</strong>
+      <a href={repositoryUrl} target="_blank" rel="noreferrer">{copy.github}</a>
+      <a href={`${repositoryUrl}/discussions`} target="_blank" rel="noreferrer">{copy.discussions}</a>
+      <a href="/docs/automation/">{copy.automation}</a>
+    </nav>
+
+    <div class="github-card">
+      <p>{copy.githubCard}</p>
+      <a href={repositoryUrl} target="_blank" rel="noreferrer">
+        <InterfaceIcon name="star" size={20} strokeWidth={1.55} />
+        <span>{copy.star}</span>
+      </a>
+    </div>
   </div>
 </footer>
 
 <style>
-:global(body){background:#fff}.reference-panel{width:min(calc(100% - 36px),1368px);margin:0 auto var(--landing-panel-gap);padding:var(--landing-panel-padding);border:1px solid #dedede;border-radius:var(--landing-panel-radius);background:#fff;color:#111;box-shadow:none}.panel-heading{display:flex;align-items:center;gap:11px;margin-bottom:20px}.panel-heading h2{margin:0;font-family:var(--font-heading);font-size:var(--landing-section-label-size);font-weight:400;line-height:1;letter-spacing:.08em}.panel-heading>svg{width:21px;height:21px;fill:none;stroke:#101010;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.panel-heading .heading-bars{width:21px;height:21px}.why-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--landing-card-gap)}.why-card{display:grid;grid-template-rows:44px 1fr;gap:14px;min-width:0;min-height:176px;padding:var(--landing-card-padding);border:1px solid #dedede;border-radius:var(--landing-card-radius);background:#fff}.why-title-row{display:flex;min-height:44px;align-items:flex-start;gap:12px;color:#111}.why-title-row>svg{width:27px;height:27px;flex:none;margin-top:1px;fill:none;stroke:#111;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.why-title-row h3,.step-head h3{margin:0;font-family:var(--font-sans);font-size:var(--landing-card-title-size);font-weight:700;line-height:1.25}.why-card p{margin:0;color:#555;font-family:var(--font-sans);font-size:var(--landing-card-body-size);line-height:1.42}.how-section{padding-bottom:var(--landing-panel-padding)}.steps-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:42px}.step-card{position:relative;display:grid;grid-template-rows:32px auto minmax(34px,auto);gap:12px;min-width:0;padding:var(--landing-card-padding);border:1px dashed #cdcdcd;border-radius:var(--landing-card-radius);background:#fff}.step-head{display:flex;min-width:0;align-items:center;gap:9px}.step-head>span{display:grid;width:26px;height:26px;flex:none;border-radius:50%;background:#070707;color:#fff;font-family:var(--font-sans);font-size:13px;font-weight:700;place-items:center}.step-card>p{max-width:94%;margin:0 auto;color:#555;text-align:center;font-family:var(--font-sans);font-size:var(--landing-card-body-size);line-height:1.4}.step-connector{position:absolute;top:50%;left:calc(100% + 1px);width:42px;height:1px;border-top:1px dashed #aaa}.step-connector::after{position:absolute;top:-4px;right:0;width:7px;height:7px;border-top:1.5px solid #111;border-right:1.5px solid #111;transform:rotate(45deg);content:""}.reference-footer{width:100%;margin-top:0;background:#07080b;color:#fff}.footer-inner{display:grid;grid-template-columns:2fr .8fr .9fr 1fr 1.65fr;gap:48px;width:min(calc(100% - 72px),1320px);margin:0 auto;padding:27px 0 26px;align-items:start}.footer-brand img{width:136px;height:auto}.footer-brand p{margin:10px 0 0;color:#b8bac1;font-family:var(--font-sans);font-size:12.5px;line-height:1.45}.footer-column{display:grid;align-content:start;gap:4px}.footer-column strong{margin-bottom:4px;color:#fff;font-family:var(--font-sans);font-size:11px;font-weight:700}.footer-column a{color:#bcbec4;font-family:var(--font-sans);font-size:12px;line-height:1.25;text-decoration:none}.footer-column a:hover{color:#fff}.github-card{padding:15px 18px 13px;border:1px solid #3a3d45;border-radius:7px;background:#0c0d11}.github-card>p{margin:0 0 12px;color:#d7d8dc;font-family:var(--font-sans);font-size:12px}.github-card>a{display:flex;align-items:center;gap:10px;color:#fff;font-family:var(--font-sans);font-size:12px;font-weight:650;text-decoration:none}@media(max-width:1100px){.why-grid{grid-template-columns:repeat(3,1fr)}.steps-grid{grid-template-columns:1fr 1fr;gap:16px}.step-connector{display:none}.footer-inner{grid-template-columns:1.6fr repeat(3,1fr);gap:28px}.github-card{grid-column:1/-1;max-width:360px}}@media(max-width:680px){.reference-panel{width:calc(100% - 20px);padding:20px 15px}.why-grid,.steps-grid{grid-template-columns:1fr}.why-card{min-height:0}.footer-inner{grid-template-columns:1fr 1fr;width:calc(100% - 32px);gap:24px;padding-block:24px}.footer-brand,.github-card{grid-column:1/-1}.github-card{max-width:none}}
+:global(body){background:#fff}
+.reference-footer{width:100%;margin-top:0;background:#07080b;color:#fff}
+.footer-inner{display:grid;grid-template-columns:2fr .82fr .92fr 1fr 1.65fr;gap:48px;width:min(calc(100% - 72px),1320px);margin:0 auto;padding:30px 0 28px;align-items:start}
+.footer-brand img{width:136px;height:auto}.footer-brand p{max-width:260px;margin:10px 0 0;color:#b8bac1;font-family:var(--font-sans);font-size:12.5px;line-height:1.45}
+.footer-column{display:grid;align-content:start;gap:5px}.footer-column strong{margin-bottom:4px;color:#fff;font-family:var(--font-sans);font-size:11px;font-weight:700}.footer-column a{color:#bcbec4;font-family:var(--font-sans);font-size:12px;line-height:1.3;text-decoration:none}.footer-column a:hover{color:#fff}
+.github-card{padding:15px 18px 13px;border:1px solid #3a3d45;background:#0c0d11}.github-card>p{margin:0 0 12px;color:#d7d8dc;font-family:var(--font-sans);font-size:12px}.github-card>a{display:flex;align-items:center;gap:10px;color:#fff;font-family:var(--font-sans);font-size:12px;font-weight:650;text-decoration:none}
+@media(max-width:1100px){.footer-inner{grid-template-columns:1.6fr repeat(3,1fr);gap:28px}.github-card{grid-column:1/-1;max-width:360px}}
+@media(max-width:680px){.footer-inner{grid-template-columns:1fr 1fr;width:calc(100% - 32px);gap:24px;padding-block:24px}.footer-brand,.github-card{grid-column:1/-1}.github-card{max-width:none}}
 </style>

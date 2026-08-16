@@ -10,7 +10,8 @@ export const localeMeta = {
 
 export const repositoryUrl = "https://github.com/nabilrn/MyPaas";
 export const installCommand = "curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh | bash";
-export const podmanInstallCommand = "curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh | env USE_PODMAN=true bash";
+export const podmanInstallCommand = installCommand;
+export const dockerInstallCommand = "curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/main/scripts/bootstrap.sh | env USE_PODMAN=false bash";
 
 export const uiCopy = {
   en: {
@@ -32,18 +33,18 @@ export const uiCopy = {
 
 const en = {
   metaTitle: "MyPaaS — Deploy to your own Linux server",
-  metaDescription: "Deploy Git repositories and public OCI images to one Linux server with Docker or Podman, Caddy routing, logs, metrics, databases, backups, and recovery.",
+  metaDescription: "Deploy Git repositories and public OCI images to one Linux server with a Podman-first runtime, Docker Engine compatibility, Caddy routing, logs, metrics, databases, backups, and recovery.",
   eyebrow: "SELF-HOSTED PAAS · ONE LINUX SERVER",
   heroTitle: "Deploy to your server. Keep control.",
   heroSummary: "MyPaaS deploys Git repositories and public container images to a Linux server you own, with routing, logs, metrics, databases, backups, and recovery built in.",
   primaryCta: "Install MyPaaS",
   secondaryCta: "View source",
-  proof: ["Open source", "Docker / Podman", "Caddy", "GitHub", "Cloudflare"],
+  proof: ["Open source", "Podman-first", "Docker-compatible", "Caddy", "GitHub"],
 
   deployLabel: "Deploy",
   deployTitle: "From source to URL.",
   deployBody: "Choose a Git repository or public OCI image. MyPaaS runs the supported deployment path and routes the result through Caddy.",
-  deployGroups: [["Source", ["Git repository", "Public OCI image"]],["Deploy", ["Dockerfile", "Docker Compose", "Static / SPA", "Container image"]],["Runtime", ["Docker Engine", "Rootful Podman"]],["Route", ["Caddy", "Cloudflare Tunnel"]]] as const,
+  deployGroups: [["Source", ["Git repository", "Public OCI image"]],["Deploy", ["Dockerfile", "Docker Compose", "Static / SPA", "Container image"]],["Runtime", ["Rootful Podman (default)", "Docker Engine (compatibility)"]],["Route", ["Caddy", "Cloudflare Tunnel"]]] as const,
 
   operationsLabel: "Operate",
   operationsTitle: "Everything after deploy.",
@@ -61,7 +62,7 @@ const en = {
   ownershipTitle: "Your server. Standard tools.",
   ownershipBody: "Workloads and persistent data stay on infrastructure you control. MyPaaS connects the tools around them instead of replacing your runtime with a proprietary one.",
   ownershipItems: ["Linux host", "Source repository", "OCI workloads", "Project data", "Persistent volumes", "Migration path"],
-  integrationItems: ["GitHub", "Public OCI registries", "Docker / Podman", "Caddy", "Cloudflare Tunnel", "PostgreSQL"],
+  integrationItems: ["GitHub", "Public OCI registries", "Rootful Podman", "Docker Engine compatibility", "Caddy", "Cloudflare Tunnel", "PostgreSQL"],
 
   interfacesLabel: "Automation",
   interfacesTitle: "Use the interface you need.",
@@ -75,9 +76,9 @@ const en = {
 
   installLabel: "Install",
   installTitle: "Install on Ubuntu or Debian.",
-  installBody: "Docker Engine is the default runtime. Rootful Podman is available through the supported Docker-compatible path.",
-  installDocker: "Docker Engine",
-  installPodman: "Rootful Podman",
+  installBody: "Fresh supported hosts are Podman-first: rootful Podman is the installer default. Docker Engine remains an explicit supported compatibility mode.",
+  installDocker: "Docker Engine compatibility",
+  installPodman: "Rootful Podman default",
   installGuide: "Installation guide",
   verified: "Current product claims are reviewed against MyPaaS main.",
   footer: "Open-source deployment platform for one Linux server.",
@@ -87,13 +88,13 @@ const en = {
 const id = {
   ...en,
   metaTitle: "MyPaaS — Deploy ke server Linux milik Anda",
-  metaDescription: "Deploy repositori Git dan image OCI publik ke satu server Linux dengan Docker atau Podman, routing Caddy, log, metrik, database, backup, dan recovery.",
+  metaDescription: "Deploy repositori Git dan image OCI publik ke satu server Linux dengan runtime Podman-first, kompatibilitas Docker Engine, routing Caddy, log, metrik, database, backup, dan recovery.",
   eyebrow: "PAAS SELF-HOSTED · SATU SERVER LINUX",
   heroTitle: "Deploy ke server Anda. Tetap pegang kendali.",
   heroSummary: "MyPaaS men-deploy repositori Git dan image container publik ke server Linux milik Anda, lengkap dengan routing, log, metrik, database, backup, dan recovery.",
   primaryCta: "Install MyPaaS",
   secondaryCta: "Lihat source",
-  proof: ["Open source", "Docker / Podman", "Caddy", "GitHub", "Cloudflare"],
+  proof: ["Open source", "Podman-first", "Docker-compatible", "Caddy", "GitHub"],
   deployLabel: "Deploy",
   deployTitle: "Dari source ke URL.",
   deployBody: "Pilih repositori Git atau image OCI publik. MyPaaS menjalankan jalur deployment yang didukung lalu merutekannya melalui Caddy.",
@@ -112,7 +113,7 @@ const id = {
   ownershipTitle: "Server Anda. Tool standar.",
   ownershipBody: "Workload dan data persisten tetap di infrastruktur yang Anda kontrol. MyPaaS menghubungkan tool di sekitarnya tanpa mengganti runtime aplikasi dengan runtime proprietary.",
   ownershipItems: ["Host Linux", "Source repository", "OCI workload", "Data project", "Persistent volume", "Jalur migrasi"],
-  integrationItems: ["GitHub", "Public OCI registry", "Docker / Podman", "Caddy", "Cloudflare Tunnel", "PostgreSQL"],
+  integrationItems: ["GitHub", "Public OCI registry", "Rootful Podman", "Kompatibilitas Docker Engine", "Caddy", "Cloudflare Tunnel", "PostgreSQL"],
   interfacesLabel: "Automation",
   interfacesTitle: "Gunakan interface yang dibutuhkan.",
   interfacesBody: "Dashboard untuk operator, CLI dan API untuk automation, webhook untuk event repository, dan MCP untuk AI agent lokal.",
@@ -122,7 +123,9 @@ const id = {
   boundaries: ["Satu VM Linux", "Tanpa Kubernetes", "Tanpa multi-node scheduler", "Tanpa multi-region HA", "Tanpa horizontal auto-scaling", "Hanya public registry image"],
   installLabel: "Instalasi",
   installTitle: "Install di Ubuntu atau Debian.",
-  installBody: "Docker Engine adalah runtime default. Rootful Podman tersedia melalui compatibility path Docker yang didukung.",
+  installBody: "Host baru yang didukung menggunakan kebijakan Podman-first: rootful Podman adalah default installer. Docker Engine tetap didukung sebagai mode kompatibilitas eksplisit.",
+  installDocker: "Kompatibilitas Docker Engine",
+  installPodman: "Rootful Podman default",
   installGuide: "Panduan instalasi",
   verified: "Claim produk direview terhadap MyPaaS main saat ini.",
   footer: "Platform deployment open-source untuk satu server Linux.",
@@ -132,13 +135,13 @@ const id = {
 const zh = {
   ...en,
   metaTitle: "MyPaaS — 部署到你自己的 Linux 服务器",
-  metaDescription: "将 Git 仓库和公开 OCI 镜像部署到一台 Linux 服务器，支持 Docker 或 Podman、Caddy 路由、日志、指标、数据库、备份和恢复。",
+  metaDescription: "将 Git 仓库和公开 OCI 镜像部署到一台 Linux 服务器，默认使用 Rootful Podman，并保留 Docker Engine 兼容模式、Caddy 路由、日志、指标、数据库、备份和恢复。",
   eyebrow: "自托管 PAAS · 一台 LINUX 服务器",
   heroTitle: "部署到你的服务器。控制权留在手中。",
   heroSummary: "MyPaaS 将 Git 仓库和公开容器镜像部署到你自己的 Linux 服务器，并提供路由、日志、指标、数据库、备份和恢复。",
   primaryCta: "安装 MyPaaS",
   secondaryCta: "查看源码",
-  proof: ["开源", "Docker / Podman", "Caddy", "GitHub", "Cloudflare"],
+  proof: ["开源", "Podman-first", "Docker-compatible", "Caddy", "GitHub"],
   deployLabel: "部署",
   deployTitle: "从源码到 URL。",
   deployBody: "选择 Git 仓库或公开 OCI 镜像。MyPaaS 执行受支持的部署路径，并通过 Caddy 提供路由。",
@@ -157,7 +160,7 @@ const zh = {
   ownershipTitle: "你的服务器。标准工具。",
   ownershipBody: "工作负载和持久数据留在你控制的基础设施上。MyPaaS 连接周边工具，而不是用专有运行时替换你的应用运行时。",
   ownershipItems: ["Linux 主机", "源码仓库", "OCI 工作负载", "项目数据", "持久卷", "迁移路径"],
-  integrationItems: ["GitHub", "公开 OCI Registry", "Docker / Podman", "Caddy", "Cloudflare Tunnel", "PostgreSQL"],
+  integrationItems: ["GitHub", "公开 OCI Registry", "Rootful Podman", "Docker Engine 兼容模式", "Caddy", "Cloudflare Tunnel", "PostgreSQL"],
   interfacesLabel: "自动化",
   interfacesTitle: "选择需要的接口。",
   interfacesBody: "Dashboard 面向运维，CLI 和 API 面向自动化，Webhook 面向仓库事件，MCP 面向本地 AI Agent。",
@@ -167,7 +170,9 @@ const zh = {
   boundaries: ["一台 Linux VM", "无 Kubernetes", "无多节点调度", "无多区域 HA", "无自动水平扩缩容", "仅公开 Registry 镜像"],
   installLabel: "安装",
   installTitle: "安装到 Ubuntu 或 Debian。",
-  installBody: "Docker Engine 是默认运行时。Rootful Podman 通过受支持的 Docker 兼容路径提供。",
+  installBody: "全新受支持主机采用 Podman-first 策略：Rootful Podman 是安装器默认运行时，Docker Engine 作为显式兼容模式继续受支持。",
+  installDocker: "Docker Engine 兼容模式",
+  installPodman: "Rootful Podman 默认",
   installGuide: "安装指南",
   verified: "产品描述已对照当前 MyPaaS main 审核。",
   footer: "面向一台 Linux 服务器的开源部署平台。",
@@ -202,11 +207,11 @@ export function searchEntries(locale: Locale) {
     ["Troubleshooting", "/docs/troubleshooting/", "troubleshooting oauth cloudflare routing detection metrics"],
   ] as const;
   return [
-    { title: copy.heroTitle, section, description: copy.heroSummary, href: home, keywords: "self hosted paas deploy linux server git oci docker podman" },
+    { title: copy.heroTitle, section, description: copy.heroSummary, href: home, keywords: "self hosted paas deploy linux server git oci podman docker compatibility" },
     { title: copy.deployTitle, section, description: copy.deployBody, href: `${home}#deploy`, keywords: "dockerfile compose static spa registry image deployment" },
     { title: copy.operationsTitle, section, description: copy.operationsBody, href: `${home}#operate`, keywords: "logs metrics telemetry lifecycle database migration" },
     { title: copy.ownershipTitle, section, description: copy.ownershipBody, href: `${home}#ownership`, keywords: "ownership integrations github cloudflare caddy registry" },
-    { title: copy.installTitle, section, description: copy.installBody, href: `${home}#install`, keywords: "install ubuntu debian docker podman" },
+    { title: copy.installTitle, section, description: copy.installBody, href: `${home}#install`, keywords: "install ubuntu debian podman docker compatibility" },
     ...docs.map(([title, href, keywords]) => ({ title, section: docsSection, description: `MyPaaS documentation: ${title}.`, href, keywords })),
   ];
 }

@@ -2,8 +2,14 @@
 interface Props { command: string; label?: string; copyLabel?: string; copiedLabel?: string; failedLabel?: string }
 const { command, label = "Shell", copyLabel = "Copy", copiedLabel = "Command copied", failedLabel = "Copy failed" } = Astro.props;
 const hero = label === "bootstrap.sh";
-const effectiveCommand = hero ? command.replace(" | env USE_PODMAN=true bash", " | bash") : command;
-const displayCommand = hero ? effectiveCommand.replace("https://raw.githubusercontent.com/", "https://raw.githubusercontent.com/\n") : effectiveCommand;
+const effectiveCommand = command;
+/* Keep the copied command single-line, while rendering the hero installer as an
+   explicit two-line shell continuation. The hero surface is widened so the URL
+   line does not re-wrap into a third visual line on desktop. */
+const shellContinuation = " \\" + "\n  | env ";
+const displayCommand = hero
+  ? effectiveCommand.replace(" | env ", shellContinuation)
+  : effectiveCommand;
 ---
 <div class:list={["copy-command-root", { "hero-command": hero }]} data-copy-command-root>
   <div class:list={["command-box", { hero }]} data-command-box data-command={effectiveCommand} data-copy-default={copyLabel} data-copy-success={copiedLabel} data-copy-failed={failedLabel}>
@@ -32,7 +38,7 @@ const displayCommand = hero ? effectiveCommand.replace("https://raw.githubuserco
 </script>
 
 <style>
-.copy-command-root{position:relative}
+.copy-command-root{position:relative;min-width:0}
 .command-box{position:relative;overflow:hidden;border:1px solid var(--app-border-strong);background:var(--app-surface);clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
 .command-meta{display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;border-bottom:1px solid var(--app-border);color:var(--app-subtle);font-family:var(--font-mono);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase}
 button{display:flex;align-items:center;gap:.35rem;padding:.3rem .5rem;border:1px solid var(--app-border);background:var(--app-bg);color:var(--app-ink);font-family:var(--font-mono);font-size:.62rem;cursor:pointer}
@@ -44,15 +50,20 @@ p{min-height:.8rem;margin:.2rem .75rem .45rem;color:var(--app-subtle);font-famil
 .copy-toast{position:absolute;z-index:40;top:calc(100% + 10px);right:0;display:flex;min-height:36px;align-items:center;gap:8px;padding:8px 11px;border:1px solid #d8d8d8;border-radius:8px;background:#fff;color:#111;font-family:var(--font-sans);font-size:12px;font-weight:600;line-height:1;box-shadow:0 8px 24px rgb(0 0 0 / .12);opacity:0;transform:translateY(-5px);transition:opacity .16s ease,transform .16s ease;pointer-events:none}
 .copy-toast[data-visible="true"]{opacity:1;transform:translateY(0)}.copy-toast svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.copy-toast .toast-error{display:none}.copy-toast[data-kind="failed"] .toast-check{display:none}.copy-toast[data-kind="failed"] .toast-error{display:block}
 
-.command-box.hero{min-height:5rem;border-color:#545454;background:linear-gradient(180deg,#111317,#090a0c);clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);box-shadow:inset 0 0 0 1px rgb(255 255 255 / .025)}
-.command-box.hero::before{position:absolute;z-index:4;top:50%;left:1rem;transform:translateY(-50%);color:#fff;content:">_";font-family:var(--font-mono);font-size:1.02rem;font-weight:600}
-.hero .command-meta{position:absolute;z-index:8;inset:0 0 auto auto;padding:.75rem;border:0}.hero .command-meta>span{display:none}
+/* Hero install is intentionally wider than the copy column. The beta URL is long;
+   widening the surface preserves the deliberate two-line shell presentation. */
+:global(.hero-install){width:min(62rem,calc(100vw - 3rem));max-width:none!important;position:relative;z-index:12}
+.copy-command-root.hero-command{width:100%;max-width:none;z-index:12}
+.command-box.hero{box-sizing:border-box;width:100%;min-height:6.6rem;overflow:visible!important;border-color:#545454;background:linear-gradient(180deg,#111317,#090a0c);clip-path:none!important;box-shadow:inset 0 0 0 1px rgb(255 255 255 / .025)}
+.command-box.hero::before{position:absolute;z-index:4;top:1.22rem;left:1rem;color:#fff;content:">_";font-family:var(--font-mono);font-size:1.02rem;font-weight:600}
+.hero .command-meta{position:absolute;z-index:8;inset:0 0 auto auto;padding:.72rem;border:0}.hero .command-meta>span{display:none}
 .hero button{width:2.25rem;height:2.25rem;padding:0;border-color:#3a414b;border-radius:.4rem;background:#12151a;place-content:center}.hero button svg{width:1rem;height:1rem}.hero button [data-copy-label]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.hero pre{min-height:5rem;margin:0;overflow:hidden;padding:1.22rem 4rem 1rem 3.3rem;color:#f5f5f5;font-size:.76rem;line-height:1.55;white-space:pre-wrap;overflow-wrap:normal;word-break:normal}.hero code{white-space:inherit}.hero p{position:absolute;left:3.3rem;bottom:.08rem;margin:0;color:#8f8f8f}
-.hero .command-border-light{display:block;position:absolute;z-index:6;inset:-1px;padding:1px;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);background:conic-gradient(from var(--command-angle),transparent 0 78%,rgb(255 255 255 / .15) 84%,rgb(255 255 255 / .95) 89%,#fff 90%,rgb(255 255 255 / .18) 95%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:command-perimeter 4.2s linear infinite;pointer-events:none}
-@property --command-angle{syntax:"<angle>";inherits:false;initial-value:0deg}@keyframes command-perimeter{to{--command-angle:360deg}}
+.hero pre{display:block;box-sizing:border-box;width:100%;min-height:6.6rem;height:auto;margin:0;overflow-x:auto;overflow-y:visible;padding:1.1rem 4.3rem 1.25rem 3.45rem;color:#f5f5f5;font-size:.69rem;line-height:2.05;white-space:pre;word-break:normal}.hero code{display:block;white-space:pre}.hero p{display:none}
+.hero .command-border-light{display:none}
 .copy-command-root.hero-command .copy-toast{top:calc(100% + 9px);right:8px;background:#111216;color:#fff;border-color:#3f4148;box-shadow:0 10px 28px rgb(0 0 0 / .28)}
 
-@media(max-width:700px){pre{font-size:.7rem}.command-box.hero{min-height:5.5rem}.hero pre{min-height:5.4rem;padding:1.25rem 3.6rem 1.2rem 2.9rem;font-size:.7rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal}.command-box.hero::before{left:.8rem;font-size:.88rem}.hero .command-meta{padding:.7rem}.hero button{width:2rem;height:2rem}.hero p{left:2.9rem}.copy-toast{right:4px}}
-@media(prefers-reduced-motion:reduce){.hero .command-border-light{animation:none;background:linear-gradient(90deg,transparent,rgb(255 255 255 / .35),transparent);opacity:.35}.copy-toast{transition:none}}
+@media(max-width:900px){:global(.hero-install){width:calc(100vw - 2rem)}.hero pre{font-size:.66rem}}
+@media(max-width:700px){pre{font-size:.7rem}:global(.hero-install){width:calc(100vw - 1.5rem)}.hero pre{min-height:6.35rem;padding:1.05rem 3.7rem 1.2rem 3rem;font-size:.62rem;line-height:2.1}.command-box.hero{min-height:6.35rem}.command-box.hero::before{top:1.15rem;left:.8rem;font-size:.88rem}.hero .command-meta{padding:.65rem}.hero button{width:2rem;height:2rem}.copy-toast{right:4px}}
+@media(max-width:420px){.hero pre{font-size:.58rem}}
+@media(prefers-reduced-motion:reduce){.copy-toast{transition:none}}
 </style>

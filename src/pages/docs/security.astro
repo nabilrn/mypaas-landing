@@ -4,18 +4,20 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
 
 <DocsLayout
   title="Security"
-  description="Understand the trust model, secret handling, webhook verification, network exposure, and owner responsibilities."
+  description="Understand the trust model, privileged engine authority, secret handling, network boundaries, and owner responsibilities."
 >
   <section>
     <p class="overline">Trust model</p>
-    <h2>One owner, one host, narrow access</h2>
+    <h2>One host, a trusted operator group, explicit privileged surfaces</h2>
     <p>
-      MyPaas is a single-node control plane with privileged access to the host Docker
-      daemon. Treat the owner account and the MyPaas service as infrastructure administration access.
+      MyPaaS is a single-host control plane for one owner or a small trusted team. The API controls the configured
+      Docker-compatible engine socket, which is effectively host-level container-engine authority. Treat compromise
+      of the MyPaaS API boundary as compromise of the MyPaaS host boundary.
     </p>
     <p>
-      GitHub OAuth authenticates users, but authorization still depends on the MyPaas
-      database whitelist. There is no public registration flow.
+      Fresh supported hosts are Podman-first, but the control plane deliberately keeps the same Docker-compatible
+      command/socket contract when rootful Podman is the engine. Docker Engine remains an explicit compatibility mode.
+      This trust model does not provide VM-grade or hostile multi-tenant isolation.
     </p>
   </section>
 
@@ -24,37 +26,62 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     <table>
       <thead><tr><th>Boundary</th><th>Control</th></tr></thead>
       <tbody>
-        <tr><td><strong>Dashboard access</strong></td><td>GitHub OAuth plus an explicit database whitelist.</td></tr>
-        <tr><td><strong>Project environment</strong></td><td>AES-256-GCM encryption at rest, masked display, authenticated reveal endpoint.</td></tr>
-        <tr><td><strong>GitHub webhook</strong></td><td>Per-project secret and HMAC-SHA256 signature verification using constant-time comparison.</td></tr>
-        <tr><td><strong>Project network</strong></td><td>Runtime ports bind locally and project traffic passes through Caddy.</td></tr>
-        <tr><td><strong>Docker access</strong></td><td>The control plane owns the Docker socket; project containers do not receive it by default.</td></tr>
-        <tr><td><strong>Database writes</strong></td><td>DB Studio requires a temporary write session and primary-key guards for update or delete.</td></tr>
-        <tr><td><strong>Rate limiting</strong></td><td>Request budgets on login, webhook, and general API traffic per IP, project, and user.</td></tr>
-        <tr><td><strong>Audit trail</strong></td><td>Administrative actions are recorded with actor, timestamp, and request context.</td></tr>
+        <tr><td><strong>Dashboard access</strong></td><td>GitHub OAuth plus the instance authorization model; the platform targets an owner or small trusted team.</td></tr>
+        <tr><td><strong>Project environment</strong></td><td>Persisted project environment values are encrypted before storage.</td></tr>
+        <tr><td><strong>GitHub webhook</strong></td><td>Per-project secret with HMAC verification and branch filtering.</td></tr>
+        <tr><td><strong>Engine authority</strong></td><td>The API receives the Docker-compatible engine socket; project workloads do not receive engine authority.</td></tr>
+        <tr><td><strong>Caddy administration</strong></td><td>Production Caddy Admin is Unix-socket only; project workloads do not receive the admin socket.</td></tr>
+        <tr><td><strong>Runtime routing</strong></td><td>Only explicitly routed runtimes join the routing network; Caddy reaches them through the managed routing path.</td></tr>
+        <tr><td><strong>Compose input</strong></td><td>Rendered Compose configuration is checked against platform isolation policy before execution; known host-escape features are rejected.</td></tr>
+        <tr><td><strong>Database writes</strong></td><td>DB Studio is read-only by default and write access requires an explicit expiring write session.</td></tr>
+        <tr><td><strong>Audit trail</strong></td><td>Administrative actions are recorded by the platform audit path.</td></tr>
       </tbody>
     </table>
   </section>
 
   <section>
-    <h2>Secrets and environment values</h2>
+    <h2>Network separation</h2>
     <p>
-      Environment values are decrypted only when an authenticated operation needs them.
-      The encryption key belongs to the MyPaas instance configuration and must be backed up
-      separately from the database. Losing it makes stored values unrecoverable.
+      Production uses distinct control, project, and routing networks. The API, dashboard, and cloudflared stay on the
+      control network; the API does not join project or routing networks. Caddy does not join the general project
+      network, and a project runtime gains routing-network membership only when its route is explicitly activated.
     </p>
     <p>
-      Do not paste secrets into issue trackers, deployment names, repository files, or logs.
-      Rotate GitHub OAuth, webhook, JWT, database, and Cloudflare credentials after suspected exposure.
+      An allocated host port is used as a stable runtime lookup key. The normal production Caddy data path resolves the
+      validated runtime and proxies over the routing network rather than treating an arbitrary host address as a fallback.
+      Route resolution is fail-closed when the expected runtime cannot be validated.
+    </p>
+  </section>
+
+  <section>
+    <h2>Secrets and environment values</h2>
+    <p>
+      Project environment values are encrypted before persistence and are decrypted only for authenticated operations
+      that need them. Back up the MyPaaS instance configuration and encryption material with the same care as the
+      control-plane database; encrypted values are not useful without the corresponding key material.
+    </p>
+    <p>
+      Do not paste secrets into issue trackers, deployment names, repository files, screenshots, or logs. Rotate GitHub
+      OAuth, webhook, JWT, database, and Cloudflare credentials after suspected exposure.
+    </p>
+  </section>
+
+  <section>
+    <h2>Compose is not a host escape hatch</h2>
+    <p>
+      Repository Compose files are rendered and evaluated before execution. The current policy rejects privileged mode,
+      host or container namespace sharing, Docker/Podman socket mounts, host bind mounts, devices and GPUs, added Linux
+      capabilities, custom runtimes, external networks or volumes, unsafe build entitlements, build SSH/secrets, and
+      privileged lifecycle hooks. Safe engine-managed named volumes are handled separately from engine-migration portability.
     </p>
   </section>
 
   <section>
     <h2>Public exposure</h2>
     <p>
-      The intended production path exposes Caddy through a configured Cloudflare Tunnel.
-      Individual runtime ports stay local. Cloudflare handles public TLS and network-edge
-      processing according to the operator's Cloudflare configuration.
+      The intended production path is Internet → Cloudflare Tunnel → Caddy → dashboard, API, static release, or an
+      explicitly routed runtime. Caddy's privileged Admin API is not exposed on production TCP port 2019; it uses the
+      MyPaaS Unix-socket control path instead.
     </p>
   </section>
 
@@ -62,12 +89,12 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
     <h2>Owner responsibilities</h2>
     <ul>
       <li>Restrict SSH and operating-system administration access.</li>
-      <li>Keep the VM, Docker Engine, Compose plugin, and MyPaas checkout updated.</li>
-      <li>Verify the built-in daily database backups and retain additional off-host copies.</li>
-      <li>Review repository Dockerfiles and Compose files before deploying them.</li>
-      <li>Monitor host disk, memory, CPU, and Cloudflare configuration.</li>
+      <li>Keep the VM, selected container engine, MyPaaS release, and supporting system packages updated deliberately.</li>
+      <li>Verify scheduled backups and retain additional off-host copies appropriate to the workload.</li>
+      <li>Review repository Dockerfiles and Compose files even though MyPaaS applies its own Compose policy checks.</li>
+      <li>Monitor host disk, memory, CPU, network, and Cloudflare configuration.</li>
       <li>Remove collaborators and rotate credentials when access is no longer required.</li>
     </ul>
-    <aside class="warning"><p>Self-hosting gives the operator control over the infrastructure; it does not eliminate security or operational risk.</p></aside>
+    <aside class="warning"><p>Self-hosting preserves infrastructure ownership; it does not turn a single-host container platform into a hostile multi-tenant security boundary.</p></aside>
   </section>
 </DocsLayout>
