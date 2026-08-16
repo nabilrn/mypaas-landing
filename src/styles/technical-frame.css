@@ -39,6 +39,14 @@
   )!important;
 }
 
+/* The install command is content-sized and may wrap differently across fonts,
+ * locales, and viewport widths. Never clip this box against decorative frame
+ * geometry; the visible border is more important than a cut corner here. */
+:where(.command-box.hero){
+  clip-path:none!important;
+  overflow:visible!important;
+}
+
 /* Larger section and rail frames use the same geometry at a larger scale. */
 :where(.integration-strip,.architecture-inner,.reference-panel){
   --frame-cut:var(--technical-frame-panel-cut,12px);
