@@ -1,34 +1,92 @@
 ---
-import { repositoryUrl } from "../../lib/site";
+import { repositoryUrl, type Locale } from "../../lib/site";
 import AgentRobotIcon from "./AgentRobotIcon.astro";
 import HowStepIllustration from "./HowStepIllustration.astro";
 import InterfaceIcon from "./InterfaceIcon.astro";
 
-const whyItems = [
-  { title: "Self-hosted", body: ["You own the server.", "You own the data.", "No vendor lock-in."], icon: "server" },
-  { title: "Integration-first", body: ["Built to work with the", "tools you already use", "and love."], icon: "puzzle" },
-  { title: "Single-server focused", body: ["Not trying to be Kubernetes.", "One host, less overhead,", "more control."], icon: "cube" },
-  { title: "Logs and metrics built in", body: ["mypaas-statd gives you", "observability out of the", "box."], icon: "bars" },
-  { title: "One control surface", body: ["Deploy, route, and operate", "without stitching together", "separate control apps."], icon: "robot" },
-  { title: "Standard deployment paths", body: ["Docker by default.", "Podman optional.", "No surprises."], icon: "terminal" },
-] as const;
+interface Props { locale?: Locale }
+const { locale = "en" } = Astro.props;
 
-const steps = [
-  { n: "1", kind: "connect", title: "Connect GitHub", body: "Link your repositories securely." },
-  { n: "2", kind: "inspect", title: "Inspect and configure", body: "Review apps and set environment, build, and domain options." },
-  { n: "3", kind: "deploy", title: "Deploy", body: "MyPaaS builds, configures, and deploys to your server." },
-  { n: "4", kind: "operate", title: "Operate", body: "Monitor logs and metrics, manage updates, and keep shipping." },
-] as const;
+const content = {
+  en: {
+    whyHeading: "WHY MYPAAS",
+    whyItems: [
+      { title: "Self-hosted ownership", body: ["Your host, workloads,", "persistent data, and routing", "stay under your control."], icon: "server" },
+      { title: "Single-host focused", body: ["Not trying to be Kubernetes.", "One host, less distributed", "systems overhead."], icon: "cube" },
+      { title: "Recovery is first-class", body: ["Rollback, restore, retention,", "and update verification are", "part of the operating model."], icon: "puzzle" },
+      { title: "Operational visibility", body: ["Build and runtime logs plus", "metrics in the project view.", "statd telemetry is optional."], icon: "bars" },
+      { title: "One control surface", body: ["Deploy, route, inspect, and", "recover without stitching", "separate control apps."], icon: "robot" },
+      { title: "Standard runtimes", body: ["Docker Engine by default.", "Rootful Podman supported.", "Caddy handles project routes."], icon: "terminal" },
+    ],
+    howHeading: "HOW IT WORKS",
+    steps: [
+      { n: "1", kind: "connect", title: "Choose a source", body: "Use a Git repository or a public OCI image." },
+      { n: "2", kind: "inspect", title: "Inspect and configure", body: "Review detected runtime, required environment, ports, Compose preflight, and domain options." },
+      { n: "3", kind: "deploy", title: "Deploy when ready", body: "MyPaaS builds or pulls the workload, checks readiness, then promotes the supported route." },
+      { n: "4", kind: "operate", title: "Operate and recover", body: "Use logs, metrics, lifecycle controls, rollback, backups, and recovery tooling from the same control plane." },
+    ],
+    footerBody: "Self-hosted deployment control plane for one Linux server.",
+    product: "PRODUCT", resources: "RESOURCES", community: "PROJECT",
+    features: "Features", architecture: "Architecture", integrations: "Integrations", docs: "Docs", guides: "Guides", changelog: "Changelog", github: "GitHub", discussions: "Discussions", automation: "Automation & MCP",
+    githubCard: "Open source. Evidence before claims.", star: "View on GitHub",
+  },
+  id: {
+    whyHeading: "KENAPA MYPAAS",
+    whyItems: [
+      { title: "Kepemilikan self-hosted", body: ["Host, workload, data persisten,", "dan jalur routing tetap", "di bawah kendali Anda."], icon: "server" },
+      { title: "Fokus single-host", body: ["Tidak mencoba menjadi Kubernetes.", "Satu host, lebih sedikit", "overhead distributed system."], icon: "cube" },
+      { title: "Recovery first-class", body: ["Rollback, restore, retention,", "dan verifikasi update menjadi", "bagian operating model."], icon: "puzzle" },
+      { title: "Visibilitas operasional", body: ["Build log, runtime log, dan", "metrics tersedia di project.", "Telemetry statd bersifat opsional."], icon: "bars" },
+      { title: "Satu control surface", body: ["Deploy, route, inspect, dan", "recover tanpa merangkai", "control app terpisah."], icon: "robot" },
+      { title: "Runtime standar", body: ["Docker Engine sebagai default.", "Rootful Podman didukung.", "Caddy menangani route project."], icon: "terminal" },
+    ],
+    howHeading: "CARA KERJA",
+    steps: [
+      { n: "1", kind: "connect", title: "Pilih source", body: "Gunakan repositori Git atau image OCI publik." },
+      { n: "2", kind: "inspect", title: "Inspect dan konfigurasi", body: "Review runtime terdeteksi, environment wajib, port, Compose preflight, dan opsi domain." },
+      { n: "3", kind: "deploy", title: "Deploy saat siap", body: "MyPaaS build atau pull workload, memeriksa readiness, lalu mempromosikan route yang didukung." },
+      { n: "4", kind: "operate", title: "Operate dan recover", body: "Gunakan log, metrics, lifecycle control, rollback, backup, dan recovery dari control plane yang sama." },
+    ],
+    footerBody: "Deployment control plane self-hosted untuk satu server Linux.",
+    product: "PRODUK", resources: "RESOURCE", community: "PROJECT",
+    features: "Fitur", architecture: "Arsitektur", integrations: "Integrasi", docs: "Dokumentasi", guides: "Panduan", changelog: "Changelog", github: "GitHub", discussions: "Diskusi", automation: "Automation & MCP",
+    githubCard: "Open source. Evidence sebelum klaim.", star: "Lihat di GitHub",
+  },
+  zh: {
+    whyHeading: "为什么选择 MYPAAS",
+    whyItems: [
+      { title: "自托管所有权", body: ["主机、工作负载、持久数据", "与路由路径都保留在", "你的控制之下。"], icon: "server" },
+      { title: "专注单机", body: ["并不试图成为 Kubernetes。", "一台主机，更少的", "分布式系统开销。"], icon: "cube" },
+      { title: "恢复是一等能力", body: ["回滚、恢复、保留策略", "与更新验证都属于", "日常运维模型。"], icon: "puzzle" },
+      { title: "运维可见性", body: ["项目视图提供构建与运行日志", "以及运行指标。", "statd 遥测为可选能力。"], icon: "bars" },
+      { title: "一个控制界面", body: ["部署、路由、检查与恢复", "无需拼接多个独立的", "控制应用。"], icon: "robot" },
+      { title: "标准运行时", body: ["默认 Docker Engine。", "支持 Rootful Podman。", "Caddy 管理项目路由。"], icon: "terminal" },
+    ],
+    howHeading: "工作方式",
+    steps: [
+      { n: "1", kind: "connect", title: "选择来源", body: "使用 Git 仓库或公开 OCI 镜像。" },
+      { n: "2", kind: "inspect", title: "检查并配置", body: "确认检测到的运行时、必要环境变量、端口、Compose preflight 与域名选项。" },
+      { n: "3", kind: "deploy", title: "准备好后部署", body: "MyPaaS 构建或拉取工作负载，检查 readiness，然后提升受支持的路由。" },
+      { n: "4", kind: "operate", title: "运维与恢复", body: "在同一控制平面使用日志、指标、生命周期控制、回滚、备份与恢复工具。" },
+    ],
+    footerBody: "面向单台 Linux 服务器的自托管部署控制平面。",
+    product: "产品", resources: "资源", community: "项目",
+    features: "功能", architecture: "架构", integrations: "集成", docs: "文档", guides: "指南", changelog: "更新日志", github: "GitHub", discussions: "讨论", automation: "自动化与 MCP",
+    githubCard: "开源。先有证据，再做声明。", star: "在 GitHub 查看",
+  },
+} as const;
+
+const copy = content[locale];
 ---
 
 <section class="why-section reference-panel" id="features" aria-labelledby="why-heading">
   <header class="panel-heading">
     <InterfaceIcon name="star" size={21} strokeWidth={1.55} />
-    <h2 id="why-heading">WHY MYPAAS</h2>
+    <h2 id="why-heading">{copy.whyHeading}</h2>
   </header>
 
   <div class="why-grid">
-    {whyItems.map((item) => (
+    {copy.whyItems.map((item) => (
       <article class="why-card">
         <div class="why-title-row">
           {item.icon === "server" && <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="24" height="6" rx="2"/><rect x="4" y="13" width="24" height="6" rx="2"/><rect x="4" y="21" width="24" height="6" rx="2"/><circle cx="9" cy="8" r="1"/><circle cx="9" cy="16" r="1"/><circle cx="9" cy="24" r="1"/></svg>}
@@ -48,16 +106,16 @@ const steps = [
 <section class="how-section reference-panel" id="how-it-works" aria-labelledby="how-heading">
   <header class="panel-heading">
     <svg class="heading-bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20v-7h3v7m3 0V5h3v15m3 0v-10h3v10"/></svg>
-    <h2 id="how-heading">HOW IT WORKS</h2>
+    <h2 id="how-heading">{copy.howHeading}</h2>
   </header>
 
   <div class="steps-grid">
-    {steps.map((step, index) => (
+    {copy.steps.map((step, index) => (
       <article class="step-card">
         <div class="step-head"><span>{step.n}</span><h3>{step.title}</h3></div>
         <HowStepIllustration kind={step.kind} />
         <p>{step.body}</p>
-        {index < steps.length - 1 && <span class="step-connector" aria-hidden="true"><i></i></span>}
+        {index < copy.steps.length - 1 && <span class="step-connector" aria-hidden="true"><i></i></span>}
       </article>
     ))}
   </div>
@@ -65,11 +123,11 @@ const steps = [
 
 <footer class="reference-footer">
   <div class="footer-inner">
-    <div class="footer-brand"><img src="/brand/logowithtext_white.png" alt="MyPaaS" /><p>Self-hosted Platform as a Service<br/>for Ubuntu and Linux servers.</p></div>
-    <nav class="footer-column" aria-label="Product links"><strong>PRODUCT</strong><a href="#features">Features</a><a href="#architecture">Architecture</a><a href="#integrations">Integrations</a></nav>
-    <nav class="footer-column" aria-label="Resource links"><strong>RESOURCES</strong><a href="/docs/">Docs</a><a href="/docs/">Guides</a><a href={`${repositoryUrl}/releases`} target="_blank" rel="noreferrer">Changelog</a></nav>
-    <nav class="footer-column" aria-label="Community links"><strong>COMMUNITY</strong><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a><a href={`${repositoryUrl}/discussions`} target="_blank" rel="noreferrer">Discussions</a><a href="/docs/">MCP Registry</a></nav>
-    <div class="github-card"><p>Open source. Community driven.</p><a href={repositoryUrl} target="_blank" rel="noreferrer"><InterfaceIcon name="star" size={20} strokeWidth={1.55} /><span>Star on GitHub</span></a></div>
+    <div class="footer-brand"><img src="/brand/logowithtext_white.png" alt="MyPaaS" /><p>{copy.footerBody}</p></div>
+    <nav class="footer-column" aria-label="Product links"><strong>{copy.product}</strong><a href="#features">{copy.features}</a><a href="#architecture">{copy.architecture}</a><a href="#integrations">{copy.integrations}</a></nav>
+    <nav class="footer-column" aria-label="Resource links"><strong>{copy.resources}</strong><a href="/docs/">{copy.docs}</a><a href="/docs/">{copy.guides}</a><a href={`${repositoryUrl}/releases`} target="_blank" rel="noreferrer">{copy.changelog}</a></nav>
+    <nav class="footer-column" aria-label="Project links"><strong>{copy.community}</strong><a href={repositoryUrl} target="_blank" rel="noreferrer">{copy.github}</a><a href={`${repositoryUrl}/discussions`} target="_blank" rel="noreferrer">{copy.discussions}</a><a href="/docs/automation/">{copy.automation}</a></nav>
+    <div class="github-card"><p>{copy.githubCard}</p><a href={repositoryUrl} target="_blank" rel="noreferrer"><InterfaceIcon name="star" size={20} strokeWidth={1.55} /><span>{copy.star}</span></a></div>
   </div>
 </footer>
 
