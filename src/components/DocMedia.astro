@@ -1,14 +1,22 @@
 ---
+import { Image } from "astro:assets";
 type ImageLike = string | { src: string; width?: number; height?: number };
 interface Props { src?: ImageLike; alt?: string; title: string; source?: string; note?: string; placeholder?: string }
 const { src, alt = "", title, source = "MyPaaS", note, placeholder } = Astro.props;
-const imageSrc = typeof src === "string" ? src : src?.src;
-const width = typeof src === "string" ? undefined : src?.width;
-const height = typeof src === "string" ? undefined : src?.height;
+const isObject = typeof src === "object" && src !== null;
+const imageSrc = isObject ? src.src : src;
+const width = isObject ? src.width : undefined;
+const height = isObject ? src.height : undefined;
 ---
 <figure class:list={["doc-media", { placeholder: !imageSrc }]}>
   <figcaption><span><strong>{title}</strong>{source && <small>{source}</small>}</span>{note && <small>{note}</small>}</figcaption>
-  {imageSrc ? <img src={imageSrc} {alt} {width} {height} loading="lazy" decoding="async" /> : (
+  {imageSrc ? (
+    isObject ? (
+      <Image src={src as any} {alt} loading="lazy" decoding="async" />
+    ) : (
+      <img src={imageSrc} {alt} {width} {height} loading="lazy" decoding="async" />
+    )
+  ) : (
     <div class="placeholder-body" role="img" aria-label={`${title} screenshot placeholder`}>
       <div class="placeholder-frame" aria-hidden="true"><i></i><i></i><i></i><div></div></div>
       <strong>Screenshot placeholder</strong><p>{placeholder ?? "Replace with a verified screenshot during the documentation capture pass."}</p>
