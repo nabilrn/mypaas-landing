@@ -28,6 +28,7 @@ const copy = {
     installHint: "Rootful Podman default · Ubuntu / Debian",
     docs: "Read the docs",
     github: "View on GitHub",
+    imageAlt: "MyPaaS dashboard showing a self-hosted deployment control plane",
     badges: ["Ubuntu / Debian Linux", "Rootful Podman default", "Docker Engine compatibility"],
   },
   id: {
@@ -40,6 +41,7 @@ const copy = {
     installHint: "Rootful Podman default · Ubuntu / Debian",
     docs: "Baca dokumentasi",
     github: "Lihat di GitHub",
+    imageAlt: "Dashboard MyPaaS untuk deployment control plane self-hosted",
     badges: ["Ubuntu / Debian Linux", "Rootful Podman default", "Kompatibilitas Docker Engine"],
   },
   zh: {
@@ -52,13 +54,22 @@ const copy = {
     installHint: "Rootful Podman 默认 · Ubuntu / Debian",
     docs: "阅读文档",
     github: "在 GitHub 查看",
+    imageAlt: "MyPaaS 自托管部署控制平面 Dashboard",
     badges: ["Ubuntu / Debian Linux", "Rootful Podman 默认", "Docker Engine 兼容模式"],
   },
 }[locale];
 
 const badgeIcons = [null, siPodman, siDocker] as const;
 ---
-<BaseLayout title={copy.title} description={copy.description} locale={locale} path={path} localizedAlternates>
+<BaseLayout
+  title={copy.title}
+  description={copy.description}
+  image="/landing/dashboard-dark.png"
+  imageAlt={copy.imageAlt}
+  locale={locale}
+  path={path}
+  localizedAlternates
+>
   <div class="landing-plasma-backdrop" aria-hidden="true">
     <PlasmaHeroBackground />
   </div>
@@ -94,10 +105,10 @@ const badgeIcons = [null, siPodman, siDocker] as const;
     </section>
 
     <div class="integration-section ecosystem-rail" id="integrations">
-      <TechRail />
+      <TechRail {locale} />
     </div>
 
-    <ArchitectureBlueprint />
+    <ArchitectureBlueprint {locale} />
     <ProductCapabilitySections {locale} />
   </main>
 
