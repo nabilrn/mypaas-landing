@@ -1,9 +1,10 @@
 ---
+import { Image } from "astro:assets";
 import PixelFrame from "../pixel/PixelFrame.astro";
 interface Props { src: string; alt: string; label: string; detail?: string; eager?: boolean; dither?: boolean }
 const { src, alt, label, detail = "REAL PRODUCT UI", eager = false, dither = false } = Astro.props;
 ---
 <PixelFrame {label} {detail} {dither}>
-  <img {src} {alt} decoding="async" loading={eager ? "eager" : "lazy"} fetchpriority={eager ? "high" : "auto"} />
+  <Image {src} {alt} width={1858} height={914} decoding="async" loading={eager ? "eager" : "lazy"} fetchpriority={eager ? "high" : "auto"} />
 </PixelFrame>
 <style>img{display:block;width:100%;height:auto;background:var(--app-surface)}</style>

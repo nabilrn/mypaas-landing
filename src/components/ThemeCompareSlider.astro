@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 interface Props {
   lightSrc?: string;
   darkSrc?: string;
@@ -20,22 +21,22 @@ const {
 
 <figure class="compare-shell technical-frame" aria-label={compareLabel} data-compare-shell>
   <div class="compare-stage" style="--reveal: 50%" data-compare-stage>
-    <img
+    <Image
       class="compare-image compare-image-light"
       src={lightSrc}
       alt={lightAlt}
-      width="1858"
-      height="914"
+      width={1858}
+      height={914}
       loading="lazy"
       decoding="async"
       draggable="false"
     />
-    <img
+    <Image
       class="compare-image compare-image-dark"
       src={darkSrc}
       alt={darkAlt}
-      width="1858"
-      height="914"
+      width={1858}
+      height={914}
       loading="lazy"
       decoding="async"
       draggable="false"

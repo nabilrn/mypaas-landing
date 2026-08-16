@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import SearchDialog from "./SearchDialog.astro";
 import InterfaceIcon from "./compact/InterfaceIcon.astro";
 import { siGithub } from "simple-icons";
@@ -11,7 +12,7 @@ const landing = ["/", "/id/", "/zh/"].includes(Astro.url.pathname);
   {landing ? (
     <>
       <a class="landing-brand" href={localeMeta[locale].path} aria-label={copy.home}>
-        <img src="/brand/logowithtext_white.png" alt="MyPaaS" />
+        <Image src="/brand/logowithtext_white.png" alt="MyPaaS" width={130} height={41} />
       </a>
       <nav class="landing-nav" aria-label={copy.navLabel}>
         <a href="#capabilities" data-scroll-target=".capabilities-section">Capabilities</a>
@@ -32,7 +33,7 @@ const landing = ["/", "/id/", "/zh/"].includes(Astro.url.pathname);
     </>
   ) : (
     <>
-      <a class="brand" href={localeMeta[locale].path} aria-label={copy.home}><img src="/brand/logowithtext_black.png" alt="MyPaaS" /></a>
+      <a class="brand" href={localeMeta[locale].path} aria-label={copy.home}><Image src="/brand/logowithtext_black.png" alt="MyPaaS" width={130} height={41} /></a>
       <nav aria-label={copy.navLabel}><a href="/docs/">{copy.docs}</a><a href="/docs/installation/">{copy.install}</a><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub</a></nav>
       <div class="header-tools">
         <button class="search-button" data-search-trigger aria-label={copy.searchOpen}>
