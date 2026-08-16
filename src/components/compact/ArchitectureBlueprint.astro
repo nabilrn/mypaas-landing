@@ -15,7 +15,7 @@ const content = {
     deployFlow: "DEPLOYMENT PATH",
     source: "Git / OCI source",
     control: "MyPaaS\nControl Plane",
-    runtime: "Docker / Podman\nRuntime",
+    runtime: "Podman default\nDocker compatibility",
     routeFlow: "PUBLIC ROUTE",
     internet: "Internet",
     tunnel: "Cloudflare\nTunnel",
@@ -25,7 +25,7 @@ const content = {
     postgres: "PostgreSQL\nControl data",
     statd: "mypaas-statd\nOptional telemetry",
     interfaces: "OPERATOR INTERFACES",
-    aria: "Deployment sources feed the MyPaaS control plane, which coordinates the Docker or Podman runtime. Public traffic flows from the internet through Cloudflare Tunnel and Caddy to explicitly routed workloads. PostgreSQL stores control-plane data and optional mypaas-statd provides telemetry. Operators use the Dashboard, CLI, REST API, or MCP interface.",
+    aria: "Deployment sources feed the MyPaaS control plane. On fresh supported hosts, the control plane uses rootful Podman by default through its Docker-compatible command and socket contract; Docker Engine remains an explicit compatibility mode. Public traffic flows from the internet through Cloudflare Tunnel and Caddy to explicitly routed workloads. PostgreSQL stores control-plane data and optional mypaas-statd provides telemetry. Operators use the Dashboard, CLI, REST API, or MCP interface.",
   },
   id: {
     kicker: "ARSITEKTUR",
@@ -34,7 +34,7 @@ const content = {
     deployFlow: "JALUR DEPLOYMENT",
     source: "Source Git / OCI",
     control: "MyPaaS\nControl Plane",
-    runtime: "Docker / Podman\nRuntime",
+    runtime: "Podman default\nDocker compatibility",
     routeFlow: "JALUR PUBLIK",
     internet: "Internet",
     tunnel: "Cloudflare\nTunnel",
@@ -44,7 +44,7 @@ const content = {
     postgres: "PostgreSQL\nData control plane",
     statd: "mypaas-statd\nTelemetry opsional",
     interfaces: "INTERFACE OPERATOR",
-    aria: "Source deployment masuk ke MyPaaS control plane yang mengoordinasikan runtime Docker atau Podman. Traffic publik berjalan dari internet melalui Cloudflare Tunnel dan Caddy ke workload yang secara eksplisit di-route. PostgreSQL menyimpan data control plane dan mypaas-statd opsional menyediakan telemetry. Operator menggunakan Dashboard, CLI, REST API, atau MCP.",
+    aria: "Source deployment masuk ke MyPaaS control plane. Pada fresh host yang didukung, control plane menggunakan rootful Podman sebagai default melalui contract command dan socket yang kompatibel Docker; Docker Engine tetap tersedia sebagai mode kompatibilitas eksplisit. Traffic publik berjalan dari internet melalui Cloudflare Tunnel dan Caddy ke workload yang secara eksplisit di-route. PostgreSQL menyimpan data control plane dan mypaas-statd opsional menyediakan telemetry. Operator menggunakan Dashboard, CLI, REST API, atau MCP.",
   },
   zh: {
     kicker: "架构",
@@ -53,7 +53,7 @@ const content = {
     deployFlow: "部署路径",
     source: "Git / OCI 源",
     control: "MyPaaS\n控制平面",
-    runtime: "Docker / Podman\n运行时",
+    runtime: "Podman 默认\nDocker 兼容模式",
     routeFlow: "公网路由",
     internet: "Internet",
     tunnel: "Cloudflare\nTunnel",
@@ -63,7 +63,7 @@ const content = {
     postgres: "PostgreSQL\n控制平面数据",
     statd: "mypaas-statd\n可选遥测",
     interfaces: "运维接口",
-    aria: "部署源进入 MyPaaS 控制平面，由控制平面协调 Docker 或 Podman 运行时。公网流量从 Internet 经 Cloudflare Tunnel 和 Caddy 到明确路由的工作负载。PostgreSQL 保存控制平面数据，可选 mypaas-statd 提供遥测。运维人员可使用 Dashboard、CLI、REST API 或 MCP。",
+    aria: "部署源进入 MyPaaS 控制平面。在全新受支持主机上，控制平面默认通过 Docker-compatible 命令和 Socket 契约使用 Rootful Podman；Docker Engine 保留为显式兼容模式。公网流量从 Internet 经 Cloudflare Tunnel 和 Caddy 到明确路由的工作负载。PostgreSQL 保存控制平面数据，可选 mypaas-statd 提供遥测。运维人员可使用 Dashboard、CLI、REST API 或 MCP。",
   },
 } as const;
 
@@ -97,7 +97,7 @@ const [statdLine1, statdLine2] = copy.statd.split("\n");
         <div class="diagram-frame control-plane"><img src="/brand/logoonly_black.png" alt="" /><div><span>{controlLine1}</span><strong>{controlLine2}</strong></div></div>
         <span class="flow-arrow" aria-hidden="true">→</span>
         <div class="diagram-frame runtime-card">
-          <span class="dual-icons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={siDocker.path}/></svg><svg viewBox="0 0 24 24"><path d={siPodman.path}/></svg></span>
+          <span class="dual-icons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={siPodman.path}/></svg><svg viewBox="0 0 24 24"><path d={siDocker.path}/></svg></span>
           <strong>{runtimeLine1}<small>{runtimeLine2}</small></strong>
         </div>
       </div>
