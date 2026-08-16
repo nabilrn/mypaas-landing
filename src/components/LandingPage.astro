@@ -6,55 +6,57 @@ import ArchitectureBlueprint from "./compact/ArchitectureBlueprint.astro";
 import DistroStack from "./compact/DistroStack.astro";
 import PixelHeroArt from "./compact/PixelHeroArt.astro";
 import PlasmaHeroBackground from "./compact/PlasmaHeroBackground.astro";
+import ProductCapabilitySections from "./compact/ProductCapabilitySections.astro";
 import ReferenceBodySections from "./compact/ReferenceBodySections.astro";
 import TechRail from "./compact/TechRail.astro";
 import { siDocker, siPodman } from "simple-icons";
-import { podmanInstallCommand, repositoryUrl, type Locale } from "../lib/site";
+import { repositoryUrl, type Locale } from "../lib/site";
 
 interface Props { locale?: Locale }
 const { locale = "en" } = Astro.props;
 const path = locale === "en" ? "/" : `/${locale}/`;
+const betaInstallCommand = "curl -fsSL https://raw.githubusercontent.com/nabilrn/MyPaas/v0.5.0-beta.1/scripts/bootstrap.sh | env MYPAAS_REF=v0.5.0-beta.1 bash";
 
 const copy = {
   en: {
-    title: "MyPaaS | Self-hosted Platform as a Service",
-    description: "Run a self-hosted PaaS on one Ubuntu or Debian Linux server with GitHub, Cloudflare, Podman, Caddy, PostgreSQL, CLI, API, and MCP workflows.",
-    eyebrow: "SELF-HOSTED PLATFORM AS A SERVICE",
+    title: "MyPaaS | Self-hosted PaaS for one Linux server",
+    description: "Deploy Git repositories and public OCI images to one Linux server with Docker or Podman, Caddy routing, logs, metrics, databases, backups, recovery, CLI, API, and MCP workflows.",
+    eyebrow: "BETA v0.5.0-beta.1 · SELF-HOSTED PAAS",
     h1: "Deploy on your own server without giving up control.",
-    intro: "MyPaaS turns one Linux server into a focused deployment platform. Connect GitHub, publish through Cloudflare and Caddy, then operate apps from the dashboard, CLI, API, or MCP.",
-    installLabel: "RECOMMENDED LINUX HOST INSTALL",
-    installHint: "Podman path · Ubuntu / Debian",
+    intro: "MyPaaS turns one Ubuntu or Debian server into a focused deployment control plane for Git repositories and public OCI images, with routing, operations, databases, backup, recovery, and automation built around standard Linux tools.",
+    installLabel: "PINNED BETA INSTALL",
+    installHint: "Docker Engine default · Ubuntu / Debian",
     docs: "Read the docs",
     github: "View on GitHub",
-    badges: ["Ubuntu / Debian Linux", "Podman for Linux hosts", "Docker for local/dev"],
+    badges: ["Ubuntu / Debian Linux", "Docker Engine default", "Rootful Podman supported"],
   },
   id: {
-    title: "MyPaaS | Platform as a Service self-hosted",
-    description: "Jalankan PaaS self-hosted pada satu server Linux Ubuntu atau Debian dengan GitHub, Cloudflare, Podman, Caddy, PostgreSQL, CLI, API, dan MCP.",
-    eyebrow: "SELF-HOSTED PLATFORM AS A SERVICE",
+    title: "MyPaaS | PaaS self-hosted untuk satu server Linux",
+    description: "Deploy repositori Git dan image OCI publik ke satu server Linux dengan Docker atau Podman, routing Caddy, log, metrik, database, backup, recovery, CLI, API, dan MCP.",
+    eyebrow: "BETA v0.5.0-beta.1 · PAAS SELF-HOSTED",
     h1: "Deploy di server sendiri tanpa kehilangan kendali.",
-    intro: "MyPaaS mengubah satu server Linux menjadi platform deployment yang fokus. Hubungkan GitHub, publish lewat Cloudflare dan Caddy, lalu operasikan aplikasi dari dashboard, CLI, API, atau MCP.",
-    installLabel: "INSTALL YANG DIREKOMENDASIKAN UNTUK HOST LINUX",
-    installHint: "Jalur Podman · Ubuntu / Debian",
+    intro: "MyPaaS mengubah satu server Ubuntu atau Debian menjadi deployment control plane untuk repositori Git dan image OCI publik, lengkap dengan routing, operasi, database, backup, recovery, dan automation di atas tool Linux standar.",
+    installLabel: "INSTALL BETA TERPIN",
+    installHint: "Docker Engine default · Ubuntu / Debian",
     docs: "Baca dokumentasi",
     github: "Lihat di GitHub",
-    badges: ["Ubuntu / Debian Linux", "Podman untuk host Linux", "Docker untuk local/dev"],
+    badges: ["Ubuntu / Debian Linux", "Docker Engine default", "Rootful Podman didukung"],
   },
   zh: {
-    title: "MyPaaS | 自托管 Platform as a Service",
-    description: "在一台 Ubuntu 或 Debian Linux 服务器上运行自托管 PaaS，并连接 GitHub、Cloudflare、Podman、Caddy、PostgreSQL、CLI、API 与 MCP。",
-    eyebrow: "SELF-HOSTED PLATFORM AS A SERVICE",
+    title: "MyPaaS | 面向单台 Linux 服务器的自托管 PaaS",
+    description: "将 Git 仓库和公开 OCI 镜像部署到一台 Linux 服务器，并提供 Docker 或 Podman、Caddy 路由、日志、指标、数据库、备份、恢复、CLI、API 与 MCP。",
+    eyebrow: "BETA v0.5.0-beta.1 · 自托管 PAAS",
     h1: "在自己的服务器上部署，同时保留控制权。",
-    intro: "MyPaaS 将一台 Linux 服务器变成聚焦的部署平台。连接 GitHub，通过 Cloudflare 与 Caddy 发布，然后通过 Dashboard、CLI、API 或 MCP 运维应用。",
-    installLabel: "推荐的 LINUX HOST 安装方式",
-    installHint: "Podman 路径 · Ubuntu / Debian",
+    intro: "MyPaaS 将一台 Ubuntu 或 Debian 服务器变成面向 Git 仓库和公开 OCI 镜像的部署控制平面，并围绕标准 Linux 工具提供路由、运维、数据库、备份、恢复与自动化。",
+    installLabel: "固定版本 BETA 安装",
+    installHint: "Docker Engine 默认 · Ubuntu / Debian",
     docs: "阅读文档",
     github: "在 GitHub 查看",
-    badges: ["Ubuntu / Debian Linux", "Linux host 使用 Podman", "Docker 用于本地开发"],
+    badges: ["Ubuntu / Debian Linux", "Docker Engine 默认", "支持 Rootful Podman"],
   },
 }[locale];
 
-const badgeIcons = [null, siPodman, siDocker] as const;
+const badgeIcons = [null, siDocker, siPodman] as const;
 ---
 <BaseLayout title={copy.title} description={copy.description} locale={locale} path={path} localizedAlternates>
   <div class="landing-plasma-backdrop" aria-hidden="true">
@@ -73,7 +75,7 @@ const badgeIcons = [null, siPodman, siDocker] as const;
 
           <div class="hero-install">
             <div class="install-head"><span>{copy.installLabel}</span><small>{copy.installHint}</small></div>
-            <CopyCommand command={podmanInstallCommand} label="bootstrap.sh" />
+            <CopyCommand command={betaInstallCommand} label="bootstrap.sh" />
           </div>
 
           <div class="runtime-badges">
@@ -96,9 +98,10 @@ const badgeIcons = [null, siPodman, siDocker] as const;
     </div>
 
     <ArchitectureBlueprint />
+    <ProductCapabilitySections {locale} />
   </main>
 
-  <ReferenceBodySections />
+  <ReferenceBodySections {locale} />
 </BaseLayout>
 
 <style>
