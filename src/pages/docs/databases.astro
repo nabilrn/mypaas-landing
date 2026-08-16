@@ -1,9 +1,8 @@
 ---
 import DocsLayout from "../../layouts/DocsLayout.astro";
-import DocMedia from "../../components/DocMedia.astro";
 ---
 <DocsLayout title="Databases & DB Studio" description="Use optional shared PostgreSQL provisioning and the guarded database inspection surface.">
 <section><p class="overline">Project data</p><h2>Optional shared PostgreSQL</h2><p>MyPaaS can provision a project-specific PostgreSQL database and role in the platform PostgreSQL service. The generated connection URL is injected through the normal managed environment-value path.</p><aside class="note"><p>This feature is intended for small trusted workloads on the same single-host platform. It is not a separate highly available managed database service.</p></aside></section>
-<section><h2>DB Studio Lite</h2><p>DB Studio Lite supports PostgreSQL, MySQL, and MariaDB connections configured for a project. It can browse schemas, tables, columns, and paginated/searchable rows.</p><DocMedia title="DB Studio Lite" source="MyPaaS dashboard" note="product UI · capture pending" placeholder="Capture DB Studio Lite with a non-sensitive example schema and table. Use demo data only; never capture production rows." /></section>
+<section><h2>DB Studio Lite</h2><p>DB Studio Lite supports PostgreSQL, MySQL, and MariaDB connections configured for a project. It can browse schemas, tables, columns, and paginated/searchable rows.</p></section>
 <section><h2>Guarded writes</h2><p>Normal use is inspection-first. Owner-only write access uses a temporary write session, and update/delete operations require a primary key. DB Studio Lite is not a general raw SQL console.</p></section>
 </DocsLayout>
