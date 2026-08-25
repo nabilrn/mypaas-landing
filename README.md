@@ -1,41 +1,28 @@
 # MyPaaS Public Site
 
-Astro website for the MyPaaS product landing page, public documentation, and privacy policy.
+Astro website for the MyPaaS landing page, public documentation, and privacy policy.
 
-The public site is intentionally evidence-driven: current product claims should follow the behavior implemented on `nabilrn/MyPaas` `main`, while roadmap items remain clearly separate.
+Public capability claims must match the current `nabilrn/MyPaas` implementation. Do not publish synthetic capacity numbers, benchmark charts, user counts, availability promises, or roadmap features as current product behavior.
 
-## Product-claim source of truth
-
-For public product claims, follow the current MyPaaS documentation hierarchy rather than historical landing copy. In particular:
-
-- fresh supported Ubuntu/Debian installations are Podman-first;
-- rootful Podman is the installer default;
-- Docker Engine is an explicit supported compatibility mode through the same Docker-compatible command/socket contract;
-- `mypaas-statd` is optional telemetry and runtime metrics can fall back through the engine path;
-- VM migration uses the supported backend Admin workflow and does not imply automatic portability of engine-managed volumes;
-- in-place Docker Engine → Podman state migration is not supported;
-- beta performance and capacity claims must remain tied to recorded qualification evidence.
-
-## Landing visual source of truth
-
-For any landing-page visual implementation or cleanup, read these files in this order:
-
-1. [`CURRENT_LANDING_VISUAL_CONTRACT.md`](./CURRENT_LANDING_VISUAL_CONTRACT.md) — **current visual source of truth**. It defines the locked screenshot-clone direction, Inter + Inconsolata typography tokens, white post-hero surfaces, no landing theme toggle, integration-rail spacing, and the MCP robot glyph.
-2. [`FRONTIER_MODEL_HANDOFF.md`](./FRONTIER_MODEL_HANDOFF.md) — historical execution/refactor context. Any visual rule that conflicts with the current visual contract is superseded.
-3. [`LANDING_REFACTOR_MASTER_PLAN.md`](./LANDING_REFACTOR_MASTER_PLAN.md) — historical audit and product/copy context. Any old typography, color, information-architecture, or theme instruction that conflicts with the current visual contract is superseded.
-
-For current UI work, screenshot fidelity and the current visual contract take precedence over earlier refactor proposals, while current MyPaaS product documentation remains authoritative for capability and runtime claims.
+The current product boundary is simple: MyPaaS is a single-host self-hosted deployment platform. Application capacity depends on the application and on the CPU, memory, storage, network, and database resources available on the host.
 
 ## Public routes
 
 - `/` — product landing page
 - `/docs/` — documentation overview
-- `/docs/installation/` — VM, GitHub OAuth, Cloudflare Tunnel, and guided installation
-- `/docs/deployment-models/` — Dockerfile, Compose, static/SPA, and public OCI image contracts
-- `/docs/configuration/` — identity, environment, webhooks, and routing
-- `/docs/operations/` — operational overview
-- `/docs/automation/` — CLI, API, webhooks, and MCP/agent interfaces
+- `/docs/installation/` — installation
+- `/docs/deployment-models/` — Dockerfile, Compose, static/SPA, and public OCI image deployment
+- `/docs/configuration/` — configuration
+- `/docs/operations/` — operations
+- `/docs/automation/` — CLI, API, webhooks, and MCP interfaces
 - `/docs/migration/` — VM migration
 - `/docs/security/` — trust model and security boundaries
-- `/docs/limitations/` — explicit single-host boundaries
+- `/docs/limitations/` — current boundaries
 - `/privacy/` — privacy policy
+
+## Development
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+```
