@@ -4,271 +4,93 @@ import type { Locale } from "../../lib/site";
 interface Props { locale?: Locale }
 const { locale = "en" } = Astro.props;
 
-const coreRepo = "https://github.com/nabilrn/MyPaas";
-const statdRepo = "https://github.com/nabilrn/mypaas-statd";
-
 const content = {
   en: {
-    evidenceLabel: "QUALIFIED BETA EVIDENCE",
-    evidenceTitle: "Show the tests, not just the claim.",
-    evidenceBody: "v0.5.0-beta.1 cleared eight mandatory runtime gates. The public evidence below stays tied to the tested release lineage and host shape.",
-    gates: ["Update safety", "Fresh-VM restore", "10/25/50 projects", "Concurrent deploys", "Image/cache retention", "Create Project contract", "DB Studio reliability", "Docs & boundaries"],
-    gateStatus: "PASS",
-    gateSummary: "8 / 8 mandatory gates · 0 open mandatory blockers",
-    capacityTitle: "Many-project qualification",
-    capacityBody: "Controlled static, Dockerfile, and Compose fixtures were exercised in 10, 25, and 50-project tiers on a 4-vCPU / ~8-GiB VM.",
-    capacityTiers: [["Tier 10", "10 projects", 20], ["Tier 25", "25 projects", 50], ["Tier 50", "50 / 50 successful", 100]],
-    capacityNote: "The bar length represents the configured project tier, not a universal capacity percentage. Real capacity depends on workload CPU, memory, image/build behavior, storage, and host configuration.",
-    statdTitle: "Runtime metrics hot path",
-    statdBody: "Historical Debian 13 / rootful Podman evidence. Three trials, 50 warmups and 500 recorded iterations per trial.",
-    statdLegendCli: "Docker-compatible CLI p50",
-    statdLegendNative: "mypaas-statd p50",
-    statdTrials: [["Trial 1", 41.0394, 0.7803], ["Trial 2", 41.5558, 0.7969], ["Trial 3", 43.2664, 0.8202]],
-    statdSpawn: "Process spawns / recorded trial",
-    statdCliSpawn: "CLI 500",
-    statdNativeSpawn: "statd 0",
-    statdNote: "Historical runtime-snapshot evidence only. It is not a generic latency promise for every machine or a benchmark of v0.2 host telemetry.",
-    proofTitle: "What the remaining gates actually exercised",
-    proofs: [
-      ["Fresh restore", "Control-plane DB, configuration, static artifacts, managed persistent data, routes, encrypted env usability, deployment history, and DB Studio were verified on a fresh VM."],
-      ["Concurrent resilience", "Concurrent create/deploy/redeploy, intentional failure, protected routes, webhook bursts, read paths, and final runtime/port consistency were checked together."],
-      ["Retention safety", "Managed-image dry-run/apply, running and rollback image protection, unrelated-image safety, persistent-volume safety, and post-cleanup deploy/rollback were exercised."],
-      ["Create Project", "Static, Dockerfile, Compose, subdirectory, public registry/GHCR, required env, missing-port, stale-analysis, timeout, and invalid-repository states were audited."],
-      ["DB Studio", "PostgreSQL, MySQL, and MariaDB Compose services were reached through real project-network resolution with read-only default and expiring write sessions."],
-      ["Fail-closed behavior", "Unsafe Compose input, stale analysis, missing required configuration, unhealthy replacements, and unresolved runtime routes are blocked instead of promoted."],
+    label: "CURRENT CAPABILITIES",
+    title: "A focused control plane for one Linux host.",
+    body: "MyPaaS handles deployment and day-to-day operations while the applications remain ordinary workloads on your server.",
+    groups: [
+      ["Deploy", "Git Dockerfile, Docker Compose, static sites, and public OCI images."],
+      ["Route", "Automatic project routing through Caddy after the intended runtime is ready."],
+      ["Operate", "Deployment history, logs, metrics, restart, redeploy, rollback, and resource settings."],
+      ["Data", "PostgreSQL provisioning, DB Studio Lite, backups, restore, and migration tooling."],
+      ["Automate", "CLI, REST API, GitHub webhooks, and an optional local MCP bridge."],
+      ["Observe", "Project telemetry plus optional mypaas-statd host/runtime metrics."],
     ],
-    evidenceLink: "Read the beta gate record",
-    benchmarkLink: "Open raw statd benchmark source",
-    capabilitiesLabel: "IMPLEMENTED CAPABILITY MAP",
-    capabilitiesTitle: "More than deploy-and-route.",
-    capabilitiesBody: "The beta already covers source inspection, runtime lifecycle, observability, data, recovery, access control, and operator automation on one host.",
-    capabilityGroups: [
-      {
-        number: "01", title: "Source & deployment", body: "Turn an explicit source into a reproducible deployment contract.",
-        items: ["Git Dockerfile, Docker Compose, and static / SPA deployments", "Public OCI images from Docker Hub, GHCR, and compatible registries", "Branch selection, repository tree inspection, and base-directory / monorepo support", "Compose file candidates, overrides, profiles, workdir, services, ports, and required-env analysis", "Environment-template discovery before creation", "GitHub push deployment with HMAC verification and branch filtering"],
-      },
-      {
-        number: "02", title: "Runtime & routing", body: "Promote a route only after MyPaaS can validate the intended workload.",
-        items: ["Rootful Podman default with Docker Engine compatibility through one command/socket contract", "Readiness-gated Compose route promotion", "Side-by-side Dockerfile / image replacement using a distinct temporary port", "Caddy route reconciliation after control-plane restart", "Fail-closed runtime lookup before routing-network attachment", "Atomic static release activation with SPA deep-link fallback"],
-      },
-      {
-        number: "03", title: "Operate & observe", body: "Keep deployment state and operational signals in the same project context.",
-        items: ["Deployment history and explicit queued / cloning / building / starting / running / failed states", "Build logs, project runtime logs, and Compose service context", "Shared per-project SSE fan-out for status and runtime metrics", "Runtime CPU / memory / PID metrics through optional statd with engine fallback", "Owner host CPU / memory / storage / network telemetry through statd v0.2", "Optional Cloudflare request, bandwidth, error, and timeseries analytics", "Per-project CPU and memory configuration"],
-      },
-      {
-        number: "04", title: "Environment & access", body: "Treat configuration and privileged control paths as explicit infrastructure state.",
-        items: ["AES-256-GCM encrypted project environment values", "Nested template discovery for Compose / monorepo repositories", "Generated project env files instead of leaking arbitrary control-plane process variables", "GitHub OAuth with whitelist-based owner / collaborator access", "Audit records for administrative and project actions", "Compose isolation policy rejecting privileged/host-escape configuration"],
-      },
-      {
-        number: "05", title: "Data & recovery", body: "Recovery paths are part of the product contract, not an afterthought.",
-        items: ["Optional shared PostgreSQL database and role provisioning", "DB Studio Lite for PostgreSQL, MySQL, and MariaDB", "Read-only DB Studio default with explicit expiring write sessions", "Historical rollback for Dockerfile, Compose, and public-image deployments", "Scheduled PostgreSQL backups with daily / weekly retention", "Manifest and checksum validation for backup / restore", "VM migration with storage preflight, runtime quiescing, and fail-closed engine-volume boundaries"],
-      },
-      {
-        number: "06", title: "Operator automation", body: "Use the browser when useful and programmable surfaces when repetition starts.",
-        items: ["Browser installation wizard and one-line Ubuntu / Debian bootstrap", "Dashboard plus `mypaas` CLI for common operator actions", "REST API and GitHub webhooks", "Local MCP bridge for repository inspection, project operations, rollback, logs, metrics, environment, quota, and host stats", "Opt-in self-update with immutable SHA images, preflight, post-update verification, and rollback", "Scoped managed-image and build-cache retention with manual and scheduled paths", "Prometheus-compatible `/metrics` plus `/health` and `/ready`"],
-      },
-    ],
-    scopeLabel: "CURRENT BETA BOUNDARY",
-    scopeTitle: "One host, deliberately.",
-    scopeBody: "MyPaaS targets an owner developer or a small trusted team. The qualification does not turn it into a multi-node HA platform or a hostile multi-tenant isolation boundary.",
-    scope: ["Single Linux host", "Rootful Podman default", "Docker Engine compatibility", "Public OCI registries only", "No Kubernetes / multi-node scheduler", "No in-place Docker → Podman state migration", "Capacity remains workload-specific"],
-    details: "Read beta limitations",
+    boundaryLabel: "CURRENT BOUNDARY",
+    boundaryTitle: "The server is still the limit.",
+    boundaryBody: "MyPaaS does not turn a small VM into unlimited infrastructure. Build cost and runtime capacity depend on the application and the CPU, memory, storage, network, and databases available on the host.",
+    boundaries: ["Single Linux host", "Owner or small trusted team", "No multi-node HA scheduler", "No universal RPS, user-count, or project-count claim"],
   },
   id: {
-    evidenceLabel: "BUKTI KUALIFIKASI BETA",
-    evidenceTitle: "Tampilkan hasil uji, bukan hanya klaim.",
-    evidenceBody: "v0.5.0-beta.1 melewati delapan gate runtime wajib. Evidence publik di bawah tetap dibatasi pada release lineage dan bentuk host yang benar-benar diuji.",
-    gates: ["Update safety", "Fresh-VM restore", "10/25/50 project", "Concurrent deploy", "Image/cache retention", "Kontrak Create Project", "Reliability DB Studio", "Docs & boundary"],
-    gateStatus: "PASS",
-    gateSummary: "8 / 8 gate wajib · 0 mandatory blocker terbuka",
-    capacityTitle: "Kualifikasi banyak project",
-    capacityBody: "Fixture static, Dockerfile, dan Compose diuji secara terkontrol pada tier 10, 25, dan 50 project di VM 4-vCPU / ~8-GiB.",
-    capacityTiers: [["Tier 10", "10 project", 20], ["Tier 25", "25 project", 50], ["Tier 50", "50 / 50 sukses", 100]],
-    capacityNote: "Panjang bar menunjukkan ukuran tier project, bukan persentase kapasitas universal. Batas nyata bergantung pada CPU/memory workload, image/build, storage, dan konfigurasi host.",
-    statdTitle: "Hot path runtime metrics",
-    statdBody: "Evidence historis Debian 13 / rootful Podman. Tiga trial, 50 warmup dan 500 iterasi tercatat per trial.",
-    statdLegendCli: "Docker-compatible CLI p50",
-    statdLegendNative: "mypaas-statd p50",
-    statdTrials: [["Trial 1", 41.0394, 0.7803], ["Trial 2", 41.5558, 0.7969], ["Trial 3", 43.2664, 0.8202]],
-    statdSpawn: "Process spawn / recorded trial",
-    statdCliSpawn: "CLI 500",
-    statdNativeSpawn: "statd 0",
-    statdNote: "Hanya evidence historis untuk runtime snapshot path. Bukan janji latency universal dan bukan benchmark host telemetry v0.2.",
-    proofTitle: "Apa yang benar-benar diuji oleh gate lainnya",
-    proofs: [
-      ["Fresh restore", "Control-plane DB, konfigurasi, static artifact, managed persistent data, route, encrypted env, deployment history, dan DB Studio diverifikasi pada VM baru."],
-      ["Concurrent resilience", "Create/deploy/redeploy concurrent, intentional failure, protected route, webhook burst, read path, serta konsistensi runtime/port final diuji bersama."],
-      ["Retention safety", "Managed-image dry-run/apply, perlindungan running/rollback image, unrelated image, persistent volume, dan deploy/rollback setelah cleanup diuji."],
-      ["Create Project", "Static, Dockerfile, Compose, subdirectory, public registry/GHCR, required env, missing port, stale analysis, timeout, dan invalid repository diaudit."],
-      ["DB Studio", "PostgreSQL, MySQL, dan MariaDB Compose diakses lewat resolusi project network nyata dengan read-only default dan expiring write session."],
-      ["Fail closed", "Compose unsafe, stale analysis, konfigurasi wajib yang hilang, unhealthy replacement, dan runtime route yang tidak tervalidasi diblokir."],
+    label: "KAPABILITAS SAAT INI",
+    title: "Control plane yang fokus untuk satu host Linux.",
+    body: "MyPaaS menangani deployment dan operasi harian, sementara aplikasi tetap menjadi workload biasa yang memakai resource server Anda.",
+    groups: [
+      ["Deploy", "Git Dockerfile, Docker Compose, static site, dan public OCI image."],
+      ["Routing", "Routing project otomatis melalui Caddy setelah runtime yang dituju siap."],
+      ["Operasi", "Riwayat deployment, log, metrik, restart, redeploy, rollback, dan pengaturan resource."],
+      ["Data", "Provisioning PostgreSQL, DB Studio Lite, backup, restore, dan tooling migrasi."],
+      ["Automasi", "CLI, REST API, GitHub webhook, dan local MCP bridge opsional."],
+      ["Observability", "Telemetry project serta metrik host/runtime opsional melalui mypaas-statd."],
     ],
-    evidenceLink: "Baca record beta gate",
-    benchmarkLink: "Buka sumber benchmark statd",
-    capabilitiesLabel: "PETA FITUR YANG SUDAH ADA",
-    capabilitiesTitle: "Lebih dari deploy dan routing.",
-    capabilitiesBody: "Beta ini sudah mencakup source inspection, runtime lifecycle, observability, data, recovery, access control, dan automation operator pada satu host.",
-    capabilityGroups: [
-      { number:"01", title:"Source & deployment", body:"Ubah source eksplisit menjadi kontrak deployment yang reproducible.", items:["Git Dockerfile, Docker Compose, dan static / SPA", "Public OCI image dari Docker Hub, GHCR, dan registry kompatibel", "Branch, repository tree, base-directory, dan monorepo support", "Analisis Compose files, overrides, profiles, workdir, services, ports, dan required env", "Environment-template discovery sebelum creation", "GitHub push deployment dengan HMAC dan branch filtering"] },
-      { number:"02", title:"Runtime & routing", body:"Route dipromosikan hanya setelah workload yang dimaksud tervalidasi.", items:["Rootful Podman default dengan Docker Engine compatibility lewat satu contract", "Compose readiness sebelum route promotion", "Side-by-side Dockerfile / image replacement dengan temporary port berbeda", "Caddy route reconciliation setelah control-plane restart", "Fail-closed runtime lookup sebelum routing-network attachment", "Atomic static release activation dan SPA deep-link fallback"] },
-      { number:"03", title:"Operate & observe", body:"Deployment state dan operational signal berada dalam konteks project yang sama.", items:["Deployment history dan state queued / cloning / building / starting / running / failed", "Build log, runtime log, dan context service Compose", "Shared per-project SSE untuk status dan runtime metrics", "CPU / memory / PID runtime via optional statd dengan engine fallback", "Host CPU / memory / storage / network telemetry via statd v0.2", "Optional Cloudflare request, bandwidth, error, dan timeseries analytics", "Konfigurasi CPU dan memory per project"] },
-      { number:"04", title:"Environment & access", body:"Konfigurasi dan privileged control path diperlakukan sebagai state infrastruktur eksplisit.", items:["AES-256-GCM encrypted project env", "Nested template discovery untuk Compose / monorepo", "Generated project env files tanpa mewariskan arbitrary control-plane env", "GitHub OAuth + whitelist owner / collaborator", "Audit records untuk tindakan admin dan project", "Compose isolation policy menolak konfigurasi privileged / host escape"] },
-      { number:"05", title:"Data & recovery", body:"Recovery adalah bagian kontrak produk, bukan fitur tambahan setelah deploy.", items:["Optional shared PostgreSQL database / role", "DB Studio Lite PostgreSQL, MySQL, MariaDB", "Read-only default + expiring write session", "Historical rollback Dockerfile, Compose, dan public image", "Scheduled PostgreSQL backup dengan daily / weekly retention", "Manifest/checksum validation untuk backup / restore", "VM migration dengan storage preflight, runtime quiescing, dan fail-closed engine-volume boundary"] },
-      { number:"06", title:"Operator automation", body:"Gunakan browser untuk operasi manual dan programmable surface untuk pekerjaan berulang.", items:["Browser install wizard + one-line Ubuntu / Debian bootstrap", "Dashboard + `mypaas` CLI", "REST API + GitHub webhook", "Local MCP bridge untuk inspection, project ops, rollback, logs, metrics, env, quota, dan host stats", "Opt-in self-update dengan immutable SHA image, preflight, verification, dan rollback", "Managed image/build-cache retention manual dan terjadwal", "Prometheus `/metrics` + `/health` + `/ready`"] },
-    ],
-    scopeLabel: "BOUNDARY BETA SAAT INI",
-    scopeTitle: "Satu host, memang disengaja.",
-    scopeBody: "MyPaaS menargetkan owner developer atau tim kecil tepercaya. Qualification ini tidak mengubahnya menjadi HA multi-node atau isolation boundary untuk tenant yang saling tidak dipercaya.",
-    scope: ["Satu host Linux", "Rootful Podman default", "Kompatibilitas Docker Engine", "Hanya registry OCI publik", "Tanpa Kubernetes / multi-node scheduler", "Tanpa migrasi Docker → Podman in-place", "Kapasitas tetap workload-specific"],
-    details: "Baca batasan beta",
+    boundaryLabel: "BATAS SAAT INI",
+    boundaryTitle: "Batasnya tetap resource server.",
+    boundaryBody: "MyPaaS tidak mengubah VM kecil menjadi infrastruktur tanpa batas. Biaya build dan kapasitas runtime bergantung pada aplikasi serta CPU, memory, storage, network, dan database yang tersedia pada host.",
+    boundaries: ["Satu host Linux", "Owner atau tim kecil tepercaya", "Tanpa scheduler HA multi-node", "Tanpa klaim universal RPS, jumlah user, atau jumlah project"],
   },
   zh: {
-    evidenceLabel: "BETA 验证证据",
-    evidenceTitle: "展示测试，而不只是声明。",
-    evidenceBody: "v0.5.0-beta.1 已通过八个强制运行时 Gate。下列公开证据严格限定在实际验证的发布链与主机规格内。",
-    gates: ["更新安全", "全新 VM 恢复", "10/25/50 项目", "并发部署", "镜像/缓存保留", "Create Project 契约", "DB Studio 可靠性", "文档与边界"],
-    gateStatus: "PASS",
-    gateSummary: "8 / 8 强制 Gate · 0 个未解决强制阻塞项",
-    capacityTitle: "多项目验证",
-    capacityBody: "在 4-vCPU / ~8-GiB VM 上，以 static、Dockerfile 与 Compose fixture 完成 10、25、50 项目的受控测试。",
-    capacityTiers: [["Tier 10", "10 项目", 20], ["Tier 25", "25 项目", 50], ["Tier 50", "50 / 50 成功", 100]],
-    capacityNote: "条形长度仅表示测试项目层级，并非通用容量百分比。实际容量取决于工作负载 CPU/内存、镜像与构建、存储及主机配置。",
-    statdTitle: "运行时指标热路径",
-    statdBody: "Debian 13 / Rootful Podman 历史证据。3 个 trial，每个 trial 50 次 warmup + 500 次记录迭代。",
-    statdLegendCli: "Docker-compatible CLI p50",
-    statdLegendNative: "mypaas-statd p50",
-    statdTrials: [["Trial 1", 41.0394, 0.7803], ["Trial 2", 41.5558, 0.7969], ["Trial 3", 43.2664, 0.8202]],
-    statdSpawn: "每个 recorded trial 的进程创建数",
-    statdCliSpawn: "CLI 500",
-    statdNativeSpawn: "statd 0",
-    statdNote: "仅为运行时快照路径的历史证据，不代表所有机器的通用延迟，也不是 v0.2 主机遥测 benchmark。",
-    proofTitle: "其他 Gate 实际验证了什么",
-    proofs: [
-      ["全新恢复", "在新 VM 上验证控制平面数据库、配置、静态产物、受管持久数据、路由、加密环境变量、部署历史与 DB Studio。"],
-      ["并发韧性", "并发 create/deploy/redeploy、预期失败、受保护路由、Webhook burst、读取路径以及最终 runtime/port 一致性一起验证。"],
-      ["保留安全", "验证受管镜像 dry-run/apply、运行中与 rollback 镜像保护、无关镜像、持久卷以及清理后的 deploy/rollback。"],
-      ["Create Project", "覆盖 static、Dockerfile、Compose、子目录、公开 Registry/GHCR、required env、缺失端口、过期分析、超时与非法仓库。"],
-      ["DB Studio", "通过真实项目网络解析连接 PostgreSQL、MySQL 与 MariaDB Compose 服务，默认只读并使用有期限写入会话。"],
-      ["Fail closed", "不安全 Compose、过期分析、缺失必要配置、不健康替换及无法验证的 runtime route 会被阻止。"],
+    label: "当前能力",
+    title: "面向单台 Linux 主机的专注控制平面。",
+    body: "MyPaaS 负责部署与日常运维，应用本身仍然是运行在您服务器资源上的普通工作负载。",
+    groups: [
+      ["部署", "Git Dockerfile、Docker Compose、静态站点和公开 OCI 镜像。"],
+      ["路由", "目标运行时就绪后，通过 Caddy 自动建立项目路由。"],
+      ["运维", "部署历史、日志、指标、重启、重新部署、回滚和资源配置。"],
+      ["数据", "PostgreSQL 配置、DB Studio Lite、备份、恢复和迁移工具。"],
+      ["自动化", "CLI、REST API、GitHub Webhook 和可选的本地 MCP bridge。"],
+      ["可观测性", "项目遥测，以及可选的 mypaas-statd 主机/运行时指标。"],
     ],
-    evidenceLink: "查看 Beta Gate 记录",
-    benchmarkLink: "查看 statd 原始 benchmark",
-    capabilitiesLabel: "已实现能力地图",
-    capabilitiesTitle: "不仅是部署和路由。",
-    capabilitiesBody: "当前 Beta 已覆盖单机上的源码检查、运行时生命周期、可观测性、数据、恢复、访问控制与运维自动化。",
-    capabilityGroups: [
-      { number:"01", title:"来源与部署", body:"把明确来源转换为可重复的部署契约。", items:["Git Dockerfile、Docker Compose、Static / SPA", "Docker Hub、GHCR 与兼容 Registry 的公开 OCI 镜像", "分支、仓库树、base-directory 与 monorepo", "Compose files / overrides / profiles / workdir / services / ports / required env 分析", "创建前环境模板发现", "带 HMAC 与分支过滤的 GitHub Push 部署"] },
-      { number:"02", title:"运行时与路由", body:"只有在目标工作负载被验证后才提升路由。", items:["Rootful Podman 默认，Docker Engine 通过同一契约兼容", "Compose readiness 后才提升路由", "Dockerfile / image side-by-side replacement 使用独立临时端口", "控制平面重启后的 Caddy 路由对账", "加入 routing network 前 fail-closed runtime lookup", "原子静态发布与 SPA deep-link fallback"] },
-      { number:"03", title:"运维与可观测", body:"部署状态与运行信号保持在同一项目上下文。", items:["部署历史及 queued / cloning / building / starting / running / failed 状态", "构建日志、运行日志与 Compose service 上下文", "共享 per-project SSE 状态与指标 fan-out", "可选 statd + engine fallback 的 CPU / memory / PID 指标", "statd v0.2 主机 CPU / memory / storage / network 遥测", "可选 Cloudflare request / bandwidth / error / timeseries analytics", "每项目 CPU 与内存配置"] },
-      { number:"04", title:"环境与访问", body:"配置和特权控制路径被作为明确基础设施状态管理。", items:["AES-256-GCM 加密项目环境变量", "Compose / monorepo 嵌套模板发现", "生成项目 env 文件而非继承任意控制平面环境变量", "GitHub OAuth + owner / collaborator 白名单", "管理员与项目操作审计记录", "Compose isolation policy 拒绝 privileged / host escape 配置"] },
-      { number:"05", title:"数据与恢复", body:"恢复路径是产品契约的一部分。", items:["可选共享 PostgreSQL 数据库 / role", "PostgreSQL / MySQL / MariaDB 的 DB Studio Lite", "默认只读 + 有期限写入会话", "Dockerfile、Compose 与公开镜像历史回滚", "PostgreSQL 定时备份及 daily / weekly retention", "Backup / restore manifest 与 checksum 验证", "带 storage preflight、runtime quiescing 与 engine-volume fail-closed 边界的 VM migration"] },
-      { number:"06", title:"运维自动化", body:"人工操作使用浏览器，重复操作使用可编程接口。", items:["浏览器安装向导 + Ubuntu / Debian 一行 bootstrap", "Dashboard + `mypaas` CLI", "REST API + GitHub Webhook", "本地 MCP bridge：inspection、project ops、rollback、logs、metrics、env、quota、host stats", "使用 immutable SHA 镜像、preflight、verification 与 rollback 的可选自更新", "受管 image/build-cache 手动与定时 retention", "Prometheus `/metrics` + `/health` + `/ready`"] },
-    ],
-    scopeLabel: "当前 BETA 边界",
-    scopeTitle: "明确设计为单机。",
-    scopeBody: "MyPaaS 面向个人开发者或小型可信团队。此次验证并不会把它变成多节点 HA 平台或针对互不信任租户的隔离边界。",
-    scope: ["单台 Linux 主机", "Rootful Podman 默认", "Docker Engine 兼容模式", "仅公开 OCI Registry", "无 Kubernetes / 多节点调度", "不支持 Docker → Podman 原地迁移", "容量仍取决于工作负载"],
-    details: "查看 Beta 限制",
+    boundaryLabel: "当前边界",
+    boundaryTitle: "服务器资源仍然决定上限。",
+    boundaryBody: "MyPaaS 不会把小型 VM 变成无限基础设施。构建成本和运行容量取决于应用本身以及主机可用的 CPU、内存、存储、网络和数据库资源。",
+    boundaries: ["单台 Linux 主机", "所有者或小型可信团队", "无多节点 HA 调度器", "不承诺通用 RPS、用户数或项目数"],
   },
-} as const;
-
-const copy = content[locale];
-const cliMax = 60;
+}[locale];
 ---
 
-<section class="evidence-section technical-frame" id="beta-evidence" aria-labelledby="beta-evidence-title">
-  <div class="section-intro">
-    <span class="section-label">{copy.evidenceLabel}</span>
-    <h2 id="beta-evidence-title">{copy.evidenceTitle}</h2>
-    <p>{copy.evidenceBody}</p>
-  </div>
-
-  <div class="gate-board" aria-label={copy.gateSummary}>
-    <div class="gate-board-head"><strong>{copy.gateSummary}</strong><span>v0.5.0-beta.1</span></div>
-    <div class="gate-grid">
-      {copy.gates.map((gate, index) => (
-        <div class="gate-row"><span class="gate-index">{String(index + 1).padStart(2,"0")}</span><strong>{gate}</strong><span class="pass">{copy.gateStatus}</span></div>
-      ))}
+<section class="capability-section" id="capabilities" aria-labelledby="capability-title">
+  <div class="section-head">
+    <span>{content.label}</span>
+    <div>
+      <h2 id="capability-title">{content.title}</h2>
+      <p>{content.body}</p>
     </div>
   </div>
-
-  <div class="benchmark-grid">
-    <article class="benchmark-card capacity-card technical-frame">
-      <header><span>PHASE 3</span><h3>{copy.capacityTitle}</h3><p>{copy.capacityBody}</p></header>
-      <div class="capacity-chart" role="img" aria-label="Qualification tiers: 10 projects, 25 projects, and 50 projects with 50 out of 50 successful at the largest tier">
-        {copy.capacityTiers.map(([tier,label,width]) => (
-          <div class="capacity-row"><div><span>{tier}</span><strong>{label}</strong></div><div class="track"><i style={`width:${width}%`}></i></div></div>
-        ))}
-      </div>
-      <p class="benchmark-note">{copy.capacityNote}</p>
-    </article>
-
-    <article class="benchmark-card statd-card technical-frame">
-      <header><span>RUNTIME METRICS</span><h3>{copy.statdTitle}</h3><p>{copy.statdBody}</p></header>
-      <div class="legend"><span><i class="legend-cli"></i>{copy.statdLegendCli}</span><span><i class="legend-statd"></i>{copy.statdLegendNative}</span></div>
-      <div class="latency-chart" role="img" aria-label="Three historical benchmark trials comparing Docker-compatible CLI and mypaas-statd p50 runtime metrics latency">
-        {copy.statdTrials.map(([trial,cli,statd]) => (
-          <div class="trial">
-            <strong>{trial}</strong>
-            <div class="metric-line"><span>CLI</span><div class="track"><i class="cli-bar" style={`width:${Number(cli) / cliMax * 100}%`}></i></div><b>{Number(cli).toFixed(2)} ms</b></div>
-            <div class="metric-line"><span>statd</span><div class="track"><i class="statd-bar" style={`width:${Number(statd) / cliMax * 100}%`}></i></div><b>{Number(statd).toFixed(2)} ms</b></div>
-          </div>
-        ))}
-      </div>
-      <div class="spawn-proof"><span>{copy.statdSpawn}</span><strong>{copy.statdCliSpawn}</strong><strong>{copy.statdNativeSpawn}</strong></div>
-      <p class="benchmark-note">{copy.statdNote}</p>
-    </article>
-  </div>
-
-  <div class="proof-block">
-    <div class="proof-heading"><span class="section-label">RUNTIME GATES</span><h3>{copy.proofTitle}</h3></div>
-    <div class="proof-grid">
-      {copy.proofs.map(([title,body]) => <article><strong>{title}</strong><p>{body}</p></article>)}
-    </div>
-  </div>
-
-  <div class="evidence-links">
-    <a href={`${coreRepo}/blob/v0.5.0-beta.1/docs/engineering/beta-readiness-gates.md`} target="_blank" rel="noreferrer">{copy.evidenceLink} ↗</a>
-    <a href={`${statdRepo}/tree/cf8843545ea19ecf9a54049e21b2fe609e49d58d/benchmarks/results/phase4-debian13-podman-2026-08-10`} target="_blank" rel="noreferrer">{copy.benchmarkLink} ↗</a>
-  </div>
-</section>
-
-<section class="capabilities-section technical-frame" id="capabilities" aria-labelledby="capabilities-title">
-  <div class="section-intro capability-intro">
-    <span class="section-label">{copy.capabilitiesLabel}</span>
-    <h2 id="capabilities-title">{copy.capabilitiesTitle}</h2>
-    <p>{copy.capabilitiesBody}</p>
-  </div>
-
   <div class="capability-grid">
-    {copy.capabilityGroups.map((group) => (
-      <article class="capability-card technical-frame">
-        <div class="capability-number">{group.number}</div>
-        <div class="capability-copy"><h3>{group.title}</h3><p>{group.body}</p></div>
-        <ul>{group.items.map((item) => <li>{item}</li>)}</ul>
+    {content.groups.map(([title, body], index) => (
+      <article>
+        <small>{String(index + 1).padStart(2, "0")}</small>
+        <h3>{title}</h3>
+        <p>{body}</p>
       </article>
     ))}
   </div>
 </section>
 
-<section class="scope-section technical-frame" id="scope" aria-labelledby="scope-title">
-  <div class="scope-copy">
-    <span class="section-label">{copy.scopeLabel}</span>
-    <h2 id="scope-title">{copy.scopeTitle}</h2>
-    <p>{copy.scopeBody}</p>
-    <a href="/docs/limitations/">{copy.details} →</a>
+<section class="boundary-section" id="limitations" aria-labelledby="boundary-title">
+  <div class="section-head">
+    <span>{content.boundaryLabel}</span>
+    <div>
+      <h2 id="boundary-title">{content.boundaryTitle}</h2>
+      <p>{content.boundaryBody}</p>
+    </div>
   </div>
-  <ul class="scope-list">{copy.scope.map((item) => <li>{item}</li>)}</ul>
+  <ul>
+    {content.boundaries.map((item) => <li>{item}</li>)}
+  </ul>
 </section>
 
 <style>
-.evidence-section,.capabilities-section,.scope-section{width:min(calc(100% - 36px),1368px);margin:0 auto var(--landing-panel-gap);padding:var(--landing-panel-padding);border:1px solid #d8d8d8;background:#fff;color:#111}.section-intro{display:grid;grid-template-columns:minmax(170px,.62fr) minmax(0,1.25fr) minmax(260px,1fr);gap:24px;align-items:start;margin-bottom:24px}.section-label{padding-top:6px;color:#333;font-family:var(--font-mono);font-size:var(--landing-section-label-size);font-weight:600;letter-spacing:.08em}.section-intro h2,.scope-copy h2{margin:0;font-family:var(--font-heading);font-size:clamp(2rem,3.2vw,3.25rem);font-weight:400;line-height:1.02;letter-spacing:-.03em}.section-intro>p,.scope-copy>p{margin:4px 0 0;color:#555;font-family:var(--font-sans);font-size:14px;line-height:1.55}
-.gate-board{border:1px solid #cfcfcf}.gate-board-head{display:flex;justify-content:space-between;gap:16px;padding:13px 15px;border-bottom:1px solid #d8d8d8;font-family:var(--font-mono);font-size:11px}.gate-board-head span{color:#666}.gate-grid{display:grid;grid-template-columns:repeat(4,1fr)}.gate-row{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;min-height:54px;padding:10px 12px;border-right:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0}.gate-row:nth-child(4n){border-right:0}.gate-row:nth-last-child(-n+4){border-bottom:0}.gate-index{color:#888;font-family:var(--font-mono);font-size:10px}.gate-row strong{font-family:var(--font-sans);font-size:12px;line-height:1.25}.pass{padding:4px 6px;border:1px solid #bbb;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.05em}
-.benchmark-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--landing-card-gap);margin-top:14px}.benchmark-card{padding:20px;border:1px solid #d8d8d8}.benchmark-card header>span{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.08em}.benchmark-card h3,.proof-heading h3,.capability-card h3{margin:8px 0 0;font-family:var(--font-sans);font-size:18px;font-weight:720}.benchmark-card header p{max-width:42rem;margin:7px 0 0;color:#5b5b5b;font-family:var(--font-sans);font-size:12.5px;line-height:1.5}.capacity-chart,.latency-chart{display:grid;gap:14px;margin-top:24px}.capacity-row{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center}.capacity-row>div:first-child{display:grid}.capacity-row span,.trial>strong,.metric-line>span{font-family:var(--font-mono);font-size:10px;color:#666}.capacity-row strong{margin-top:3px;font-family:var(--font-sans);font-size:12.5px}.track{position:relative;height:13px;overflow:hidden;border:1px solid #cfcfcf;background:repeating-linear-gradient(90deg,#fff 0,#fff calc(20% - 1px),#e6e6e6 calc(20% - 1px),#e6e6e6 20%)}.track i{display:block;height:100%;background:#111}.benchmark-note{margin:18px 0 0;color:#666;font-family:var(--font-mono);font-size:10px;line-height:1.5}.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px}.legend span{display:flex;align-items:center;gap:6px;color:#555;font-family:var(--font-mono);font-size:9.5px}.legend i{display:inline-block;width:16px;height:5px}.legend-cli{background:#111}.legend-statd{border:1px solid #111;background:#fff}.trial{display:grid;gap:6px;padding-top:10px;border-top:1px solid #e2e2e2}.metric-line{display:grid;grid-template-columns:40px minmax(0,1fr) 64px;gap:8px;align-items:center}.metric-line b{text-align:right;font-family:var(--font-mono);font-size:9.5px;font-weight:600}.metric-line .track{height:10px;background:#f2f2f2}.metric-line .statd-bar{min-width:3px;border-right:2px solid #111;background:#fff}.spawn-proof{display:grid;grid-template-columns:1fr auto auto;gap:12px;margin-top:18px;padding:10px 12px;border:1px solid #d8d8d8;font-family:var(--font-mono);font-size:10px}.spawn-proof span{color:#666}.spawn-proof strong{font-weight:700}
-.proof-block{margin-top:14px;border:1px solid #d8d8d8}.proof-heading{display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start;padding:16px;border-bottom:1px solid #d8d8d8}.proof-heading h3{margin:0}.proof-grid{display:grid;grid-template-columns:repeat(3,1fr)}.proof-grid article{min-height:145px;padding:16px;border-right:1px solid #e1e1e1;border-bottom:1px solid #e1e1e1}.proof-grid article:nth-child(3n){border-right:0}.proof-grid article:nth-last-child(-n+3){border-bottom:0}.proof-grid strong{font-family:var(--font-sans);font-size:12.5px}.proof-grid p{margin:8px 0 0;color:#5d5d5d;font-family:var(--font-sans);font-size:11.5px;line-height:1.5}.evidence-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.evidence-links a,.scope-copy>a{padding:8px 10px;border:1px solid #cfcfcf;color:#111;font-family:var(--font-mono);font-size:10.5px;font-weight:600;text-decoration:none}.evidence-links a:hover,.scope-copy>a:hover{background:#111;color:#fff}
-.capability-intro{margin-bottom:24px}.capability-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--landing-card-gap)}.capability-card{display:grid;grid-template-columns:54px 1fr;gap:0 16px;padding:20px;border:1px solid #d9d9d9}.capability-number{grid-row:1/3;color:#999;font-family:var(--font-mono);font-size:22px;line-height:1}.capability-copy h3{margin:0}.capability-copy p{margin:7px 0 0;color:#5a5a5a;font-family:var(--font-sans);font-size:12.5px;line-height:1.5}.capability-card ul{grid-column:2;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin:18px 0 0;padding:0;list-style:none}.capability-card li{position:relative;padding-left:14px;color:#333;font-family:var(--font-sans);font-size:11.5px;line-height:1.45}.capability-card li::before{position:absolute;top:.62em;left:0;width:5px;height:1px;background:#111;content:""}
-.scope-section{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr);gap:36px;align-items:center}.scope-copy{display:grid;grid-template-columns:165px minmax(0,1fr);gap:12px 24px}.scope-copy .section-label{grid-row:1/5}.scope-copy>p{max-width:620px}.scope-copy>a{width:max-content}.scope-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0;padding:0;list-style:none}.scope-list li{padding:11px 12px;border:1px solid #dedede;color:#333;font-family:var(--font-mono);font-size:11px;line-height:1.3}
-@media(max-width:1050px){.section-intro{grid-template-columns:1fr 1.4fr}.section-intro>p{grid-column:2}.gate-grid{grid-template-columns:repeat(2,1fr)}.gate-row:nth-child(4n){border-right:1px solid #e0e0e0}.gate-row:nth-child(2n){border-right:0}.gate-row:nth-last-child(-n+4){border-bottom:1px solid #e0e0e0}.gate-row:nth-last-child(-n+2){border-bottom:0}.benchmark-grid{grid-template-columns:1fr}.proof-grid{grid-template-columns:1fr 1fr}.proof-grid article:nth-child(3n){border-right:1px solid #e1e1e1}.proof-grid article:nth-child(2n){border-right:0}.proof-grid article:nth-last-child(-n+3){border-bottom:1px solid #e1e1e1}.proof-grid article:nth-last-child(-n+2){border-bottom:0}.capability-card ul{grid-template-columns:1fr}.scope-section{grid-template-columns:1fr}.scope-copy{grid-template-columns:150px 1fr}}
-@media(max-width:720px){.evidence-section,.capabilities-section,.scope-section{width:calc(100% - 20px);padding:20px 15px}.section-intro,.scope-copy{grid-template-columns:1fr;gap:10px}.section-intro>p{grid-column:auto}.scope-copy .section-label{grid-row:auto}.gate-grid{grid-template-columns:1fr}.gate-row,.gate-row:nth-child(4n),.gate-row:nth-child(2n),.gate-row:nth-last-child(-n+4),.gate-row:nth-last-child(-n+2){border-right:0;border-bottom:1px solid #e0e0e0}.gate-row:last-child{border-bottom:0}.gate-board-head{display:grid}.capacity-row{grid-template-columns:110px 1fr}.proof-heading{grid-template-columns:1fr;gap:6px}.proof-grid,.capability-grid{grid-template-columns:1fr}.proof-grid article,.proof-grid article:nth-child(3n),.proof-grid article:nth-child(2n),.proof-grid article:nth-last-child(-n+3),.proof-grid article:nth-last-child(-n+2){border-right:0;border-bottom:1px solid #e1e1e1}.proof-grid article:last-child{border-bottom:0}.capability-card{grid-template-columns:42px 1fr;padding:16px}.scope-list{grid-template-columns:1fr}.section-intro h2,.scope-copy h2{font-size:2rem}}
-@media(max-width:460px){.metric-line{grid-template-columns:34px minmax(0,1fr) 58px}.capacity-row{grid-template-columns:1fr}.spawn-proof{grid-template-columns:1fr 1fr}.spawn-proof span{grid-column:1/-1}.capability-card{grid-template-columns:1fr}.capability-number{grid-row:auto;margin-bottom:10px}.capability-copy,.capability-card ul{grid-column:1}}
+.capability-section,.boundary-section{width:min(calc(100% - 36px),1368px);margin:0 auto var(--landing-panel-gap);padding:var(--landing-panel-padding);border:1px solid #d8d8d8;background:#fff;color:#111}.section-head{display:grid;grid-template-columns:minmax(170px,.55fr) minmax(0,1.45fr);gap:24px;margin-bottom:28px}.section-head>span{padding-top:6px;font-family:var(--font-mono);font-size:var(--landing-section-label-size);font-weight:600;letter-spacing:.08em}.section-head h2{max-width:18ch;margin:0;font-family:var(--font-heading);font-size:clamp(2rem,3.2vw,3.25rem);font-weight:400;line-height:1.02;letter-spacing:-.03em}.section-head p{max-width:54rem;margin:12px 0 0;color:#555;font-size:14px;line-height:1.6}.capability-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #ddd;border-left:1px solid #ddd}.capability-grid article{min-height:180px;padding:22px;border-right:1px solid #ddd;border-bottom:1px solid #ddd}.capability-grid small{font-family:var(--font-mono);color:#777}.capability-grid h3{margin:28px 0 8px;font-size:1.05rem}.capability-grid p{margin:0;color:#555;font-size:14px;line-height:1.55}.boundary-section ul{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;padding:0;border-top:1px solid #ddd;border-left:1px solid #ddd;list-style:none}.boundary-section li{padding:18px;border-right:1px solid #ddd;border-bottom:1px solid #ddd;font-size:14px;line-height:1.45}@media(max-width:820px){.section-head{grid-template-columns:1fr}.capability-grid{grid-template-columns:1fr 1fr}.boundary-section ul{grid-template-columns:1fr 1fr}}@media(max-width:560px){.capability-grid,.boundary-section ul{grid-template-columns:1fr}}
 </style>
